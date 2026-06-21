@@ -51,5 +51,5 @@ A comprehensive, gamified 90-day learning and tracking platform built to help st
    ```
    Navigate to `http://127.0.0.1:8000/` in your browser.
 
-## Built With ❤️
+## Built By atul-techx
 Designed to help software engineers level up!
