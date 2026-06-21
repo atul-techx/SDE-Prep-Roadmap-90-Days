@@ -1,0 +1,187 @@
+{% extends 'roadmap/base.html' %}
+
+{% block header_title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto pb-12">
+    
+    <!-- Cover & Avatar Banner -->
+    <div class="relative bg-white rounded-t-3xl shadow-sm border border-slate-200 overflow-hidden">
+        
+        <!-- Cover Photo (Using uploaded image or gradient) -->
+        <div class="h-48 w-full {% if not profile.cover_banner %}bg-gradient-to-r from-slate-800 via-indigo-900 to-slate-800{% endif %} relative group" {% if profile.cover_banner %}style="background-image: url('{{ profile.cover_banner.url }}'); background-size: cover; background-position: center;"{% endif %}>
+            {% if not profile.cover_banner %}
+            <!-- Decorative SVG pattern overlay -->
+            <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
+            {% endif %}
+            
+            <label for="coverUpload" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                <div class="bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg text-white font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-camera"></i> Edit Cover
+                </div>
+            </label>
+        </div>
+
+        <!-- Avatar Container (Overlapping) -->
+        <div class="absolute top-28 left-8">
+            <div class="w-32 h-32 rounded-full bg-amber-100 border-4 border-white shadow-lg flex items-center justify-center text-5xl font-bold text-amber-600 relative overflow-hidden group">
+                {% if profile.profile_picture %}
+                    <img src="{{ profile.profile_picture.url }}" class="w-full h-full object-cover">
+                {% else %}
+                    {{ request.user.username.0|upper }}
+                {% endif %}
+                
+                <label for="avatarUpload" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white">
+                    <i class="fa-solid fa-camera text-2xl"></i>
+                </label>
+                
+                <!-- Tiny edit icon badge (visible when not hovering) -->
+                <div class="absolute bottom-1 right-1 w-8 h-8 bg-white rounded-full shadow-md border border-slate-100 flex items-center justify-center text-slate-400 group-hover:opacity-0 transition-opacity">
+                    <i class="fa-solid fa-camera text-xs"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Spacer for avatar -->
+        <div class="h-20"></div>
+        
+        <!-- Tabs -->
+        <div class="px-8 border-b border-slate-100 flex gap-8">
+            <div class="py-4 border-b-2 border-slate-800 font-bold text-slate-800">
+                Profile Details
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Form Section -->
+    <div class="bg-white rounded-b-3xl shadow-sm border-x border-b border-slate-200 px-8 py-8 mt-0 relative">
+        
+        <form method="POST" action="{% url 'profile' %}" enctype="multipart/form-data" id="profileForm">
+            {% csrf_token %}
+            
+            <input type="file" name="cover_banner" id="coverUpload" accept="image/*" class="hidden" onchange="this.form.submit()" disabled>
+            <input type="file" name="profile_picture" id="avatarUpload" accept="image/*" class="hidden" onchange="this.form.submit()" disabled>
+            
+            <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-100">
+                <h2 class="text-lg font-bold text-slate-800">Your account details</h2>
+                <div>
+                    <button type="button" id="editBtn" onclick="enableEdit()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-2.5 rounded font-bold transition-all border border-slate-300">
+                        <i class="fa-solid fa-pen-to-square mr-2"></i>Edit Profile
+                    </button>
+                    <button type="submit" id="saveBtn" class="hidden bg-[#F07B65] hover:bg-[#E06A54] text-white px-6 py-2.5 rounded font-bold shadow-md shadow-orange-500/20 transition-all hover:-translate-y-0.5">
+                        <i class="fa-solid fa-check mr-2"></i>Save Profile
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
+                
+                <!-- Full Name -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">Full Name</label>
+                    <input type="text" name="full_name" value="{{ profile.full_name|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 font-bold transition-colors" placeholder="e.g. Anushka Gangwar" readonly>
+                    <p class="text-[10px] text-slate-400 mt-1.5"><i class="fa-solid fa-circle-exclamation text-slate-300 mr-1"></i>This name will appear on your certificate.</p>
+                </div>
+
+                <!-- Gender -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">Gender</label>
+                    <select name="gender" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 font-bold transition-colors appearance-none cursor-default" disabled>
+                        <option value="" {% if not profile.gender %}selected{% endif %}>Select Gender</option>
+                        <option value="Male" {% if profile.gender == 'Male' %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if profile.gender == 'Female' %}selected{% endif %}>Female</option>
+                        <option value="Other" {% if profile.gender == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">Email</label>
+                    <input type="email" name="email" value="{{ request.user.email }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 font-bold transition-colors" placeholder="e.g. name@example.com" readonly>
+                </div>
+
+                <!-- Contact Number (Readonly always) -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">Contact Number <span class="text-slate-300 ml-1 font-normal">(Registered)</span></label>
+                    <div class="flex items-end">
+                        <div class="text-slate-400 font-bold border-b border-transparent py-2 pr-3 flex items-center gap-2">
+                            <span>IN <i class="fa-solid fa-caret-down text-[10px]"></i></span>
+                            <span>+91</span>
+                            <span class="text-slate-300">|</span>
+                        </div>
+                        <input type="text" name="contact_number" value="{{ profile.contact_number|default:'' }}" class="flex-1 bg-transparent border-b border-transparent py-2 pl-3 text-slate-700 font-bold cursor-not-allowed" placeholder="9588012281" readonly>
+                    </div>
+                </div>
+
+                <!-- State -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">State</label>
+                    <input type="text" name="state" value="{{ profile.state|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 font-bold transition-colors" placeholder="e.g. Uttar Pradesh" readonly>
+                </div>
+
+                <!-- City -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">City</label>
+                    <input type="text" name="city" value="{{ profile.city|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 font-bold transition-colors" placeholder="e.g. Moradabad" readonly>
+                </div>
+
+                <!-- Pincode -->
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-1">Pincode</label>
+                    <input type="text" name="pincode" value="{{ profile.pincode|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 font-bold transition-colors" placeholder="e.g. 244001" readonly>
+                </div>
+
+            </div>
+        </form>
+        
+    </div>
+</div>
+
+<script>
+    function enableEdit() {
+        // Hide edit button, show save button
+        document.getElementById('editBtn').classList.add('hidden');
+        document.getElementById('saveBtn').classList.remove('hidden');
+        
+        // Enable file uploads
+        document.getElementById('coverUpload').disabled = false;
+        document.getElementById('avatarUpload').disabled = false;
+        
+        // Enable inputs
+        const inputs = document.querySelectorAll('.profile-input');
+        inputs.forEach(input => {
+            if(input.tagName === 'SELECT') {
+                input.disabled = false;
+                input.classList.remove('cursor-default');
+                input.classList.add('cursor-pointer');
+            } else {
+                input.readOnly = false;
+            }
+            // Add border to show they are editable
+            input.classList.remove('border-transparent');
+            input.classList.add('border-slate-200');
+            // Change text font weight back to medium instead of bold so it looks like an input
+            input.classList.remove('font-bold');
+            input.classList.add('font-medium');
+        });
+        
+        // Add visual cue to camera icons
+        document.querySelectorAll('label[for="coverUpload"], label[for="avatarUpload"]').forEach(lbl => {
+            lbl.classList.remove('hidden');
+        });
+    }
+</script>
+<style>
+    /* Hide camera labels by default unless in edit mode */
+    label[for="coverUpload"], label[for="avatarUpload"], .fa-camera {
+        display: none;
+    }
+    .group:hover label[for="coverUpload"], .group:hover label[for="avatarUpload"] {
+        display: flex !important;
+    }
+    label[for="coverUpload"][disabled], label[for="avatarUpload"][disabled] {
+        display: none !important;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'roadmap/base.html' %}
+
+{% block title %}Sign In - Roadmap 90{% endblock %}
+
+{% block content %}
+<div class="absolute inset-0 bg-slate-50 flex items-center justify-center p-4">
+    
+    <div class="bg-white rounded-3xl shadow-xl w-full max-w-[1000px] flex overflow-hidden border border-slate-100">
+        
+        <!-- Left Side: Branding/Graphic -->
+        <div class="hidden md:flex flex-col justify-center w-1/2 bg-slate-900 p-12 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/20"></div>
+            <div class="relative z-10">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-3xl shadow-lg shadow-indigo-500/30 mb-8">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <h1 class="text-4xl font-extrabold text-white leading-tight mb-4">Master Data Structures in 90 Days.</h1>
+                <p class="text-slate-400 text-lg">Join the most intensive and rewarding coding roadmap. Built for engineers, by engineers.</p>
+            </div>
+            <!-- Decorative circle -->
+            <div class="absolute -bottom-24 -right-24 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <!-- Right Side: Form -->
+        <div class="w-full md:w-1/2 p-12 lg:p-16 flex flex-col justify-center bg-white">
+            
+            <div class="mb-10">
+                <h2 class="text-3xl font-bold text-slate-800">Welcome back</h2>
+                <p class="text-slate-500 mt-2">Sign in to your Roadmap 90 account to continue.</p>
+            </div>
+
+            <form method="POST" class="space-y-6">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="block text-sm font-bold text-slate-700 mb-2">{{ field.label }}</label>
+                    <!-- Applying standard CSS for inputs -->
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-red-500 text-xs mt-1.5 font-medium"><i class="fa-solid fa-triangle-exclamation mr-1"></i> {{ field.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                {% if form.non_field_errors %}
+                    <div class="bg-red-50 text-red-600 text-sm font-medium p-4 rounded-xl border border-red-100 flex items-start gap-3">
+                        <i class="fa-solid fa-circle-xmark mt-0.5"></i>
+                        <span>{{ form.non_field_errors.0 }}</span>
+                    </div>
+                {% endif %}
+
+                <button type="submit" class="w-full bg-brand-blue hover:bg-indigo-500 text-white font-bold py-3.5 px-4 rounded-xl transition-all duration-200 focus:ring-4 focus:ring-indigo-100 shadow-lg shadow-indigo-500/30 mt-4">
+                    Sign In to Dashboard
+                </button>
+                
+                <p class="text-center text-sm text-slate-500 mt-6 font-medium">
+                    New to the roadmap? <a href="{% url 'register' %}" class="text-brand-blue hover:text-indigo-800 transition-colors">Create an account</a>
+                </p>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Fixed input styling using standard CSS so it works without PostCSS/Tailwind build */
+    .form-group input {
+        width: 100%;
+        background-color: #F8FAFC;
+        border: 2px solid #E2E8F0;
+        border-radius: 0.75rem;
+        padding: 0.875rem 1rem;
+        color: #0F172A;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+        font-weight: 500;
+    }
+    
+    .form-group input:focus {
+        outline: none;
+        border-color: #4F46E5;
+        background-color: #FFFFFF;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    }
+
+    .form-group input::placeholder {
+        color: #94A3B8;
+        font-weight: 400;
+    }
+</style>
+{% endblock %}
