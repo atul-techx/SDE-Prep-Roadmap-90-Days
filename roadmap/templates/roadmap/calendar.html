@@ -28,12 +28,12 @@
             <div class="flex items-center gap-6">
                 <h2 class="text-xl font-bold text-slate-800">{{ current_month_name }}</h2>
                 <div class="flex items-center gap-2">
-                    <button class="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-500 transition-colors">
+                    <a href="?year={{ prev_year }}&month={{ prev_month }}" class="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-500 transition-colors">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
-                    </button>
-                    <button class="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-500 transition-colors">
+                    </a>
+                    <a href="?year={{ next_year }}&month={{ next_month }}" class="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-500 transition-colors">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

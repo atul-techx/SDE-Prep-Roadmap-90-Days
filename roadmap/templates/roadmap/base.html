@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Roadmap 90{% endblock %}</title>
+    <title>{% block title %}SDE PREP 90{% endblock %}</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -12,8 +12,29 @@
                 extend: {
                     colors: {
                         brand: {
-                            blue: '#4F46E5', /* Indigo 600 */
-                            light: '#F8FAFC', /* Slate 50 */
+                            blue: '#A7C4A0', /* Eucalyptus Green */
+                            light: '#F4EFE6', /* Eucalyptus Light */
+                        },
+                        indigo: {
+                            50: '#f6f9f5',
+                            100: '#edf3eb',
+                            200: '#dbe7d7',
+                            300: '#c0d6ba',
+                            400: '#A7C4A0',
+                            500: '#A7C4A0',
+                            600: '#8ba783',
+                            700: '#6c8865',
+                            800: '#566d51',
+                            900: '#465942',
+                        },
+                        purple: {
+                            500: '#A7C4A0',
+                            600: '#8ba783',
+                        },
+                        blue: {
+                            50: '#f6f9f5',
+                            100: '#edf3eb',
+                            700: '#8ba783',
                         }
                     },
                     animation: {
@@ -31,7 +52,7 @@
     </script>
     <style>
         body {
-            background-color: #F8FAFC;
+            background-color: #F4EFE6;
             color: #334155;
             font-family: 'Inter', sans-serif;
         }
@@ -53,10 +74,8 @@
     <aside class="w-64 bg-slate-900 flex flex-col h-screen fixed left-0 top-0 z-40 shadow-2xl">
         <!-- Logo -->
         <div class="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white mr-3 shadow-lg">
-                <i class="fa-solid fa-layer-group text-sm"></i>
-            </div>
-            <span class="font-extrabold text-xl text-white tracking-tight">Roadmap 90</span>
+            <img src="/media/sde_prep_logo.png" alt="Logo" class="w-8 h-8 rounded-lg object-cover mr-3 shadow-lg">
+            <span class="font-extrabold text-xl text-white tracking-tight">SDE PREP 90</span>
         </div>
         
         <!-- Navigation -->
@@ -110,13 +129,13 @@
     {% endif %}
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden {% if user.is_authenticated %}ml-64{% endif %} bg-[#F8FAFC]">
+    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden {% if user.is_authenticated %}ml-64{% endif %} bg-[#F4EFE6]">
         
         <!-- Top Navbar -->
         {% if user.is_authenticated %}
         <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 shrink-0 z-30 relative sticky top-0">
             <div class="flex items-center gap-4">
-                <h1 class="text-xl font-bold text-slate-800 tracking-tight">{% block header_title %}Roadmap 90{% endblock %}</h1>
+                <h1 class="text-xl font-bold text-slate-800 tracking-tight">{% block header_title %}SDE PREP 90{% endblock %}</h1>
             </div>
             <div class="flex items-center gap-5">
                 <div class="relative">

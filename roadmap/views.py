@@ -11,6 +11,11 @@ from django.db.models import Sum
 from .forms import StudentRegistrationForm
 
 def register_view(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('founder_dashboard')
+        return redirect('dashboard')
+        
     if request.method == 'POST':
         form = StudentRegistrationForm(request.POST)
         if form.is_valid():
@@ -31,6 +36,11 @@ def register_view(request):
     return render(request, 'roadmap/register.html', {'form': form})
 
 def login_view(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            return redirect('founder_dashboard')
+        return redirect('dashboard')
+        
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -108,7 +118,7 @@ def founder_dashboard_view(request):
     if not request.user.is_superuser:
         return redirect('dashboard')
         
-    students = StudentProfile.objects.select_related('user').all().order_by('-xp')
+    students = StudentProfile.objects.select_related('user').filter(user__is_superuser=False).order_by('-xp')
     
     student_data = []
     for st in students:
@@ -120,12 +130,16 @@ def founder_dashboard_view(request):
         recent_freeze = ProgressTracker.objects.filter(student=st, used_freeze=True, completed_at__gte=timezone.now() - timedelta(days=3)).exists()
         if recent_freeze:
             status = 'FREEZE USED'
+            
+        display_name = st.full_name if st.full_name else st.user.username
         
         student_data.append({
-            'id': f"STU-{2026000 + st.user.id}",
-            'username': st.user.username,
+            'profile_id': st.id,
+            'real_username': st.user.username,
+            'username': display_name,
             'email': st.user.email,
-            'initials': st.user.username[0].upper() if st.user.username else 'U',
+            'contact': st.contact_number if st.contact_number else 'N/A',
+            'initials': display_name[0].upper() if display_name else 'U',
             'progress': days_completed,
             'streak': st.current_streak,
             'xp': st.xp,
@@ -134,14 +148,98 @@ def founder_dashboard_view(request):
 
     return render(request, 'roadmap/founder_dashboard.html', {'students': student_data})
 
+@login_required
+def founder_register_student_view(request):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+        
+    if request.method == 'POST':
+        form = StudentRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            profile = StudentProfile.objects.create(user=user)
+            profile.full_name = form.cleaned_data.get('full_name')
+            profile.contact_number = form.cleaned_data.get('contact_number')
+            profile.save()
+            messages.success(request, f"Student {user.username} registered successfully.")
+            return redirect('founder_dashboard')
+    else:
+        form = StudentRegistrationForm()
+        
+    return render(request, 'roadmap/founder_register_student.html', {'form': form})
+
+@login_required
+def founder_student_detail_view(request, profile_id):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+        
+    profile = get_object_or_404(StudentProfile, id=profile_id)
+    today = timezone.now().date()
+    
+    current_day_number = (today - profile.start_date).days + 1
+    if current_day_number > 90:
+        current_day_number = 90
+    elif current_day_number < 1:
+        current_day_number = 1
+
+    days_since_last = (today - profile.last_completed_date).days if profile.last_completed_date else 0
+    streak_at_risk = days_since_last > 1 and profile.current_streak > 0
+    display_streak = profile.current_streak if not streak_at_risk else 0
+
+    all_days = DailyContent.objects.order_by('day_number')
+    completed_days = ProgressTracker.objects.filter(student=profile).values_list('day__day_number', flat=True)
+    
+    days_data = []
+    for day_num in range(1, 91):
+        day_obj = all_days.filter(day_number=day_num).first()
+        status = 'locked'
+        if day_num <= current_day_number:
+            status = 'unlocked'
+        if day_num in completed_days:
+            status = 'completed'
+            
+        days_data.append({
+            'day_number': day_num,
+            'day_obj': day_obj,
+            'status': status
+        })
+        
+    context = {
+        'student_profile': profile,
+        'current_day_number': current_day_number,
+        'display_streak': display_streak,
+        'days_data': days_data,
+        'total_completed': len(completed_days),
+    }
+    return render(request, 'roadmap/founder_student_detail.html', context)
+
 import calendar as cal
 from datetime import date
 
 @login_required
 def calendar_view(request):
     today = timezone.now().date()
-    year = today.year
-    month = today.month
+    
+    try:
+        year = int(request.GET.get('year', today.year))
+        month = int(request.GET.get('month', today.month))
+    except ValueError:
+        year = today.year
+        month = today.month
+        
+    if month == 1:
+        prev_month = 12
+        prev_year = year - 1
+    else:
+        prev_month = month - 1
+        prev_year = year
+        
+    if month == 12:
+        next_month = 1
+        next_year = year + 1
+    else:
+        next_month = month + 1
+        next_year = year
     
     c = cal.Calendar(firstweekday=6)
     weeks = c.monthdatescalendar(year, month)
@@ -171,9 +269,15 @@ def calendar_view(request):
             })
         calendar_grid.append(week_data)
         
+    current_date = date(year, month, 1)
+        
     return render(request, 'roadmap/calendar.html', {
         'calendar_grid': calendar_grid,
-        'current_month_name': today.strftime('%B %Y')
+        'current_month_name': current_date.strftime('%B %Y'),
+        'prev_month': prev_month,
+        'prev_year': prev_year,
+        'next_month': next_month,
+        'next_year': next_year,
     })
 
 @login_required
