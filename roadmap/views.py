@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib import messages
-from .models import StudentProfile, DailyContent, ProgressTracker, Notice, Event, DayAccessLog
+from .models import StudentProfile, DailyContent, ProgressTracker, Notice, Event, DayAccessLog, Note
 from django.db.models import Sum
 
 from .forms import StudentRegistrationForm
@@ -358,6 +358,44 @@ def founder_content_edit_view(request, day_number):
         return redirect('founder_content_list')
         
     return render(request, 'roadmap/founder_content_edit.html', {'day': day})
+
+@login_required
+def founder_notes_view(request):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+        
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        category = request.POST.get('category')
+        description = request.POST.get('description')
+        file = request.FILES.get('file')
+        
+        if title and file:
+            Note.objects.create(title=title, category=category, description=description, file=file)
+            messages.success(request, "Note uploaded successfully!")
+        else:
+            messages.error(request, "Title and File are required.")
+        return redirect('founder_notes')
+        
+    notes = Note.objects.all().order_by('-uploaded_at')
+    categories = [c[0] for c in Note.CATEGORY_CHOICES]
+    return render(request, 'roadmap/founder_notes.html', {'notes': notes, 'categories': categories})
+
+@login_required
+def student_notes_view(request):
+    category_filter = request.GET.get('category')
+    notes = Note.objects.all().order_by('-uploaded_at')
+    
+    if category_filter:
+        notes = notes.filter(category=category_filter)
+        
+    categories = [c[0] for c in Note.CATEGORY_CHOICES]
+    
+    return render(request, 'roadmap/student_notes.html', {
+        'notes': notes, 
+        'categories': categories,
+        'current_category': category_filter
+    })
 
 @login_required
 def mark_completed_view(request, day_number):

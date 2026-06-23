@@ -1,0 +1,91 @@
+{% extends 'roadmap/base.html' %}
+
+{% block header_title %}Notes Library{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto space-y-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-2">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Notes Library</h1>
+            <p class="text-slate-500 font-medium">Download cheat sheets, handwritten notes, and topic guides.</p>
+        </div>
+        
+        <!-- Category Filter -->
+        <div class="shrink-0">
+            <form method="GET" class="flex items-center gap-2">
+                <select name="category" class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-brand-blue/20 outline-none text-sm font-semibold text-slate-700 shadow-sm appearance-none cursor-pointer pr-10 relative">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat }}" {% if current_category == cat %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2.5 rounded-xl font-bold text-sm transition-colors shadow-sm">
+                    Filter
+                </button>
+                {% if current_category %}
+                    <a href="{% url 'student_notes' %}" class="text-slate-400 hover:text-red-500 px-2 transition-colors" title="Clear Filter">
+                        <i class="fa-solid fa-times"></i>
+                    </a>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+
+    <!-- Notes Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {% for note in notes %}
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col group overflow-hidden">
+                
+                <!-- Card Header -->
+                <div class="p-6 flex-1 flex flex-col relative">
+                    <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-indigo-50 to-white rounded-bl-full -z-0 opacity-50 group-hover:scale-110 transition-transform"></div>
+                    
+                    <div class="mb-4 relative z-10 flex items-center justify-between">
+                        <span class="px-3 py-1 bg-brand-blue/10 text-brand-blue font-extrabold text-[10px] uppercase tracking-wider rounded-full border border-brand-blue/20">
+                            {{ note.category }}
+                        </span>
+                        <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-extrabold text-lg text-slate-800 mb-2 leading-tight relative z-10">{{ note.title }}</h3>
+                    
+                    {% if note.description %}
+                        <p class="text-sm text-slate-500 line-clamp-3 relative z-10 leading-relaxed">{{ note.description }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Card Footer Action -->
+                <div class="p-4 border-t border-slate-100 bg-slate-50 mt-auto flex gap-3">
+                    <a href="{{ note.file.url }}" target="_blank" class="flex-1 py-2.5 bg-white border border-slate-200 hover:border-brand-blue text-slate-700 hover:text-brand-blue font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Open
+                    </a>
+                    <a href="{{ note.file.url }}" download class="flex-1 py-2.5 bg-brand-blue hover:bg-indigo-600 border border-transparent text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm hover:-translate-y-0.5">
+                        <i class="fa-solid fa-cloud-arrow-down"></i> Download
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-span-full py-16 text-center bg-white border border-dashed border-slate-200 rounded-3xl shadow-sm">
+                <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 text-3xl mx-auto mb-4">
+                    <i class="fa-solid fa-box-open"></i>
+                </div>
+                <p class="font-extrabold text-lg text-slate-700">No notes found.</p>
+                <p class="text-slate-500 mt-1 max-w-sm mx-auto">
+                    {% if current_category %}
+                        There are currently no notes uploaded in the <strong>{{ current_category }}</strong> category.
+                    {% else %}
+                        Your instructors haven't uploaded any notes yet. Check back later!
+                    {% endif %}
+                </p>
+                {% if current_category %}
+                    <a href="{% url 'student_notes' %}" class="mt-6 inline-block bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-6 py-2 rounded-lg transition-colors">
+                        View All Notes
+                    </a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -82,3 +82,23 @@ class CommunityMessage(models.Model):
 
     def __str__(self):
         return f"{self.user.username} at {self.created_at}"
+
+class Note(models.Model):
+    CATEGORY_CHOICES = [
+        ('Handwritten', 'Handwritten Notes'),
+        ('Python', 'Python'),
+        ('Java', 'Java'),
+        ('C++', 'C++'),
+        ('DSA', 'Data Structures & Algorithms'),
+        ('System Design', 'System Design'),
+        ('Other', 'Other'),
+    ]
+    
+    title = models.CharField(max_length=255)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Other')
+    description = models.TextField(blank=True, null=True)
+    file = models.FileField(upload_to='notes/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
