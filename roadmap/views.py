@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib import messages
-from .models import StudentProfile, DailyContent, ProgressTracker, Notice, Event
+from .models import StudentProfile, DailyContent, ProgressTracker, Notice, Event, DayAccessLog
 from django.db.models import Sum
 
 from .forms import StudentRegistrationForm
@@ -46,6 +46,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
+            request.session['show_welcome_back'] = True
             if user.is_superuser:
                 return redirect('founder_dashboard')
             return redirect('dashboard')
@@ -110,6 +111,7 @@ def dashboard_view(request):
         'latest_notice': latest_notice,
         'streak_at_risk': streak_at_risk,
         'display_streak': display_streak,
+        'show_welcome_back': request.session.pop('show_welcome_back', False),
     }
     return render(request, 'roadmap/dashboard.html', context)
 
@@ -299,6 +301,65 @@ def add_event_view(request):
     return redirect('calendar')
 
 @login_required
+def student_day_content_view(request, day_number):
+    if request.user.is_superuser:
+        return redirect('founder_dashboard')
+        
+    profile = request.user.profile
+    today = timezone.now().date()
+    current_day_number = (today - profile.start_date).days + 1
+    
+    if day_number > current_day_number:
+        messages.error(request, "This day is locked.")
+        return redirect('dashboard')
+        
+    day_obj = get_object_or_404(DailyContent, day_number=day_number)
+    is_completed = ProgressTracker.objects.filter(student=profile, day=day_obj).exists()
+    
+    access_log, created = DayAccessLog.objects.get_or_create(student=profile, day=day_obj)
+    
+    unlock_time = access_log.first_accessed_at + timedelta(hours=2)
+    now = timezone.now()
+    can_complete = now >= unlock_time
+    
+    time_remaining_seconds = 0
+    if not can_complete:
+        time_remaining_seconds = (unlock_time - now).total_seconds()
+        
+    context = {
+        'day': day_obj,
+        'is_completed': is_completed,
+        'can_complete': can_complete,
+        'time_remaining_seconds': time_remaining_seconds,
+        'unlock_time': unlock_time,
+    }
+    return render(request, 'roadmap/day_content.html', context)
+
+@login_required
+def founder_content_list_view(request):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+        
+    days = DailyContent.objects.all().order_by('day_number')
+    return render(request, 'roadmap/founder_content_list.html', {'days': days})
+
+@login_required
+def founder_content_edit_view(request, day_number):
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+        
+    day, created = DailyContent.objects.get_or_create(day_number=day_number, defaults={'topic_name': f'Day {day_number}'})
+    
+    if request.method == 'POST':
+        day.topic_name = request.POST.get('topic_name', day.topic_name)
+        day.rich_content = request.POST.get('rich_content', '')
+        day.save()
+        messages.success(request, f"Day {day_number} content updated successfully!")
+        return redirect('founder_content_list')
+        
+    return render(request, 'roadmap/founder_content_edit.html', {'day': day})
+
+@login_required
 def mark_completed_view(request, day_number):
     if request.method == 'POST':
         profile = request.user.profile
@@ -311,6 +372,12 @@ def mark_completed_view(request, day_number):
             return redirect('dashboard')
             
         day_obj = get_object_or_404(DailyContent, day_number=day_number)
+        
+        access_log = DayAccessLog.objects.filter(student=profile, day=day_obj).first()
+        if not access_log or timezone.now() < (access_log.first_accessed_at + timedelta(hours=2)):
+            messages.error(request, "You must wait 2 hours after opening the content before marking it as complete.")
+            return redirect('student_day_content', day_number=day_number)
+            
         if ProgressTracker.objects.filter(student=profile, day=day_obj).exists():
             messages.info(request, "Day already completed.")
             return redirect('dashboard')
@@ -323,11 +390,11 @@ def mark_completed_view(request, day_number):
             profile.current_streak = 1
             
         profile.last_completed_date = today
-        profile.xp += 50
+        profile.xp += 10
         profile.save()
         
         ProgressTracker.objects.create(student=profile, day=day_obj)
-        messages.success(request, f"+50 XP! Day {day_number} completed.")
+        messages.success(request, f"+10 XP! Day {day_number} completed.")
         
     return redirect('dashboard')
 
@@ -367,7 +434,7 @@ def community_view(request):
 
 @login_required
 def leaderboard_view(request):
-    students = StudentProfile.objects.select_related('user').all().order_by('-xp')
+    students = StudentProfile.objects.select_related('user').filter(user__is_superuser=False).order_by('-xp')
     leaderboard_data = []
     for index, student in enumerate(students):
         leaderboard_data.append({

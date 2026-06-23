@@ -1,0 +1,73 @@
+{% extends 'roadmap/base.html' %}
+
+{% block header_title %}Day {{ day.day_number }} Content{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+    <a href="{% url 'dashboard' %}" class="text-slate-500 hover:text-brand-blue font-semibold text-sm mb-2 inline-flex items-center gap-1 transition-colors"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+    
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="px-8 py-6 border-b border-slate-100 bg-slate-50">
+            <div class="flex items-center justify-between">
+                <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Day {{ day.day_number }}: {{ day.topic_name }}</h1>
+                {% if is_completed %}
+                    <span class="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-check-circle"></i> Completed
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="p-8 prose prose-slate max-w-none prose-headings:text-slate-800 prose-a:text-brand-blue hover:prose-a:text-indigo-600 prose-img:rounded-xl">
+            {% if day.rich_content %}
+                {{ day.rich_content|safe }}
+            {% else %}
+                <div class="text-center py-12 text-slate-400">
+                    <i class="fa-solid fa-person-digging text-5xl mb-4 text-slate-200"></i>
+                    <p class="font-medium">Content is being prepared for this day.</p>
+                </div>
+            {% endif %}
+        </div>
+        
+        {% if not is_completed %}
+        <div class="p-8 border-t border-slate-100 bg-slate-50 flex flex-col items-center">
+            {% if can_complete %}
+                <p class="text-slate-500 mb-4 text-sm font-medium"><i class="fa-solid fa-clock mr-1 text-slate-400"></i> Minimum read time elapsed. You can now mark this as complete.</p>
+                <form method="POST" action="{% url 'mark_completed' day.day_number %}">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-brand-blue hover:bg-indigo-600 text-white font-bold py-3.5 px-10 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5 flex items-center gap-2">
+                        Mark as Completed <i class="fa-solid fa-check"></i>
+                    </button>
+                </form>
+            {% else %}
+                <div class="text-center">
+                    <p class="text-slate-600 font-bold mb-2">You must spend time reading this content.</p>
+                    <p class="text-slate-400 text-sm mb-4">The completion button will unlock in <span id="countdownTimer" class="font-bold text-brand-blue">--:--</span>.</p>
+                    <button disabled class="bg-slate-300 text-slate-500 font-bold py-3.5 px-10 rounded-xl cursor-not-allowed flex items-center gap-2 mx-auto">
+                        <i class="fa-solid fa-lock"></i> Locked
+                    </button>
+                </div>
+                
+                <script>
+                    var secondsRemaining = {{ time_remaining_seconds|floatformat:"0" }};
+                    function updateTimer() {
+                        if(secondsRemaining <= 0) {
+                            window.location.reload();
+                            return;
+                        }
+                        var h = Math.floor(secondsRemaining / 3600);
+                        var m = Math.floor((secondsRemaining % 3600) / 60);
+                        var s = Math.floor(secondsRemaining % 60);
+                        document.getElementById('countdownTimer').innerText = 
+                            (h > 0 ? h + "h " : "") + m + "m " + s + "s";
+                        secondsRemaining--;
+                    }
+                    setInterval(updateTimer, 1000);
+                    updateTimer();
+                </script>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

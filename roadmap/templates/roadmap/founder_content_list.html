@@ -1,0 +1,33 @@
+{% extends 'roadmap/base.html' %}
+
+{% block header_title %}Manage Daily Content{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto space-y-6">
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Content Manager</h1>
+            <p class="text-slate-500 font-medium">Edit the rich content, notes, and topics for all 90 days.</p>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {% for day_num in "x"|ljust:"90"|make_list %}
+            {% with forloop.counter as day %}
+                <div class="bg-white border border-slate-200 rounded-xl p-5 flex flex-col justify-between shadow-sm hover:shadow-md hover:border-brand-blue/50 transition-all">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="text-slate-800 font-bold text-lg">Day {{ day }}</h4>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <a href="{% url 'founder_content_edit' day %}" class="w-full inline-block text-center px-4 py-2 bg-slate-50 hover:bg-brand-blue hover:text-white text-slate-600 font-semibold rounded-lg transition-colors border border-slate-200 hover:border-brand-blue">
+                            Edit Content <i class="fa-solid fa-pen-to-square ml-1 text-xs"></i>
+                        </a>
+                    </div>
+                </div>
+            {% endwith %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
