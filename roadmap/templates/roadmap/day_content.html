@@ -35,7 +35,7 @@
                 <p class="text-slate-500 mb-4 text-sm font-medium"><i class="fa-solid fa-clock mr-1 text-slate-400"></i> Minimum read time elapsed. You can now mark this as complete.</p>
                 <form method="POST" action="{% url 'mark_completed' day.day_number %}">
                     {% csrf_token %}
-                    <button type="submit" class="bg-brand-blue hover:bg-indigo-600 text-white font-bold py-3.5 px-10 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5 flex items-center gap-2">
+                    <button type="submit" class="bg-brand-blue hover:brightness-110 text-white font-bold py-3.5 px-10 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5 flex items-center gap-2">
                         Mark as Completed <i class="fa-solid fa-check"></i>
                     </button>
                 </form>

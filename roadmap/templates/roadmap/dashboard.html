@@ -111,12 +111,12 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <div id="welcomeBackModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm transition-opacity">
     <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center transform transition-transform scale-100">
-        <div class="w-20 h-20 bg-brand-blue rounded-full flex items-center justify-center text-white text-3xl mx-auto mb-5 shadow-lg shadow-indigo-500/30">
+        <div class="w-20 h-20 bg-brand-blue rounded-full flex items-center justify-center text-white text-3xl mx-auto mb-5 shadow-lg shadow-brand-blue/30">
             <i class="fa-solid fa-hands-clapping"></i>
         </div>
         <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight mb-2">Welcome Back!</h2>
         <p class="text-slate-500 font-medium mb-8">We're so glad to see you again, <span class="text-brand-blue font-bold">{{ profile.full_name|default:profile.user.username }}</span>! Let's crush today's goals.</p>
-        <button onclick="document.getElementById('welcomeBackModal').remove()" class="w-full bg-brand-blue hover:bg-indigo-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-500/30 transition-all">
+        <button onclick="document.getElementById('welcomeBackModal').remove()" class="w-full bg-brand-blue hover:brightness-110 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand-blue/30 transition-all">
             Let's Go! <i class="fa-solid fa-rocket ml-1"></i>
         </button>
     </div>
@@ -132,14 +132,14 @@
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
-                colors: ['#A7C4A0', '#F4EFE6', '#4F46E5']
+                colors: ['#7FCDFF', '#DFF7FF', '#4F46E5']
             });
             confetti({
                 particleCount: 6,
                 angle: 120,
                 spread: 55,
                 origin: { x: 1 },
-                colors: ['#A7C4A0', '#F4EFE6', '#4F46E5']
+                colors: ['#7FCDFF', '#DFF7FF', '#4F46E5']
             });
 
             if (Date.now() < end) {

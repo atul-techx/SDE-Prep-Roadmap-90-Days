@@ -12,29 +12,30 @@
                 extend: {
                     colors: {
                         brand: {
-                            blue: '#A7C4A0', /* Eucalyptus Green */
-                            light: '#F4EFE6', /* Eucalyptus Light */
+                            blue: '#7FCDFF', /* Ocean Breeze Blue */
+                            light: '#DFF7FF', /* Ocean Breeze Light */
+                            dark: '#0369a1', /* Sky 700 for text contrast */
                         },
                         indigo: {
-                            50: '#f6f9f5',
-                            100: '#edf3eb',
-                            200: '#dbe7d7',
-                            300: '#c0d6ba',
-                            400: '#A7C4A0',
-                            500: '#A7C4A0',
-                            600: '#8ba783',
-                            700: '#6c8865',
-                            800: '#566d51',
-                            900: '#465942',
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#7FCDFF',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
                         },
                         purple: {
-                            500: '#A7C4A0',
-                            600: '#8ba783',
+                            500: '#7FCDFF',
+                            600: '#0284c7',
                         },
                         blue: {
-                            50: '#f6f9f5',
-                            100: '#edf3eb',
-                            700: '#8ba783',
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            700: '#0369a1',
                         }
                     },
                     animation: {
@@ -52,9 +53,26 @@
     </script>
     <style>
         body {
-            background-color: #F4EFE6;
+            background-color: #DFF7FF;
             color: #334155;
             font-family: 'Inter', sans-serif;
+        }
+        /* Ocean Breeze Theme Overrides */
+        .bg-brand-blue {
+            background: linear-gradient(135deg, #DFF7FF 0%, #7FCDFF 100%) !important;
+            color: #0f172a !important; /* Slate 900 for readability */
+            border: 1px solid rgba(127, 205, 255, 0.5);
+        }
+        .bg-brand-blue:hover {
+            background: linear-gradient(135deg, #7FCDFF 0%, #3BA4D9 100%) !important;
+            color: #ffffff !important;
+            border-color: #3BA4D9;
+        }
+        .text-brand-blue {
+            color: #0369a1 !important; /* Sky 700 */
+        }
+        .bg-brand-blue\/10 {
+            background-color: rgba(127, 205, 255, 0.2) !important;
         }
         .no-scrollbar::-webkit-scrollbar {
             display: none;
@@ -67,7 +85,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="min-h-screen flex font-sans antialiased selection:bg-brand-blue selection:text-white overflow-hidden">
+<body class="min-h-screen flex font-sans antialiased selection:bg-brand-blue selection:text-slate-900 overflow-hidden">
 
     <!-- Sidebar -->
     {% if user.is_authenticated %}
@@ -83,37 +101,37 @@
         <!-- Navigation -->
         <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
             {% if user.is_superuser %}
-            <a href="{% url 'founder_dashboard' %}" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_dashboard' %}bg-brand-blue text-white shadow-lg shadow-indigo-500/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'founder_dashboard' %}" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_dashboard' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
                 <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
             </a>
-            <a href="{% url 'founder_content_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_content_list' or request.resolver_match.url_name == 'founder_content_edit' %}bg-brand-blue text-white shadow-lg shadow-indigo-500/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'founder_content_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_content_list' or request.resolver_match.url_name == 'founder_content_edit' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
                 <i class="fa-solid fa-file-pen w-5"></i> Manage Content
             </a>
-            <a href="{% url 'founder_notes' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_notes' %}bg-brand-blue text-white shadow-lg shadow-indigo-500/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'founder_notes' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_notes' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
                 <i class="fa-solid fa-book w-5"></i> Manage Notes
             </a>
             {% else %}
-            <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'dashboard' %}bg-brand-blue text-white shadow-lg shadow-indigo-500/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'dashboard' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
                 <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
             </a>
-            <a href="{% url 'student_notes' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'student_notes' %}bg-brand-blue text-white shadow-lg shadow-indigo-500/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'student_notes' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'student_notes' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
                 <i class="fa-solid fa-book-open w-5"></i> Notes Library
             </a>
             {% endif %}
             
-            <a href="{% url 'calendar' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'calendar' %}bg-brand-blue text-white shadow-lg shadow-indigo-500/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'calendar' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'calendar' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
                 <i class="fa-regular fa-calendar-days text-lg w-5"></i> Timeline
             </a>
             
-            <a href="{% url 'community' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'community' %}bg-brand-blue text-white shadow-lg shadow-indigo-500/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'community' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'community' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
                 <i class="fa-solid fa-users w-5"></i> Community
             </a>
             
-            <a href="{% url 'leaderboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'leaderboard' %}bg-brand-blue text-white shadow-lg shadow-indigo-500/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'leaderboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'leaderboard' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
                 <i class="fa-solid fa-trophy w-5"></i> Leaderboard
             </a>
             
-            <a href="{% url 'profile' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'profile' %}bg-brand-blue text-white shadow-lg shadow-indigo-500/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'profile' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'profile' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
                 <i class="fa-solid fa-user w-5"></i> Profile
             </a>
         </div>
@@ -125,7 +143,7 @@
                     {% if user.profile.profile_picture %}
                         <img src="{{ user.profile.profile_picture.url }}" class="w-9 h-9 rounded-full object-cover shadow-md border border-slate-700">
                     {% else %}
-                        <div class="w-9 h-9 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white flex items-center justify-center font-bold text-sm shadow-md border border-slate-700">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-r from-[#7FCDFF] to-[#3BA4D9] text-white flex items-center justify-center font-bold text-sm shadow-md border border-slate-700">
                             {{ user.username|make_list|first|upper }}
                         </div>
                     {% endif %}
@@ -146,7 +164,7 @@
     {% endif %}
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden {% if user.is_authenticated %}ml-64{% endif %} bg-[#F4EFE6]">
+    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden {% if user.is_authenticated %}ml-64{% endif %} bg-brand-light">
         
         <!-- Top Navbar -->
         {% if user.is_authenticated %}
