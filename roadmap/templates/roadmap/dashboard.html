@@ -80,12 +80,19 @@
                         <p class="text-slate-400 text-xs mt-1">{% if day.day_obj %}{{ day.day_obj.topic_name }}{% else %}Upcoming Topic{% endif %}</p>
                     </div>
                 {% elif day.status == 'completed' %}
-                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex flex-col min-h-[120px] relative">
-                        <div class="absolute top-4 right-4 text-emerald-500">
-                            <i class="fa-solid fa-circle-check text-lg"></i>
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex flex-col justify-between min-h-[120px] relative hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="absolute top-4 right-4 text-emerald-500">
+                                <i class="fa-solid fa-circle-check text-lg"></i>
+                            </div>
+                            <h4 class="text-emerald-700 font-bold">Day {{ day.day_number }}</h4>
+                            <p class="text-emerald-600 text-xs mt-1 font-medium pr-6">{% if day.day_obj %}{{ day.day_obj.topic_name }}{% else %}Topic Name{% endif %}</p>
                         </div>
-                        <h4 class="text-emerald-700 font-bold">Day {{ day.day_number }}</h4>
-                        <p class="text-emerald-600 text-xs mt-1 font-medium pr-6">{% if day.day_obj %}{{ day.day_obj.topic_name }}{% else %}Topic Name{% endif %}</p>
+                        <div class="mt-4 flex justify-end">
+                            <a href="{% url 'student_day_content' day.day_number %}" class="px-3 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 text-xs font-bold rounded transition-colors flex items-center gap-1.5 shadow-sm border border-emerald-200">
+                                Review Content <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </div>
                     </div>
                 {% else %}
                     <!-- Unlocked -->
