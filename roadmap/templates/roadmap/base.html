@@ -7,7 +7,15 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // Pre-render theme check to prevent flash
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -57,6 +65,10 @@
             color: #334155;
             font-family: 'Inter', sans-serif;
         }
+        .dark body {
+            background-color: #0a0a0a;
+            color: #ededed;
+        }
         /* Ocean Breeze Theme Overrides */
         .bg-brand-blue {
             background: linear-gradient(135deg, #DFF7FF 0%, #7FCDFF 100%) !important;
@@ -85,7 +97,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="min-h-screen flex font-sans antialiased selection:bg-brand-blue selection:text-slate-900 overflow-hidden">
+<body class="min-h-screen flex font-sans antialiased selection:bg-brand-blue selection:text-slate-900 dark:selection:text-white overflow-hidden transition-colors duration-300">
 
     <!-- Sidebar -->
     {% if user.is_authenticated %}
@@ -164,17 +176,20 @@
     {% endif %}
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden {% if user.is_authenticated %}ml-64{% endif %} bg-brand-light">
+    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden {% if user.is_authenticated %}ml-64{% endif %} bg-brand-light dark:bg-[#0a0a0a] transition-colors duration-300">
         
         <!-- Top Navbar -->
         {% if user.is_authenticated %}
-        <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 flex items-center justify-between px-8 shrink-0 z-30 relative sticky top-0">
+        <header class="h-16 bg-white/80 dark:bg-[#121212]/80 backdrop-blur-md border-b border-slate-200 dark:border-zinc-800 flex items-center justify-between px-8 shrink-0 z-30 relative sticky top-0 transition-colors duration-300">
             <div class="flex items-center gap-4">
-                <h1 class="text-xl font-bold text-slate-800 tracking-tight">{% block header_title %}SDE PREP 90{% endblock %}</h1>
+                <h1 class="text-xl font-bold text-slate-800 dark:text-white tracking-tight">{% block header_title %}SDE PREP 90{% endblock %}</h1>
             </div>
             <div class="flex items-center gap-5">
+                <button id="themeToggle" class="text-slate-400 hover:text-brand-blue dark:hover:text-emerald-400 transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-indigo-50 dark:hover:bg-zinc-800">
+                    <i id="themeToggleIcon" class="fa-solid fa-moon text-xl"></i>
+                </button>
                 <div class="relative">
-                    <button class="text-slate-400 hover:text-brand-blue transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-indigo-50">
+                    <button class="text-slate-400 hover:text-brand-blue dark:hover:text-emerald-400 transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-indigo-50 dark:hover:bg-zinc-800">
                         <i class="fa-regular fa-bell text-xl"></i>
                     </button>
                     <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
@@ -184,8 +199,8 @@
 
         <!-- Notices Marquee (if any) -->
         {% if latest_notice %}
-        <div class="bg-indigo-50 border-b border-indigo-100 overflow-hidden relative h-10 flex items-center shrink-0">
-            <div class="absolute whitespace-nowrap animate-marquee text-brand-blue font-semibold text-sm flex items-center">
+        <div class="bg-indigo-50 dark:bg-indigo-900/30 border-b border-indigo-100 dark:border-indigo-800/50 overflow-hidden relative h-10 flex items-center shrink-0 transition-colors">
+            <div class="absolute whitespace-nowrap animate-marquee text-brand-blue dark:text-blue-400 font-semibold text-sm flex items-center">
                 <i class="fa-solid fa-bolt text-yellow-500 mr-3"></i> {{ latest_notice.text }} <span class="mx-8 opacity-30">•</span> {{ latest_notice.text }} <span class="mx-8 opacity-30">•</span> {{ latest_notice.text }}
             </div>
         </div>
@@ -204,10 +219,44 @@
         {% endif %}
 
         <!-- Main Scrollable Area -->
-        <main class="flex-1 overflow-y-auto p-8 relative">
+        <main class="flex-1 overflow-y-auto p-8 relative transition-colors duration-300">
             {% block content %}{% endblock %}
         </main>
 
     </div>
+
+    <script>
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeToggleIcon = document.getElementById('themeToggleIcon');
+
+        function updateIcon() {
+            if (document.documentElement.classList.contains('dark')) {
+                themeToggleIcon.classList.remove('fa-moon');
+                themeToggleIcon.classList.add('fa-sun');
+            } else {
+                themeToggleIcon.classList.remove('fa-sun');
+                themeToggleIcon.classList.add('fa-moon');
+            }
+        }
+
+        if (themeToggleBtn) {
+            updateIcon(); // Initial icon state
+
+            themeToggleBtn.addEventListener('click', function() {
+                // Toggle the 'dark' class on the HTML element
+                document.documentElement.classList.toggle('dark');
+                
+                // Update the icon
+                updateIcon();
+
+                // Save preference to localStorage
+                if (document.documentElement.classList.contains('dark')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+        }
+    </script>
 </body>
 </html>

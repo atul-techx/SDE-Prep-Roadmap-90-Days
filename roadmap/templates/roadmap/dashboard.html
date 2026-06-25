@@ -3,127 +3,289 @@
 {% block header_title %}Student Dashboard{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto space-y-6">
+<style>
+    /* Custom Scrollbar for Accordion */
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #f1f5f9; 
+    }
+    .dark ::-webkit-scrollbar-track {
+        background: #171717; 
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #cbd5e1; 
+        border-radius: 4px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+        background: #404040; 
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8; 
+    }
+    .dark ::-webkit-scrollbar-thumb:hover {
+        background: #525252; 
+    }
+</style>
+
+<div class="max-w-7xl mx-auto space-y-6 pb-20">
     
-    <!-- Profile & Stats row -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex items-center gap-4">
-            <div class="w-12 h-12 rounded-full bg-brand-blue text-white flex items-center justify-center text-xl font-bold">
-                {{ profile.user.username|make_list|first|upper }}
-            </div>
-            <div>
-                <h3 class="font-bold text-slate-800">{{ profile.user.username }}</h3>
-                <p class="text-xs text-slate-500">Joined {{ profile.start_date|date:"M j, Y" }}</p>
-            </div>
+    <!-- Header Title Area -->
+    <div class="flex items-center justify-between mb-4">
+        <h1 class="text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-white flex items-center gap-2 transition-colors">
+            90 Days <span class="text-brand-blue">SDE Internship Prepration</span> Challenge
+        </h1>
+        <div class="bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-800 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-zinc-300 shadow-sm transition-colors">
+            Solved: <span class="text-brand-blue">0 / 482</span>
         </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex items-center justify-between">
-            <div>
-                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Total XP</p>
-                <p class="text-2xl font-bold text-slate-800">{{ profile.xp }}</p>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
-                <i class="fa-solid fa-star"></i>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex items-center justify-between">
-            <div>
-                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Current Streak</p>
-                <p class="text-2xl font-bold text-slate-800">{{ display_streak }} <span class="text-sm font-normal text-slate-500">Days</span></p>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-500">
-                <i class="fa-solid fa-fire"></i>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5 flex flex-col justify-center">
-            <div class="flex items-center justify-between mb-2">
-                <div>
-                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Freezes Left</p>
-                    <p class="text-2xl font-bold text-slate-800">{{ profile.freezes_left }}</p>
-                </div>
-                <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-brand-blue">
-                    <i class="fa-solid fa-snowflake"></i>
-                </div>
-            </div>
-            {% if streak_at_risk %}
-                <form method="POST" action="{% url 'apply_freeze' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="w-full py-1.5 rounded bg-brand-blue hover:bg-blue-700 text-white text-xs font-semibold transition-colors" {% if profile.freezes_left == 0 %}disabled{% endif %}>
-                        Apply Freeze
-                    </button>
-                </form>
-            {% endif %}
-        </div>
-
     </div>
 
-    <!-- 90-Day Grid -->
-    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-            <h2 class="font-bold text-slate-800">Your 90-Day Path</h2>
-            <div class="text-xs font-semibold text-brand-blue bg-blue-100 px-3 py-1 rounded-full">
-                Day {{ current_day_number }} of 90
-            </div>
-        </div>
+    <div class="flex flex-col lg:flex-row gap-6">
         
-        <div class="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto no-scrollbar">
-            {% for day in days_data %}
-                {% if day.status == 'locked' %}
-                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 relative overflow-hidden flex flex-col min-h-[120px]">
-                        <div class="absolute inset-0 bg-white/50 backdrop-blur-[2px] z-10 flex items-center justify-center">
-                            <i class="fa-solid fa-lock text-slate-400 text-xl"></i>
-                        </div>
-                        <h4 class="text-slate-400 font-bold">Day {{ day.day_number }}</h4>
-                        <p class="text-slate-400 text-xs mt-1">{% if day.day_obj %}{{ day.day_obj.topic_name }}{% else %}Upcoming Topic{% endif %}</p>
+        <!-- Left Column: Main Content -->
+        <div class="flex-1 space-y-6">
+            
+            <!-- Overall Stats Box -->
+            <div class="bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-800 shadow-sm rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden transition-colors">
+                <!-- Circular Progress Mock -->
+                <div class="relative w-32 h-32 flex items-center justify-center shrink-0">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" class="text-slate-200 dark:text-zinc-800" stroke-width="8"></circle>
+                        <!-- Progress value here -->
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#3b82f6" stroke-width="8" stroke-dasharray="283" stroke-dashoffset="283" class="transition-all duration-1000"></circle>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span class="text-3xl font-black text-slate-800 dark:text-white">0%</span>
+                        <span class="text-[10px] text-slate-500 dark:text-zinc-300 font-bold tracking-wider">OVERALL</span>
                     </div>
-                {% elif day.status == 'completed' %}
-                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 flex flex-col justify-between min-h-[120px] relative hover:shadow-md transition-shadow">
-                        <div>
-                            <div class="absolute top-4 right-4 text-emerald-500">
-                                <i class="fa-solid fa-circle-check text-lg"></i>
+                </div>
+
+                <!-- Easy / Medium / Hard -->
+                <div class="flex-1 flex items-center justify-between gap-4 w-full">
+                    <div class="text-center">
+                        <p class="text-xs font-bold text-emerald-500 dark:text-emerald-300 tracking-wider mb-1">EASY</p>
+                        <p class="text-xl md:text-2xl font-bold text-slate-800 dark:text-white">0 <span class="text-slate-400 dark:text-zinc-400 text-lg">/ 123</span></p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs font-bold text-amber-500 tracking-wider mb-1">MEDIUM</p>
+                        <p class="text-xl md:text-2xl font-bold text-slate-800 dark:text-white">0 <span class="text-slate-400 dark:text-zinc-400 text-lg">/ 209</span></p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xs font-bold text-rose-500 tracking-wider mb-1">HARD</p>
+                        <p class="text-xl md:text-2xl font-bold text-slate-800 dark:text-white">0 <span class="text-slate-400 dark:text-zinc-400 text-lg">/ 148</span></p>
+                    </div>
+                </div>
+
+                <!-- Quote -->
+                <div class="hidden xl:block w-64 pl-6 border-l border-slate-200 dark:border-zinc-800">
+                    <p class="text-xs text-slate-500 dark:text-zinc-400 italic mb-2 leading-relaxed">"It's not about being the best today, it's about being 1% better than you were yesterday."</p>
+                    <p class="text-xs font-bold text-brand-blue">— The Code Journey</p>
+                </div>
+            </div>
+
+            <!-- Roadmap Plan Section -->
+            <div class="flex items-center gap-2 mb-2 mt-8">
+                <h3 class="text-sm font-bold text-slate-500 dark:text-zinc-400 tracking-widest uppercase">Roadmap Plan <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i></h3>
+            </div>
+
+            <div class="space-y-4">
+                {% for day in days_data %}
+                <!-- Accordion Item -->
+                <div class="bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden transition-all duration-300 accordion-container">
+                    <!-- Header -->
+                    <button class="w-full px-6 py-5 flex items-center justify-between bg-white dark:bg-[#121212] hover:bg-slate-50 dark:hover:bg-[#1a1a1a] transition-colors accordion-btn focus:outline-none">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-xl {% if day.status == 'completed' %}bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20{% else %}bg-slate-100 dark:bg-zinc-700/50 text-brand-blue dark:text-brand-blue border border-slate-200 dark:border-zinc-700{% endif %} flex items-center justify-center font-bold text-lg transition-colors">
+                                {{ day.day_number }}
                             </div>
-                            <h4 class="text-emerald-700 font-bold">Day {{ day.day_number }}</h4>
-                            <p class="text-emerald-600 text-xs mt-1 font-medium pr-6">{% if day.day_obj %}{{ day.day_obj.topic_name }}{% else %}Topic Name{% endif %}</p>
+                            <div class="text-left">
+                                <h4 class="text-slate-800 dark:text-white font-bold text-lg transition-colors">Day {{ day.day_number }}: {% if day.day_obj %}{{ day.day_obj.topic_name }}{% else %}Basics{% endif %}</h4>
+                                <p class="text-xs text-slate-500 dark:text-zinc-300 font-medium mt-0.5 transition-colors">0 / 10 PROBLEMS</p>
+                            </div>
                         </div>
-                        <div class="mt-4 flex justify-end">
-                            <a href="{% url 'student_day_content' day.day_number %}" class="px-3 py-1.5 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 text-xs font-bold rounded transition-colors flex items-center gap-1.5 shadow-sm border border-emerald-200">
-                                Review Content <i class="fa-solid fa-arrow-right"></i>
-                            </a>
+                        <div class="flex items-center gap-6">
+                            <div class="hidden sm:flex flex-col items-end">
+                                <span class="text-[10px] text-slate-500 dark:text-zinc-300 font-bold tracking-wider mb-1 transition-colors">PROGRESS</span>
+                                <span class="text-sm font-black text-slate-800 dark:text-white italic transition-colors">0%</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down text-slate-400 dark:text-zinc-300 transition-transform duration-300 accordion-icon"></i>
+                        </div>
+                    </button>
+
+                    <!-- Content (Hidden by default) -->
+                    <div class="accordion-content hidden border-t border-slate-100 dark:border-zinc-800/50 bg-slate-50 dark:bg-[#0a0a0a] transition-colors">
+                        <!-- Sub-section header -->
+                        <div class="px-6 py-3 bg-slate-100 dark:bg-[#111] border-b border-slate-200 dark:border-zinc-800/50 flex items-center justify-between cursor-pointer hover:bg-slate-200 dark:hover:bg-[#151515] transition-colors">
+                            <h5 class="text-xs font-bold text-slate-600 dark:text-zinc-400 tracking-wider">THINGS TO LEARN IN JAVA</h5>
+                            <i class="fa-solid fa-chevron-down text-slate-400 dark:text-zinc-400 text-xs"></i>
+                        </div>
+                        
+                        <!-- List Items Mock -->
+                        <div class="p-2 space-y-1">
+                            <!-- Item 1 -->
+                            <div class="flex items-center justify-between px-4 py-3 hover:bg-white dark:hover:bg-zinc-900/50 rounded-lg transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-5 h-5 rounded border-2 border-slate-300 dark:border-zinc-700 flex items-center justify-center cursor-pointer hover:border-brand-blue dark:hover:border-brand-blue transition-colors">
+                                        <!-- Checked state: <i class="fa-solid fa-check text-[10px] text-emerald-500"></i> -->
+                                    </div>
+                                    <span class="text-sm font-medium text-slate-700 dark:text-zinc-300 group-hover:text-brand-blue dark:group-hover:text-white transition-colors">Java Basics</span>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <button class="text-slate-400 dark:text-zinc-300 hover:text-red-500 dark:hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube text-lg"></i></button>
+                                    <button class="text-slate-400 dark:text-zinc-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><i class="fa-solid fa-book-open text-base"></i></button>
+                                    <button class="text-slate-400 dark:text-zinc-300 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"><i class="fa-solid fa-code text-base"></i></button>
+                                    <span class="px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-300 text-[10px] font-bold tracking-wide bg-emerald-50 dark:bg-emerald-500/10 w-16 text-center transition-colors">EASY</span>
+                                </div>
+                            </div>
+                            <!-- Item 2 -->
+                            <div class="flex items-center justify-between px-4 py-3 hover:bg-white dark:hover:bg-zinc-900/50 rounded-lg transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-5 h-5 rounded border-2 border-slate-300 dark:border-zinc-700 flex items-center justify-center cursor-pointer hover:border-brand-blue dark:hover:border-brand-blue transition-colors"></div>
+                                    <span class="text-sm font-medium text-slate-700 dark:text-zinc-300 group-hover:text-brand-blue dark:group-hover:text-white transition-colors">Input Output</span>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <button class="text-slate-400 dark:text-zinc-300 hover:text-red-500 dark:hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube text-lg"></i></button>
+                                    <button class="text-slate-400 dark:text-zinc-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><i class="fa-solid fa-book-open text-base"></i></button>
+                                    <button class="text-slate-400 dark:text-zinc-300 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"><i class="fa-solid fa-code text-base"></i></button>
+                                    <span class="px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-300 text-[10px] font-bold tracking-wide bg-emerald-50 dark:bg-emerald-500/10 w-16 text-center transition-colors">EASY</span>
+                                </div>
+                            </div>
+                            <!-- Item 3 -->
+                            <div class="flex items-center justify-between px-4 py-3 hover:bg-white dark:hover:bg-zinc-900/50 rounded-lg transition-colors group">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-5 h-5 rounded border-2 border-slate-300 dark:border-zinc-700 flex items-center justify-center cursor-pointer hover:border-brand-blue dark:hover:border-brand-blue transition-colors"></div>
+                                    <span class="text-sm font-medium text-slate-700 dark:text-zinc-300 group-hover:text-brand-blue dark:group-hover:text-white transition-colors">Control Statements</span>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <button class="text-slate-400 dark:text-zinc-300 hover:text-red-500 dark:hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube text-lg"></i></button>
+                                    <button class="text-slate-400 dark:text-zinc-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"><i class="fa-solid fa-book-open text-base"></i></button>
+                                    <button class="text-slate-400 dark:text-zinc-300 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"><i class="fa-solid fa-code text-base"></i></button>
+                                    <span class="px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-300 text-[10px] font-bold tracking-wide bg-emerald-50 dark:bg-emerald-500/10 w-16 text-center transition-colors">EASY</span>
+                                </div>
+                            </div>
+                            
+                            
                         </div>
                     </div>
-                {% else %}
-                    <!-- Unlocked -->
-                    <div class="bg-white border-2 border-brand-blue rounded-xl p-4 flex flex-col justify-between min-h-[120px] shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
-                        <div class="absolute top-0 left-0 w-1.5 h-full bg-brand-blue"></div>
-                        <div>
-                            <h4 class="text-slate-800 font-bold pl-2">Day {{ day.day_number }}</h4>
-                            <p class="text-slate-600 text-xs mt-1 pl-2">{% if day.day_obj %}{{ day.day_obj.topic_name }}{% else %}Topic Name{% endif %}</p>
+                </div>
+                {% endfor %}
+            </div>
+            
+        </div>
+
+        <!-- Right Column: Sidebar Stats & Resources -->
+        <div class="w-full lg:w-80 space-y-6 shrink-0">
+            
+            <!-- Active Progress Box -->
+            <div class="bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-800 shadow-sm rounded-2xl p-6 relative overflow-hidden transition-colors">
+                <div class="absolute top-4 right-4 w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
+                    <i class="fa-solid fa-check text-emerald-500 dark:text-emerald-500/30 text-2xl"></i>
+                </div>
+                <h3 class="text-[10px] font-bold text-slate-500 dark:text-zinc-400 tracking-widest uppercase mb-4 transition-colors">ACTIVE PROGRESS</h3>
+                <div class="flex items-baseline gap-1">
+                    <span class="text-5xl font-black text-slate-800 dark:text-white transition-colors">0</span>
+                    <span class="text-slate-400 dark:text-zinc-400 text-xl font-bold transition-colors">/ 482</span>
+                </div>
+                <div class="mt-4 h-1.5 w-full bg-slate-100 dark:bg-zinc-700 rounded-full overflow-hidden transition-colors">
+                    <div class="h-full bg-brand-blue w-0"></div>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div>
+                <h3 class="text-[10px] font-bold text-slate-500 dark:text-zinc-400 tracking-widest uppercase mb-3 ml-1 transition-colors">RESOURCES</h3>
+                <div class="space-y-3">
+                    <a href="#" class="flex items-center gap-4 bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-800 shadow-sm p-4 rounded-xl hover:border-brand-blue dark:hover:border-zinc-600 transition-colors group">
+                        <div class="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 flex items-center justify-center shrink-0">
+                            <i class="fa-brands fa-youtube text-xl"></i>
                         </div>
-                        <div class="mt-4 flex justify-end">
-                            <a href="{% url 'student_day_content' day.day_number %}" class="px-3 py-1.5 bg-brand-blue hover:bg-blue-700 text-white text-xs font-medium rounded transition-colors flex items-center gap-1.5 shadow-sm">
-                                View Content <i class="fa-solid fa-arrow-right"></i>
-                            </a>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold text-slate-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-emerald-400 transition-colors">Java DSA Playlist</h4>
+                            <p class="text-[10px] text-slate-500 dark:text-zinc-300 font-bold uppercase tracking-wider mt-0.5 transition-colors">ALL DSA TOPICS COVERED</p>
                         </div>
-                    </div>
+                        <i class="fa-solid fa-chevron-right text-slate-400 dark:text-zinc-400 text-xs group-hover:text-brand-blue dark:group-hover:text-white transition-colors"></i>
+                    </a>
+
+                    <a href="#" class="flex items-center gap-4 bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-800 shadow-sm p-4 rounded-xl hover:border-brand-blue dark:hover:border-zinc-600 transition-colors group">
+                        <div class="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-500/10 text-red-500 flex items-center justify-center shrink-0">
+                            <i class="fa-brands fa-youtube text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold text-slate-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-emerald-400 transition-colors">45 Days SDE Sheet</h4>
+                            <p class="text-[10px] text-slate-500 dark:text-zinc-300 font-bold uppercase tracking-wider mt-0.5 transition-colors">CHALLENGE - C++</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-400 dark:text-zinc-400 text-xs group-hover:text-brand-blue dark:group-hover:text-white transition-colors"></i>
+                    </a>
+
+                    <a href="#" class="flex items-center gap-4 bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-800 shadow-sm p-4 rounded-xl hover:border-brand-blue dark:hover:border-zinc-600 transition-colors group">
+                        <div class="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-500 dark:text-blue-400 flex items-center justify-center shrink-0">
+                            <i class="fa-solid fa-book-open text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="text-sm font-bold text-slate-800 dark:text-white group-hover:text-brand-blue dark:group-hover:text-emerald-400 transition-colors">Docs & Notes</h4>
+                            <p class="text-[10px] text-slate-500 dark:text-zinc-300 font-bold uppercase tracking-wider mt-0.5 transition-colors">OFFICIAL REFERENCES</p>
+                        </div>
+                        <i class="fa-solid fa-chevron-right text-slate-400 dark:text-zinc-400 text-xs group-hover:text-brand-blue dark:group-hover:text-white transition-colors"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Profile Info (from old dashboard) -->
+            <div class="mt-8 pt-6 border-t border-slate-200 dark:border-zinc-800/50 transition-colors">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-xs text-slate-500 dark:text-zinc-300 font-bold transition-colors">XP: <span class="text-emerald-500 dark:text-emerald-300">{{ profile.xp }}</span></p>
+                    <p class="text-xs text-slate-500 dark:text-zinc-300 font-bold transition-colors">Streak: <span class="text-amber-500">{{ display_streak }} Days</span></p>
+                </div>
+                {% if streak_at_risk %}
+                    <form method="POST" action="{% url 'apply_freeze' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full py-2.5 rounded-lg bg-blue-50 dark:bg-blue-500/10 hover:bg-blue-100 dark:hover:bg-blue-500/20 text-brand-blue dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 text-xs font-bold transition-colors" {% if profile.freezes_left == 0 %}disabled{% endif %}>
+                            Apply Freeze ({{ profile.freezes_left }} left)
+                        </button>
+                    </form>
                 {% endif %}
-            {% endfor %}
+            </div>
+
         </div>
     </div>
 </div>
 
+<script>
+    // Accordion Logic
+    document.addEventListener('DOMContentLoaded', () => {
+        const accordions = document.querySelectorAll('.accordion-container');
+        
+        accordions.forEach(acc => {
+            const btn = acc.querySelector('.accordion-btn');
+            const content = acc.querySelector('.accordion-content');
+            const icon = acc.querySelector('.accordion-icon');
+            
+            btn.addEventListener('click', () => {
+                const isOpen = !content.classList.contains('hidden');
+                
+                if (isOpen) {
+                    content.classList.add('hidden');
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    content.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
+    });
+</script>
+
 {% if show_welcome_back %}
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<div id="welcomeBackModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm transition-opacity">
-    <div class="bg-white rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center transform transition-transform scale-100">
-        <div class="w-20 h-20 bg-brand-blue rounded-full flex items-center justify-center text-white text-3xl mx-auto mb-5 shadow-lg shadow-brand-blue/30">
+<div id="welcomeBackModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 dark:bg-black/80 backdrop-blur-sm transition-opacity">
+    <div class="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center transition-colors">
+        <div class="w-20 h-20 bg-brand-blue dark:bg-emerald-500/10 border-0 dark:border dark:border-emerald-500/20 rounded-full flex items-center justify-center text-white dark:text-emerald-300 text-3xl mx-auto mb-5 shadow-lg shadow-brand-blue/30 dark:shadow-emerald-500/20 transition-colors">
             <i class="fa-solid fa-hands-clapping"></i>
         </div>
-        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight mb-2">Welcome Back!</h2>
-        <p class="text-slate-500 font-medium mb-8">We're so glad to see you again, <span class="text-brand-blue font-bold">{{ profile.full_name|default:profile.user.username }}</span>! Let's crush today's goals.</p>
-        <button onclick="document.getElementById('welcomeBackModal').remove()" class="w-full bg-brand-blue hover:brightness-110 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand-blue/30 transition-all">
+        <h2 class="text-3xl font-extrabold text-slate-800 dark:text-white tracking-tight mb-2 transition-colors">Welcome Back!</h2>
+        <p class="text-slate-500 dark:text-zinc-400 font-medium mb-8 transition-colors">Ready to continue your journey, <span class="text-brand-blue dark:text-emerald-300 font-bold">{{ profile.full_name|default:profile.user.username }}</span>?</p>
+        <button onclick="document.getElementById('welcomeBackModal').remove()" class="w-full bg-brand-blue hover:brightness-110 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-bold py-3.5 rounded-xl shadow-lg shadow-brand-blue/30 dark:shadow-emerald-500/20 transition-all">
             Let's Go! <i class="fa-solid fa-rocket ml-1"></i>
         </button>
     </div>
@@ -134,19 +296,22 @@
         var end = Date.now() + duration;
 
         (function frame() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const colors = isDark ? ['#34d399', '#10b981', '#059669'] : ['#7FCDFF', '#DFF7FF', '#4F46E5'];
+            
             confetti({
                 particleCount: 6,
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
-                colors: ['#7FCDFF', '#DFF7FF', '#4F46E5']
+                colors: colors
             });
             confetti({
                 particleCount: 6,
                 angle: 120,
                 spread: 55,
                 origin: { x: 1 },
-                colors: ['#7FCDFF', '#DFF7FF', '#4F46E5']
+                colors: colors
             });
 
             if (Date.now() < end) {

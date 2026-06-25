@@ -8,12 +8,12 @@
     <!-- Header -->
     <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
         <div>
-            <h1 class="text-3xl font-extrabold text-slate-800 tracking-tight">Schedule Overview</h1>
-            <p class="text-slate-500 text-sm mt-1">Track your roadmap milestones, assignments, and events.</p>
+            <h1 class="text-3xl font-extrabold text-slate-800 dark:text-white tracking-tight transition-colors">Schedule Overview</h1>
+            <p class="text-slate-500 dark:text-zinc-400 text-sm mt-1 transition-colors">Track your roadmap milestones, assignments, and events.</p>
         </div>
         <div class="flex gap-3">
             {% if user.is_superuser %}
-            <button onclick="document.getElementById('addEventModal').classList.remove('hidden')" class="bg-indigo-50 text-brand-blue font-semibold text-sm px-5 py-2.5 rounded-xl flex items-center gap-2 hover:bg-indigo-100 transition-colors cursor-pointer shadow-sm">
+            <button onclick="document.getElementById('addEventModal').classList.remove('hidden')" class="bg-indigo-50 dark:bg-indigo-500/10 text-brand-blue dark:text-blue-400 font-semibold text-sm px-5 py-2.5 rounded-xl flex items-center gap-2 hover:bg-indigo-100 dark:hover:bg-indigo-500/20 transition-colors cursor-pointer shadow-sm">
                 <i class="fa-solid fa-plus"></i> Add Event
             </button>
             {% endif %}
@@ -24,14 +24,14 @@
     <div class="w-full max-w-5xl mx-auto space-y-6">
         
         <!-- Controls -->
-        <div class="flex items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border border-slate-100">
+        <div class="flex items-center justify-between bg-white dark:bg-[#121212] px-6 py-4 rounded-2xl shadow-sm border border-slate-100 dark:border-zinc-800/50 transition-colors">
             <div class="flex items-center gap-6">
-                <h2 class="text-xl font-bold text-slate-800">{{ current_month_name }}</h2>
+                <h2 class="text-xl font-bold text-slate-800 dark:text-white transition-colors">{{ current_month_name }}</h2>
                 <div class="flex items-center gap-2">
-                    <a href="?year={{ prev_year }}&month={{ prev_month }}" class="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-500 transition-colors">
+                    <a href="?year={{ prev_year }}&month={{ prev_month }}" class="w-8 h-8 rounded-full bg-slate-50 dark:bg-zinc-800/50 hover:bg-slate-100 dark:hover:bg-zinc-700/50 flex items-center justify-center text-slate-500 dark:text-zinc-400 transition-colors">
                         <i class="fa-solid fa-chevron-left text-xs"></i>
                     </a>
-                    <a href="?year={{ next_year }}&month={{ next_month }}" class="w-8 h-8 rounded-full bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-500 transition-colors">
+                    <a href="?year={{ next_year }}&month={{ next_month }}" class="w-8 h-8 rounded-full bg-slate-50 dark:bg-zinc-800/50 hover:bg-slate-100 dark:hover:bg-zinc-700/50 flex items-center justify-center text-slate-500 dark:text-zinc-400 transition-colors">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </a>
                 </div>
@@ -42,13 +42,13 @@
         <div class="bg-transparent">
             <!-- Days Header -->
             <div class="grid grid-cols-7 gap-3 xl:gap-4 mb-4">
-                <div class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Sun</div>
-                <div class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Mon</div>
-                <div class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Tue</div>
-                <div class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Wed</div>
-                <div class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Thu</div>
-                <div class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Fri</div>
-                <div class="text-center text-xs font-bold text-slate-400 uppercase tracking-widest">Sat</div>
+                <div class="text-center text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest transition-colors">Sun</div>
+                <div class="text-center text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest transition-colors">Mon</div>
+                <div class="text-center text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest transition-colors">Tue</div>
+                <div class="text-center text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest transition-colors">Wed</div>
+                <div class="text-center text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest transition-colors">Thu</div>
+                <div class="text-center text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest transition-colors">Fri</div>
+                <div class="text-center text-xs font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest transition-colors">Sat</div>
             </div>
 
             <!-- Floating Tiles -->
@@ -57,21 +57,21 @@
                     {% for day in week %}
                         {% if not day.in_month %}
                             <!-- Empty / Previous/Next Month -->
-                            <div class="aspect-square rounded-2xl border border-dashed border-slate-200 flex p-3 opacity-40 bg-slate-50/50">
-                                <span class="text-slate-400 font-semibold text-sm">{{ day.day }}</span>
+                            <div class="aspect-square rounded-2xl border border-dashed border-slate-200 dark:border-zinc-800 flex p-3 opacity-40 bg-slate-50/50 dark:bg-[#0a0a0a] transition-colors">
+                                <span class="text-slate-400 dark:text-zinc-600 font-semibold text-sm transition-colors">{{ day.day }}</span>
                             </div>
                         {% else %}
                             {% if day.is_today %}
                                 <!-- Today Active -->
-                                <div class="aspect-square bg-indigo-50 rounded-2xl shadow-md border border-indigo-200 p-2 flex flex-col transform scale-105 z-10 relative overflow-y-auto no-scrollbar">
+                                <div class="aspect-square bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl shadow-md border border-indigo-200 dark:border-indigo-800/50 p-2 flex flex-col transform scale-105 z-10 relative overflow-y-auto no-scrollbar transition-colors">
                                     <div class="flex justify-between items-center mb-1.5 px-1">
-                                        <span class="text-brand-blue font-extrabold text-sm">{{ day.day }}</span>
-                                        <div class="w-1.5 h-1.5 bg-brand-blue rounded-full animate-pulse"></div>
+                                        <span class="text-brand-blue dark:text-blue-400 font-extrabold text-sm transition-colors">{{ day.day }}</span>
+                                        <div class="w-1.5 h-1.5 bg-brand-blue dark:bg-blue-400 rounded-full animate-pulse transition-colors"></div>
                                     </div>
                                     <div class="space-y-1 mt-auto">
                                         {% for event in day.events %}
                                         <div onclick="openEventModal('{{ event.title|escapejs }}', '{{ event.date|date:'F j, Y' }}', '{{ event.category|escapejs }}', '{{ event.description|escapejs }}')" 
-                                             class="w-full text-[10px] font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-colors px-1.5 py-1 rounded border border-indigo-500 cursor-pointer truncate text-center">
+                                             class="w-full text-[10px] font-bold text-white bg-indigo-600 dark:bg-indigo-500 hover:bg-indigo-700 dark:hover:bg-indigo-400 shadow-sm transition-colors px-1.5 py-1 rounded border border-indigo-500 dark:border-indigo-400 cursor-pointer truncate text-center">
                                             {{ event.title }}
                                         </div>
                                         {% endfor %}
@@ -79,8 +79,8 @@
                                 </div>
                             {% else %}
                                 <!-- Regular Days -->
-                                <div class="aspect-square bg-white rounded-2xl border border-slate-200 shadow-md hover:shadow-lg transition-shadow p-2 flex flex-col relative overflow-y-auto no-scrollbar">
-                                    <span class="text-slate-700 font-bold text-sm mb-1.5 px-1">{{ day.day }}</span>
+                                <div class="aspect-square bg-white dark:bg-[#121212] rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-md hover:shadow-lg transition-all p-2 flex flex-col relative overflow-y-auto no-scrollbar">
+                                    <span class="text-slate-700 dark:text-zinc-300 font-bold text-sm mb-1.5 px-1 transition-colors">{{ day.day }}</span>
                                     <div class="space-y-1 mt-auto">
                                         {% for event in day.events %}
                                             <div class="px-2 py-1 rounded-md text-[10px] font-bold truncate {{ event.color_class }} text-white mb-1 shadow hover:shadow-md hover:scale-105 transition-all duration-200 cursor-pointer flex items-center gap-1.5 border border-black/5" onclick="openEventModal('{{ event.title|escapejs }}', '{{ event.date|date:'F j, Y' }}', '{{ event.category|escapejs }}', '{{ event.description|escapejs }}')">
@@ -100,23 +100,23 @@
 </div>
 
 <!-- Event Detail Modal -->
-<div id="eventDetailModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm transition-opacity">
-    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col transform transition-transform">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-            <h3 class="font-bold text-xs uppercase tracking-wider text-brand-blue bg-indigo-100 px-3 py-1 rounded-full" id="modalEventCategory">Category</h3>
-            <button onclick="closeEventModal()" class="text-slate-400 hover:text-red-500 transition-colors w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center">
+<div id="eventDetailModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 dark:bg-black/70 backdrop-blur-sm transition-opacity">
+    <div class="bg-white dark:bg-[#121212] rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden flex flex-col transform transition-all">
+        <div class="px-6 py-4 border-b border-slate-100 dark:border-zinc-800/50 flex items-center justify-between bg-slate-50 dark:bg-[#0a0a0a] transition-colors">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-brand-blue dark:text-blue-400 bg-indigo-100 dark:bg-indigo-900/40 px-3 py-1 rounded-full transition-colors" id="modalEventCategory">Category</h3>
+            <button onclick="closeEventModal()" class="text-slate-400 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 transition-colors w-8 h-8 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center justify-center">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
         <div class="p-8 space-y-5">
             <div>
-                <h2 class="text-2xl font-extrabold text-slate-800 leading-tight" id="modalEventTitle">Event Title</h2>
-                <p class="text-sm font-semibold text-slate-500 mt-2 flex items-center gap-2" id="modalEventDate">
-                    <i class="fa-regular fa-calendar text-brand-blue"></i> <span>Date</span>
+                <h2 class="text-2xl font-extrabold text-slate-800 dark:text-white leading-tight transition-colors" id="modalEventTitle">Event Title</h2>
+                <p class="text-sm font-semibold text-slate-500 dark:text-zinc-400 mt-2 flex items-center gap-2 transition-colors" id="modalEventDate">
+                    <i class="fa-regular fa-calendar text-brand-blue dark:text-blue-400 transition-colors"></i> <span>Date</span>
                 </p>
             </div>
-            <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                <p class="text-sm text-slate-600 leading-relaxed font-medium" id="modalEventDesc">Description goes here...</p>
+            <div class="bg-slate-50 dark:bg-[#0a0a0a] p-4 rounded-xl border border-slate-100 dark:border-zinc-800/50 transition-colors">
+                <p class="text-sm text-slate-600 dark:text-zinc-300 leading-relaxed font-medium transition-colors" id="modalEventDesc">Description goes here...</p>
             </div>
         </div>
     </div>
@@ -124,36 +124,36 @@
 
 <!-- Add Event Modal (Founders Only) -->
 {% if user.is_superuser %}
-<div id="addEventModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col">
-        <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-            <h3 class="font-bold text-slate-800 text-lg">Add New Event</h3>
-            <button onclick="document.getElementById('addEventModal').classList.add('hidden')" class="text-slate-400 hover:text-red-500 transition-colors w-8 h-8 rounded-full hover:bg-red-50 flex items-center justify-center">
+<div id="addEventModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 dark:bg-black/70 backdrop-blur-sm transition-opacity">
+    <div class="bg-white dark:bg-[#121212] rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col transition-all">
+        <div class="px-6 py-5 border-b border-slate-100 dark:border-zinc-800/50 flex items-center justify-between bg-slate-50 dark:bg-[#0a0a0a] transition-colors">
+            <h3 class="font-bold text-slate-800 dark:text-white text-lg transition-colors">Add New Event</h3>
+            <button onclick="document.getElementById('addEventModal').classList.add('hidden')" class="text-slate-400 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 transition-colors w-8 h-8 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center justify-center">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
         </div>
         <form method="POST" action="{% url 'add_event' %}" class="p-8 space-y-5">
             {% csrf_token %}
             <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Event Title</label>
-                <input type="text" name="title" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all font-medium text-slate-800">
+                <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5 uppercase tracking-wide transition-colors">Event Title</label>
+                <input type="text" name="title" required class="w-full bg-slate-50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all font-medium text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500">
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Date</label>
-                    <input type="date" name="date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all font-medium text-slate-800">
+                    <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5 uppercase tracking-wide transition-colors">Date</label>
+                    <input type="date" name="date" required class="w-full bg-slate-50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all font-medium text-slate-800 dark:text-white">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Category</label>
-                    <input type="text" name="category" placeholder="e.g. Exam..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all font-medium text-slate-800">
+                    <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5 uppercase tracking-wide transition-colors">Category</label>
+                    <input type="text" name="category" placeholder="e.g. Exam..." required class="w-full bg-slate-50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all font-medium text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500">
                 </div>
             </div>
             <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wide">Description (Optional)</label>
-                <textarea name="description" rows="3" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all font-medium text-slate-800"></textarea>
+                <label class="block text-xs font-bold text-slate-700 dark:text-zinc-300 mb-1.5 uppercase tracking-wide transition-colors">Description (Optional)</label>
+                <textarea name="description" rows="3" class="w-full bg-slate-50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-zinc-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all font-medium text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500"></textarea>
             </div>
             <div class="pt-4">
-                <button type="submit" class="w-full bg-brand-blue hover:brightness-110 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-blue/30 cursor-pointer">
+                <button type="submit" class="w-full bg-brand-blue hover:brightness-110 text-white dark:text-slate-900 font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-blue/30 cursor-pointer">
                     Save Event
                 </button>
             </div>
@@ -165,7 +165,7 @@
 <script>
     function openEventModal(title, date, category, desc) {
         document.getElementById('modalEventTitle').innerText = title;
-        document.getElementById('modalEventDate').innerHTML = `<i class="fa-regular fa-calendar text-brand-blue"></i> <span>${date}</span>`;
+        document.getElementById('modalEventDate').innerHTML = `<i class="fa-regular fa-calendar text-brand-blue dark:text-blue-400 transition-colors"></i> <span>${date}</span>`;
         document.getElementById('modalEventCategory').innerText = category;
         document.getElementById('modalEventDesc').innerText = desc ? desc : 'No further details available for this event.';
         document.getElementById('eventDetailModal').classList.remove('hidden');
