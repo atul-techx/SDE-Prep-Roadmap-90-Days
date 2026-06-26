@@ -24,29 +24,29 @@
 <div class="max-w-5xl mx-auto">
     <div class="mb-6 flex items-center justify-between">
         <div>
-            <a href="{% url 'founder_content_list' %}" class="text-slate-500 dark:text-zinc-400 hover:text-brand-blue dark:hover:text-blue-400 font-semibold text-sm mb-2 inline-flex items-center gap-1 transition-colors"><i class="fa-solid fa-arrow-left"></i> Back to List</a>
-            <h1 class="text-3xl font-extrabold text-slate-800 dark:text-white tracking-tight transition-colors">Day {{ day.day_number }} Content</h1>
+            <a href="{% url 'founder_content_list' %}" class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-blue dark:text-blue-light dark:hover:text-blue-400 font-semibold text-sm mb-2 inline-flex items-center gap-1 transition-colors"><i class="fa-solid fa-arrow-left"></i> Back to List</a>
+            <h1 class="text-3xl font-extrabold text-navy dark:text-ice text-navy dark:text-ice tracking-tight transition-colors">Day {{ day.day_number }} Content</h1>
         </div>
     </div>
 
-    <form method="POST" class="bg-white dark:bg-[#121212] p-8 rounded-3xl shadow-sm border border-slate-200 dark:border-zinc-800 transition-colors" id="contentForm">
+    <form method="POST" class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] p-8 rounded-3xl shadow-sm border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 transition-colors" id="contentForm">
         {% csrf_token %}
         
         <div class="mb-6">
-            <label class="block text-slate-700 dark:text-zinc-300 font-bold mb-2 transition-colors">Topic Name</label>
-            <input type="text" name="topic_name" value="{{ day.topic_name }}" class="w-full bg-slate-50 dark:bg-[#0a0a0a] border border-slate-200 dark:border-zinc-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all text-slate-800 dark:text-white">
+            <label class="block text-navy dark:text-ice text-slate dark:text-slate-light font-bold mb-2 transition-colors">Topic Name</label>
+            <input type="text" name="topic_name" value="{{ day.topic_name }}" class="w-full bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue/50 dark:focus:ring-blue-dark/50/20 outline-none transition-all text-navy dark:text-ice text-navy dark:text-ice">
         </div>
 
         <div class="mb-6">
-            <label class="block text-slate-700 dark:text-zinc-300 font-bold mb-2 transition-colors">Rich Content (HTML/Text/Media)</label>
+            <label class="block text-navy dark:text-ice text-slate dark:text-slate-light font-bold mb-2 transition-colors">Rich Content (HTML/Text/Media)</label>
             <input type="hidden" name="rich_content" id="rich_content">
-            <div id="editor-container" class="h-96 rounded-b-xl border-slate-200 dark:border-zinc-700 font-sans text-base transition-colors">
+            <div id="editor-container" class="h-96 rounded-b-xl border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 font-sans text-base transition-colors">
                 {{ day.rich_content|safe }}
             </div>
         </div>
         
-        <div class="flex justify-end pt-4 border-t border-slate-100 dark:border-zinc-800/50 transition-colors">
-            <button type="submit" class="bg-brand-blue hover:brightness-110 text-white dark:text-slate-900 font-bold py-3 px-8 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5">
+        <div class="flex justify-end pt-4 border-t border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 transition-colors">
+            <button type="submit" class="bg-blue dark:bg-blue-dark hover:bg-blue dark:bg-blue-dark-light text-slate dark:text-slate-light text-navy dark:text-ice font-bold py-3 px-8 rounded-xl shadow-lg transition-transform hover:-translate-y-0.5">
                 Save Content
             </button>
         </div>

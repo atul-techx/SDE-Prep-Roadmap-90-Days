@@ -7,11 +7,11 @@
     
     <!-- Header -->
     <div class="text-center space-y-4">
-        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-500 dark:text-amber-400 mb-2 shadow-inner transition-colors">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-light dark:bg-blue-dark/20 dark:bg-amber-900/30 text-blue dark:text-blue-light dark:text-amber-400 mb-2 shadow-inner transition-colors">
             <i class="fa-solid fa-trophy text-3xl"></i>
         </div>
-        <h1 class="text-4xl font-black text-slate-800 dark:text-white tracking-tight transition-colors">Global Rankings</h1>
-        <p class="text-slate-500 dark:text-zinc-400 max-w-xl mx-auto text-lg transition-colors">Compete with your peers, maintain your streak, and climb to the top of the SDE PREP 90 leaderboard!</p>
+        <h1 class="text-4xl font-black text-navy dark:text-ice text-navy dark:text-ice tracking-tight transition-colors">Global Rankings</h1>
+        <p class="text-slate dark:text-slate-light text-slate dark:text-slate-light max-w-xl mx-auto text-lg transition-colors">Compete with your peers, maintain your streak, and climb to the top of the SDE PREP 90 leaderboard!</p>
     </div>
 
     <!-- Podium for Top 3 -->
@@ -21,20 +21,20 @@
         {% if leaderboard_data|length >= 2 %}
         {% with student=leaderboard_data.1 %}
         <div class="w-full md:w-64 flex flex-col items-center order-2 md:order-1 relative group">
-            <div class="absolute -top-6 text-4xl text-slate-300 dark:text-zinc-600 drop-shadow-md z-20 group-hover:-translate-y-2 transition-all duration-300">
+            <div class="absolute -top-6 text-4xl text-slate dark:text-slate-light dark:text-zinc-600 drop-shadow-md z-20 group-hover:-translate-y-2 transition-all duration-300">
                 <i class="fa-solid fa-medal"></i>
             </div>
-            <div class="bg-white dark:bg-[#121212] border-2 border-slate-200 dark:border-zinc-800 rounded-t-3xl rounded-b-xl shadow-lg w-full flex flex-col items-center pt-8 pb-6 px-4 relative z-10 transition-colors">
-                <div class="w-20 h-20 rounded-full bg-slate-100 dark:bg-zinc-800 border-4 border-white dark:border-[#121212] shadow-md flex items-center justify-center text-2xl font-bold text-slate-500 dark:text-zinc-400 mb-3 overflow-hidden transition-colors">
+            <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border-2 border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 rounded-t-3xl rounded-b-xl shadow-lg w-full flex flex-col items-center pt-8 pb-6 px-4 relative z-10 transition-colors">
+                <div class="w-20 h-20 rounded-full bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 bg-ice dark:bg-navy-dark-light border-4 border-white dark:border-[#121212] shadow-md flex items-center justify-center text-2xl font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light mb-3 overflow-hidden transition-colors">
                     {{ student.profile.user.username.0|upper }}
                 </div>
-                <h3 class="font-extrabold text-slate-800 dark:text-white text-lg truncate w-full text-center transition-colors">{{ student.profile.user.username }}</h3>
-                <p class="text-slate-500 dark:text-zinc-400 text-sm font-semibold mb-4 transition-colors">{{ student.profile.xp }} XP</p>
-                <div class="bg-slate-50 dark:bg-[#0a0a0a] w-full py-2 rounded-lg text-center border border-slate-100 dark:border-zinc-800/50 transition-colors">
-                    <span class="text-slate-400 dark:text-zinc-500 font-bold text-sm uppercase tracking-widest transition-colors">Rank 2</span>
+                <h3 class="font-extrabold text-navy dark:text-ice text-navy dark:text-ice text-lg truncate w-full text-center transition-colors">{{ student.profile.user.username }}</h3>
+                <p class="text-slate dark:text-slate-light text-slate dark:text-slate-light text-sm font-semibold mb-4 transition-colors">{{ student.profile.xp }} XP</p>
+                <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] w-full py-2 rounded-lg text-center border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 transition-colors">
+                    <span class="text-slate dark:text-slate-light text-slate dark:text-slate-light font-bold text-sm uppercase tracking-widest transition-colors">Rank 2</span>
                 </div>
             </div>
-            <div class="w-full h-16 bg-slate-200 dark:bg-zinc-800/50 rounded-b-xl shadow-inner border-x-2 border-b-2 border-slate-300 dark:border-zinc-700 transition-colors"></div>
+            <div class="w-full h-16 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 bg-ice dark:bg-navy-dark-light/50 rounded-b-xl shadow-inner border-x-2 border-b-2 border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 transition-colors"></div>
         </div>
         {% endwith %}
         {% endif %}
@@ -46,14 +46,14 @@
             <div class="absolute -top-12 text-6xl text-amber-400 dark:text-amber-300 drop-shadow-[0_4px_12px_rgba(251,191,36,0.5)] z-20 group-hover:-translate-y-2 transition-all duration-300">
                 <i class="fa-solid fa-crown"></i>
             </div>
-            <div class="bg-gradient-to-b from-amber-50 dark:from-amber-900/20 to-white dark:to-[#121212] border-2 border-amber-200 dark:border-amber-700/50 rounded-t-3xl rounded-b-xl shadow-2xl shadow-amber-500/20 dark:shadow-amber-900/20 w-full flex flex-col items-center pt-10 pb-8 px-4 relative z-10 transform md:-translate-y-4 transition-colors">
-                <div class="w-24 h-24 rounded-full bg-amber-100 dark:bg-amber-900/40 border-4 border-white dark:border-[#121212] shadow-md flex items-center justify-center text-3xl font-bold text-amber-600 dark:text-amber-400 mb-3 overflow-hidden ring-4 ring-amber-50 dark:ring-amber-900/20 transition-colors">
+            <div class="bg-gradient-to-b from-amber-50 dark:from-amber-900/20 to-obsidian dark:to-[#121212] border-2 border-amber-200 dark:border-amber-700/50 rounded-t-3xl rounded-b-xl shadow-2xl shadow-amber-500/20 dark:shadow-amber-900/20 w-full flex flex-col items-center pt-10 pb-8 px-4 relative z-10 transform md:-translate-y-4 transition-colors">
+                <div class="w-24 h-24 rounded-full bg-blue-light dark:bg-blue-dark/20 dark:bg-amber-900/40 border-4 border-white dark:border-[#121212] shadow-md flex items-center justify-center text-3xl font-bold text-blue dark:text-blue-light dark:text-amber-400 mb-3 overflow-hidden ring-4 ring-amber-50 dark:ring-amber-900/20 transition-colors">
                     {{ student.profile.user.username.0|upper }}
                 </div>
-                <h3 class="font-extrabold text-slate-800 dark:text-white text-xl truncate w-full text-center transition-colors">{{ student.profile.user.username }}</h3>
-                <p class="text-amber-600 dark:text-amber-400 text-lg font-black mb-5 transition-colors">{{ student.profile.xp }} XP</p>
-                <div class="bg-amber-100 dark:bg-amber-900/30 w-full py-2.5 rounded-lg text-center border border-amber-200 dark:border-amber-700/50 transition-colors">
-                    <span class="text-amber-600 dark:text-amber-400 font-black text-sm uppercase tracking-widest transition-colors">Rank 1</span>
+                <h3 class="font-extrabold text-navy dark:text-ice text-navy dark:text-ice text-xl truncate w-full text-center transition-colors">{{ student.profile.user.username }}</h3>
+                <p class="text-blue dark:text-blue-light dark:text-amber-400 text-lg font-black mb-5 transition-colors">{{ student.profile.xp }} XP</p>
+                <div class="bg-blue-light dark:bg-blue-dark/20 dark:bg-amber-900/30 w-full py-2.5 rounded-lg text-center border border-amber-200 dark:border-amber-700/50 transition-colors">
+                    <span class="text-blue dark:text-blue-light dark:text-amber-400 font-black text-sm uppercase tracking-widest transition-colors">Rank 1</span>
                 </div>
             </div>
             <div class="w-full h-24 bg-amber-300 dark:bg-amber-700 rounded-b-xl shadow-inner border-x-2 border-b-2 border-amber-400 dark:border-amber-600 transform md:-translate-y-4 transition-colors"></div>
@@ -68,12 +68,12 @@
             <div class="absolute -top-6 text-4xl text-orange-400 drop-shadow-md z-20 group-hover:-translate-y-2 transition-transform duration-300">
                 <i class="fa-solid fa-medal"></i>
             </div>
-            <div class="bg-white dark:bg-[#121212] border-2 border-orange-100 dark:border-orange-900/30 rounded-t-3xl rounded-b-xl shadow-lg w-full flex flex-col items-center pt-8 pb-6 px-4 relative z-10 transition-colors">
+            <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border-2 border-orange-100 dark:border-orange-900/30 rounded-t-3xl rounded-b-xl shadow-lg w-full flex flex-col items-center pt-8 pb-6 px-4 relative z-10 transition-colors">
                 <div class="w-20 h-20 rounded-full bg-orange-50 dark:bg-orange-900/20 border-4 border-white dark:border-[#121212] shadow-md flex items-center justify-center text-2xl font-bold text-orange-500 dark:text-orange-400 mb-3 overflow-hidden transition-colors">
                     {{ student.profile.user.username.0|upper }}
                 </div>
-                <h3 class="font-extrabold text-slate-800 dark:text-white text-lg truncate w-full text-center transition-colors">{{ student.profile.user.username }}</h3>
-                <p class="text-slate-500 dark:text-zinc-400 text-sm font-semibold mb-4 transition-colors">{{ student.profile.xp }} XP</p>
+                <h3 class="font-extrabold text-navy dark:text-ice text-navy dark:text-ice text-lg truncate w-full text-center transition-colors">{{ student.profile.user.username }}</h3>
+                <p class="text-slate dark:text-slate-light text-slate dark:text-slate-light text-sm font-semibold mb-4 transition-colors">{{ student.profile.xp }} XP</p>
                 <div class="bg-orange-50 dark:bg-orange-900/20 w-full py-2 rounded-lg text-center border border-orange-100 dark:border-orange-900/30 transition-colors">
                     <span class="text-orange-600 dark:text-orange-400 font-bold text-sm uppercase tracking-widest transition-colors">Rank 3</span>
                 </div>
@@ -86,9 +86,9 @@
     </div>
 
     <!-- Rankings List -->
-    <div class="bg-white dark:bg-[#121212] rounded-3xl shadow-sm border border-slate-200 dark:border-zinc-800 overflow-hidden mt-8 max-w-4xl mx-auto transition-colors">
+    <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] rounded-3xl shadow-sm border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 overflow-hidden mt-8 max-w-4xl mx-auto transition-colors">
         
-        <div class="bg-slate-50 dark:bg-zinc-900 px-8 py-5 border-b border-slate-200 dark:border-zinc-800/50 grid grid-cols-12 gap-4 items-center font-bold text-xs uppercase tracking-widest text-slate-400 dark:text-zinc-500 transition-colors">
+        <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 bg-ice dark:bg-navy-dark-light px-8 py-5 border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 grid grid-cols-12 gap-4 items-center font-bold text-xs uppercase tracking-widest text-slate dark:text-slate-light text-slate dark:text-slate-light transition-colors">
             <div class="col-span-2 text-center">Rank</div>
             <div class="col-span-5">Student</div>
             <div class="col-span-3 text-center">Streak</div>
@@ -97,55 +97,55 @@
 
         <div class="divide-y divide-slate-100 dark:divide-zinc-800/50 transition-colors">
             {% for item in leaderboard_data %}
-            <div class="px-8 py-5 grid grid-cols-12 gap-4 items-center hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors {% if item.profile.user == request.user %}bg-indigo-50/50 dark:bg-indigo-500/10 hover:bg-indigo-50 dark:hover:bg-indigo-500/20{% endif %}">
+            <div class="px-8 py-5 grid grid-cols-12 gap-4 items-center hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:hover:bg-zinc-800/50 transition-colors {% if item.profile.user == request.user %}bg-blue-light dark:bg-blue-dark/20/50 dark:bg-blue dark:bg-blue-dark/10 hover:bg-blue-light dark:bg-blue-dark/20 dark:hover:bg-blue dark:bg-blue-dark/20{% endif %}">
                 
                 <!-- Rank -->
                 <div class="col-span-2 text-center">
                     {% if item.rank == 1 %}
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 font-black text-sm transition-colors">1</span>
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-light dark:bg-blue-dark/20 dark:bg-amber-900/40 text-blue dark:text-blue-light dark:text-amber-400 font-black text-sm transition-colors">1</span>
                     {% elif item.rank == 2 %}
-                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 font-black text-sm transition-colors">2</span>
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-zinc-700 text-navy dark:text-ice text-slate dark:text-slate-light font-black text-sm transition-colors">2</span>
                     {% elif item.rank == 3 %}
                         <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 font-black text-sm transition-colors">3</span>
                     {% else %}
-                        <span class="font-bold text-slate-400 dark:text-zinc-500 text-lg transition-colors">#{{ item.rank }}</span>
+                        <span class="font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light text-lg transition-colors">#{{ item.rank }}</span>
                     {% endif %}
                 </div>
 
                 <!-- Student -->
                 <div class="col-span-5 flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-brand-blue dark:text-blue-400 flex items-center justify-center font-bold text-sm shrink-0 transition-colors">
+                    <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-blue dark:text-blue-light dark:text-blue-400 flex items-center justify-center font-bold text-sm shrink-0 transition-colors">
                         {{ item.profile.user.username.0|upper }}
                     </div>
                     <div>
-                        <h4 class="font-bold text-slate-800 dark:text-white text-sm {% if item.profile.user == request.user %}text-brand-blue dark:!text-brand-blue{% endif %} transition-colors">
+                        <h4 class="font-bold text-navy dark:text-ice text-navy dark:text-ice text-sm {% if item.profile.user == request.user %}text-blue dark:text-blue-light dark:!text-blue dark:text-blue-light{% endif %} transition-colors">
                             {{ item.profile.user.username }}
                             {% if item.profile.user == request.user %}
-                                <span class="ml-2 inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-brand-blue text-white dark:text-slate-900 uppercase tracking-wider transition-colors">You</span>
+                                <span class="ml-2 inline-block px-2 py-0.5 rounded text-[10px] font-bold bg-blue dark:bg-blue-dark text-slate dark:text-slate-light text-navy dark:text-ice uppercase tracking-wider transition-colors">You</span>
                             {% endif %}
                         </h4>
-                        <p class="text-xs text-slate-500 dark:text-zinc-400 font-medium transition-colors">Joined Day 1</p>
+                        <p class="text-xs text-slate dark:text-slate-light text-slate dark:text-slate-light font-medium transition-colors">Joined Day 1</p>
                     </div>
                 </div>
 
                 <!-- Streak -->
                 <div class="col-span-3 flex justify-center">
-                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg {% if item.profile.current_streak >= 3 %}bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400{% elif item.profile.current_streak > 0 %}bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400{% else %}bg-slate-50 dark:bg-zinc-800/50 text-slate-400 dark:text-zinc-500{% endif %} font-bold text-xs transition-colors">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg {% if item.profile.current_streak >= 3 %}bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400{% elif item.profile.current_streak > 0 %}bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400{% else %}bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 bg-ice dark:bg-navy-dark-light/50 text-slate dark:text-slate-light text-slate dark:text-slate-light{% endif %} font-bold text-xs transition-colors">
                         <i class="fa-solid fa-fire"></i> {{ item.profile.current_streak }} Day{{ item.profile.current_streak|pluralize }}
                     </div>
                 </div>
 
                 <!-- XP Score -->
                 <div class="col-span-2 text-right">
-                    <span class="font-black text-slate-800 dark:text-white text-base transition-colors">{{ item.profile.xp }}</span>
-                    <span class="text-xs font-bold text-slate-400 dark:text-zinc-500 transition-colors">XP</span>
+                    <span class="font-black text-navy dark:text-ice text-navy dark:text-ice text-base transition-colors">{{ item.profile.xp }}</span>
+                    <span class="text-xs font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light transition-colors">XP</span>
                 </div>
             </div>
             {% endfor %}
             
             {% if not leaderboard_data %}
-            <div class="p-12 text-center text-slate-500 dark:text-zinc-400 transition-colors">
-                <i class="fa-solid fa-ghost text-4xl mb-4 text-slate-300 dark:text-zinc-600 transition-colors"></i>
+            <div class="p-12 text-center text-slate dark:text-slate-light text-slate dark:text-slate-light transition-colors">
+                <i class="fa-solid fa-ghost text-4xl mb-4 text-slate dark:text-slate-light dark:text-zinc-600 transition-colors"></i>
                 <p class="font-bold">No students on the leaderboard yet!</p>
             </div>
             {% endif %}

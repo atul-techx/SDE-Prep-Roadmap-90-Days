@@ -6,23 +6,23 @@
 <div class="max-w-7xl mx-auto flex flex-col xl:flex-row gap-8">
     
     <!-- Left Column: Chat Board -->
-    <div class="flex-1 flex flex-col h-[calc(100vh-140px)] bg-white dark:bg-[#121212] rounded-3xl shadow-md border border-slate-200 dark:border-zinc-800 overflow-hidden transition-colors">
+    <div class="flex-1 flex flex-col h-[calc(100vh-140px)] bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] rounded-3xl shadow-md border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 overflow-hidden transition-colors">
         
         <!-- Chat Header -->
-        <div class="bg-white dark:bg-[#121212] px-6 py-4 border-b border-slate-100 dark:border-zinc-800/50 flex items-center justify-between z-10 relative shadow-sm transition-colors">
+        <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] px-6 py-4 border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 flex items-center justify-between z-10 relative shadow-sm transition-colors">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 flex items-center justify-center overflow-hidden rounded-full shrink-0">
                     <img src="/media/sde_prep_logo.png" alt="Community Logo" class="w-full h-full object-cover scale-150">
                 </div>
                 <div>
-                    <h2 class="font-extrabold text-slate-800 dark:text-white text-lg tracking-tight transition-colors">General Discussion</h2>
-                    <p class="text-xs text-slate-500 dark:text-zinc-400 font-medium transition-colors"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block mr-1 animate-pulse"></span> All Students</p>
+                    <h2 class="font-extrabold text-navy dark:text-ice text-navy dark:text-ice text-lg tracking-tight transition-colors">General Discussion</h2>
+                    <p class="text-xs text-slate dark:text-slate-light text-slate dark:text-slate-light font-medium transition-colors"><span class="w-2 h-2 rounded-full bg-emerald-400 inline-block mr-1 animate-pulse"></span> All Students</p>
                 </div>
             </div>
         </div>
 
         <!-- Chat Messages Area -->
-        <div class="flex-1 bg-slate-50/80 dark:bg-[#0a0a0a] overflow-y-auto p-6 space-y-6 flex flex-col-reverse relative no-scrollbar transition-colors" id="chatBox">
+        <div class="flex-1 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30/80 dark:bg-[#0a0a0a] overflow-y-auto p-6 space-y-6 flex flex-col-reverse relative no-scrollbar transition-colors" id="chatBox">
             <!-- Messages render from bottom to top -->
             {% for msg in community_messages %}
             <div class="flex {% if msg.user == request.user %}justify-end{% else %}justify-start{% endif %}">
@@ -30,24 +30,24 @@
                     
                     <!-- Avatar -->
                     {% if msg.user.profile.profile_picture %}
-                        <img src="{{ msg.user.profile.profile_picture.url }}" class="w-8 h-8 shrink-0 rounded-full object-cover shadow-sm mt-1 border border-white dark:border-zinc-700 transition-colors">
+                        <img src="{{ msg.user.profile.profile_picture.url }}" class="w-8 h-8 shrink-0 rounded-full object-cover shadow-sm mt-1 border border-white border-blue/20 dark:border-slate-dark/50 transition-colors">
                     {% else %}
-                        <div class="w-8 h-8 shrink-0 rounded-full bg-indigo-200 dark:bg-indigo-900/30 flex items-center justify-center text-brand-blue dark:text-blue-400 font-bold text-xs shadow-sm mt-1 border border-white dark:border-zinc-700 transition-colors">
+                        <div class="w-8 h-8 shrink-0 rounded-full bg-indigo-200 dark:bg-indigo-900/30 flex items-center justify-center text-blue dark:text-blue-light dark:text-blue-400 font-bold text-xs shadow-sm mt-1 border border-white border-blue/20 dark:border-slate-dark/50 transition-colors">
                             {{ msg.user.username.0|upper }}
                         </div>
                     {% endif %}
 
                     <!-- Message Bubble -->
                     <div class="flex flex-col {% if msg.user == request.user %}items-end{% else %}items-start{% endif %}">
-                        <span class="text-[10px] font-bold text-slate-400 dark:text-zinc-500 mb-1 px-1 transition-colors">{{ msg.user.username }} • {{ msg.created_at|date:"h:i A" }}</span>
+                        <span class="text-[10px] font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light mb-1 px-1 transition-colors">{{ msg.user.username }} • {{ msg.created_at|date:"h:i A" }}</span>
                         
-                        <div class="px-5 py-3 rounded-2xl shadow-sm {% if msg.user == request.user %}bg-brand-blue text-white rounded-tr-none{% else %}bg-white dark:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-100 dark:border-zinc-700 rounded-tl-none{% endif %} transition-colors">
+                        <div class="px-5 py-3 rounded-2xl shadow-sm {% if msg.user == request.user %}bg-blue dark:bg-blue-dark text-slate dark:text-slate-light rounded-tr-none{% else %}bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 bg-ice dark:bg-navy-dark-light text-navy dark:text-ice dark:text-zinc-200 border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 rounded-tl-none{% endif %} transition-colors">
                             {% if msg.content %}
                                 <p class="text-sm leading-relaxed">{{ msg.content|linebreaksbr }}</p>
                             {% endif %}
                             
                             {% if msg.image %}
-                                <div class="mt-2 rounded-xl overflow-hidden border {% if msg.user == request.user %}border-white/20{% else %}border-slate-100 dark:border-zinc-700{% endif %} transition-colors">
+                                <div class="mt-2 rounded-xl overflow-hidden border {% if msg.user == request.user %}border-white/20{% else %}border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50{% endif %} transition-colors">
                                     <img src="{{ msg.image.url }}" alt="Uploaded Image" class="max-w-full h-auto max-h-64 object-cover cursor-pointer hover:opacity-90 transition-opacity" onclick="window.open('{{ msg.image.url }}', '_blank')">
                                 </div>
                             {% endif %}
@@ -56,44 +56,44 @@
                 </div>
             </div>
             {% empty %}
-            <div class="h-full flex flex-col items-center justify-center text-slate-400 dark:text-zinc-500 transition-colors">
-                <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-zinc-800/50 flex items-center justify-center mb-4 shadow-inner transition-colors">
-                    <i class="fa-solid fa-comments text-2xl text-slate-300 dark:text-zinc-600 transition-colors"></i>
+            <div class="h-full flex flex-col items-center justify-center text-slate dark:text-slate-light text-slate dark:text-slate-light transition-colors">
+                <div class="w-16 h-16 rounded-full bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 bg-ice dark:bg-navy-dark-light/50 flex items-center justify-center mb-4 shadow-inner transition-colors">
+                    <i class="fa-solid fa-comments text-2xl text-slate dark:text-slate-light dark:text-zinc-600 transition-colors"></i>
                 </div>
-                <p class="font-bold text-sm text-slate-500 dark:text-zinc-400 transition-colors">No messages yet.</p>
+                <p class="font-bold text-sm text-slate dark:text-slate-light text-slate dark:text-slate-light transition-colors">No messages yet.</p>
                 <p class="text-xs mt-1 transition-colors">Be the first to start the discussion!</p>
             </div>
             {% endfor %}
         </div>
 
         <!-- Chat Input Form -->
-        <div class="bg-white dark:bg-[#121212] px-5 py-4 border-t border-slate-100 dark:border-zinc-800/50 relative z-10 transition-colors">
+        <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] px-5 py-4 border-t border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 relative z-10 transition-colors">
             <form method="POST" enctype="multipart/form-data" class="flex items-end gap-3" id="chatForm" onsubmit="return validateForm(this);">
                 {% csrf_token %}
                 
                 <!-- Image Upload Button -->
                 <div class="shrink-0 mb-1.5">
                     <input type="file" name="image" id="imageUpload" accept="image/*" class="hidden" onchange="previewImage(this)">
-                    <label for="imageUpload" class="w-10 h-10 rounded-full bg-slate-50 dark:bg-[#0a0a0a] hover:bg-indigo-50 dark:hover:bg-zinc-800 border border-slate-200 dark:border-zinc-700 flex items-center justify-center text-slate-500 dark:text-zinc-400 hover:text-brand-blue dark:hover:text-white transition-colors cursor-pointer group" title="Upload Image">
+                    <label for="imageUpload" class="w-10 h-10 rounded-full bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] hover:bg-blue-light dark:bg-blue-dark/20 dark:hover:bg-zinc-800 border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 flex items-center justify-center text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-blue dark:text-blue-light dark:hover:text-slate dark:text-slate-light transition-colors cursor-pointer group" title="Upload Image">
                         <i class="fa-solid fa-image group-hover:scale-110 transition-transform"></i>
                     </label>
                 </div>
 
                 <!-- Text Input -->
-                <div class="flex-1 bg-slate-50 dark:bg-[#0a0a0a] rounded-2xl border border-slate-200 dark:border-zinc-700 focus-within:border-brand-blue dark:focus-within:border-brand-blue focus-within:ring-2 focus-within:ring-brand-blue/20 transition-all p-2 relative shadow-inner">
-                    <div id="imagePreviewContainer" class="hidden absolute bottom-full left-0 mb-3 bg-white dark:bg-[#121212] p-2 rounded-xl shadow-lg border border-slate-100 dark:border-zinc-800 transition-colors">
+                <div class="flex-1 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] rounded-2xl border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 focus-within:border-blue dark:border-blue-dark dark:focus-within:border-blue dark:border-blue-dark focus-within:ring-2 focus-within:ring-brand-blue/20 transition-all p-2 relative shadow-inner">
+                    <div id="imagePreviewContainer" class="hidden absolute bottom-full left-0 mb-3 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] p-2 rounded-xl shadow-lg border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 transition-colors">
                         <div class="relative">
                             <img id="imagePreview" src="#" alt="Preview" class="h-20 w-auto rounded-lg object-cover">
-                            <button type="button" onclick="clearImage()" class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center text-[10px] hover:bg-red-600 shadow-md">
+                            <button type="button" onclick="clearImage()" class="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-red-500 text-slate dark:text-slate-light flex items-center justify-center text-[10px] hover:bg-red-600 shadow-md">
                                 <i class="fa-solid fa-times"></i>
                             </button>
                         </div>
                     </div>
-                    <textarea name="content" id="chatInput" rows="1" class="w-full bg-transparent border-none focus:ring-0 text-sm px-2 py-1 resize-none max-h-32 text-slate-700 dark:text-white placeholder-slate-400 dark:placeholder-zinc-500 transition-colors" placeholder="Type a message..." oninput="autoGrow(this)"></textarea>
+                    <textarea name="content" id="chatInput" rows="1" class="w-full bg-transparent border-none focus:ring-0 text-sm px-2 py-1 resize-none max-h-32 text-navy dark:text-ice text-navy dark:text-ice placeholder-slate-400 dark:placeholder-zinc-500 transition-colors" placeholder="Type a message..." oninput="autoGrow(this)"></textarea>
                 </div>
 
                 <!-- Send Button -->
-                <button type="submit" class="shrink-0 w-12 h-12 rounded-full bg-brand-blue hover:brightness-110 text-white dark:text-slate-900 flex items-center justify-center shadow-lg shadow-brand-blue/30 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed mb-0.5">
+                <button type="submit" class="shrink-0 w-12 h-12 rounded-full bg-blue dark:bg-blue-dark hover:bg-blue dark:bg-blue-dark-light text-slate dark:text-slate-light text-navy dark:text-ice flex items-center justify-center shadow-lg shadow-blue/30 dark:shadow-blue-dark/30 transition-all hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed mb-0.5">
                     <i class="fa-solid fa-paper-plane text-sm ml-0.5 mt-0.5"></i>
                 </button>
             </form>
@@ -103,12 +103,12 @@
 
     <!-- Right Column: WhatsApp Community Card -->
     <div class="xl:w-80 shrink-0">
-        <div class="bg-gradient-to-br from-[#25D366] to-[#1DA851] rounded-3xl p-6 shadow-xl shadow-green-500/20 text-white relative overflow-hidden">
+        <div class="bg-gradient-to-br from-[#25D366] to-[#1DA851] rounded-3xl p-6 shadow-xl shadow-green-500/20 text-slate dark:text-slate-light relative overflow-hidden">
             <!-- Decorative WhatsApp Icon Background -->
-            <i class="fa-brands fa-whatsapp absolute -bottom-10 -right-10 text-[180px] text-white/10 rotate-12"></i>
+            <i class="fa-brands fa-whatsapp absolute -bottom-10 -right-10 text-[180px] text-slate dark:text-slate-light/10 rotate-12"></i>
             
             <div class="relative z-10 flex flex-col h-full">
-                <div class="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner">
+                <div class="w-14 h-14 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-3xl mb-6 shadow-inner">
                     <i class="fa-brands fa-whatsapp drop-shadow-md"></i>
                 </div>
                 
@@ -117,7 +117,7 @@
                     Join the official SDE PREP 90 WhatsApp community for real-time announcements, instant help, and live discussions with fellow students!
                 </p>
                 
-                <a href="https://chat.whatsapp.com/K6LXkhV1hiy2s2gc7DGwDu" target="_blank" class="mt-auto w-full bg-white text-green-600 hover:bg-green-50 font-extrabold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 hover:-translate-y-1">
+                <a href="https://chat.whatsapp.com/K6LXkhV1hiy2s2gc7DGwDu" target="_blank" class="mt-auto w-full bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 text-green-600 hover:bg-green-50 font-extrabold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 hover:-translate-y-1">
                     Join Group <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                 </a>
             </div>

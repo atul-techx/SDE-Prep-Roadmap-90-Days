@@ -6,7 +6,7 @@
 <div class="max-w-5xl mx-auto pb-12">
     
     <!-- Cover & Avatar Banner -->
-    <div class="relative bg-white dark:bg-[#121212] rounded-t-3xl shadow-sm border border-slate-200 dark:border-zinc-800 overflow-hidden transition-colors">
+    <div class="relative bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] rounded-t-3xl shadow-sm border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 overflow-hidden transition-colors">
         
         <!-- Cover Photo (Using uploaded image or gradient) -->
         <div class="h-48 w-full {% if not profile.cover_banner %}bg-gradient-to-r from-slate-800 via-indigo-900 to-slate-800 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900{% endif %} relative group transition-colors" {% if profile.cover_banner %}style="background-image: url('{{ profile.cover_banner.url }}'); background-size: cover; background-position: center;"{% endif %}>
@@ -15,8 +15,8 @@
             <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 24px 24px;"></div>
             {% endif %}
             
-            <label for="coverUpload" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                <div class="bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg text-white font-bold flex items-center gap-2">
+            <label for="coverUpload" class="absolute inset-0 bg-ice dark:bg-navy-dark/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30/20 backdrop-blur-md px-4 py-2 rounded-lg text-slate dark:text-slate-light font-bold flex items-center gap-2">
                     <i class="fa-solid fa-camera"></i> Edit Cover
                 </div>
             </label>
@@ -24,19 +24,19 @@
 
         <!-- Avatar Container (Overlapping) -->
         <div class="absolute top-28 left-8">
-            <div class="w-32 h-32 rounded-full bg-amber-100 dark:bg-amber-900/40 border-4 border-white dark:border-[#121212] shadow-lg flex items-center justify-center text-5xl font-bold text-amber-600 dark:text-amber-400 relative overflow-hidden group transition-colors">
+            <div class="w-32 h-32 rounded-full bg-blue-light dark:bg-blue-dark/20 dark:bg-amber-900/40 border-4 border-white dark:border-[#121212] shadow-lg flex items-center justify-center text-5xl font-bold text-blue dark:text-blue-light dark:text-amber-400 relative overflow-hidden group transition-colors">
                 {% if profile.profile_picture %}
                     <img src="{{ profile.profile_picture.url }}" class="w-full h-full object-cover">
                 {% else %}
                     {{ request.user.username.0|upper }}
                 {% endif %}
                 
-                <label for="avatarUpload" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white">
+                <label for="avatarUpload" class="absolute inset-0 bg-ice dark:bg-navy-dark/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-slate dark:text-slate-light">
                     <i class="fa-solid fa-camera text-2xl"></i>
                 </label>
                 
                 <!-- Tiny edit icon badge (visible when not hovering) -->
-                <div class="absolute bottom-1 right-1 w-8 h-8 bg-white dark:bg-zinc-800 rounded-full shadow-md border border-slate-100 dark:border-zinc-700 flex items-center justify-center text-slate-400 dark:text-zinc-400 group-hover:opacity-0 transition-all">
+                <div class="absolute bottom-1 right-1 w-8 h-8 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 bg-ice dark:bg-navy-dark-light rounded-full shadow-md border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 flex items-center justify-center text-slate dark:text-slate-light text-slate dark:text-slate-light group-hover:opacity-0 transition-all">
                     <i class="fa-solid fa-camera text-xs"></i>
                 </div>
             </div>
@@ -46,15 +46,15 @@
         <div class="h-20"></div>
         
         <!-- Tabs -->
-        <div class="px-8 border-b border-slate-100 dark:border-zinc-800/50 flex gap-8 transition-colors">
-            <div class="py-4 border-b-2 border-slate-800 dark:border-white font-bold text-slate-800 dark:text-white transition-colors">
+        <div class="px-8 border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 flex gap-8 transition-colors">
+            <div class="py-4 border-b-2 border-blue/20 dark:border-slate-dark/50 dark:border-white font-bold text-navy dark:text-ice text-navy dark:text-ice transition-colors">
                 Profile Details
             </div>
         </div>
     </div>
 
     <!-- Profile Form Section -->
-    <div class="bg-white dark:bg-[#121212] rounded-b-3xl shadow-sm border-x border-b border-slate-200 dark:border-zinc-800 px-8 py-8 mt-0 relative transition-colors">
+    <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] rounded-b-3xl shadow-sm border-x border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 px-8 py-8 mt-0 relative transition-colors">
         
         <form method="POST" action="{% url 'profile' %}" enctype="multipart/form-data" id="profileForm">
             {% csrf_token %}
@@ -62,13 +62,13 @@
             <input type="file" name="cover_banner" id="coverUpload" accept="image/*" class="hidden" onchange="this.form.submit()" disabled>
             <input type="file" name="profile_picture" id="avatarUpload" accept="image/*" class="hidden" onchange="this.form.submit()" disabled>
             
-            <div class="flex items-center justify-between mb-8 pb-4 border-b border-slate-100 dark:border-zinc-800/50 transition-colors">
-                <h2 class="text-lg font-bold text-slate-800 dark:text-white transition-colors">Your account details</h2>
+            <div class="flex items-center justify-between mb-8 pb-4 border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 transition-colors">
+                <h2 class="text-lg font-bold text-navy dark:text-ice text-navy dark:text-ice transition-colors">Your account details</h2>
                 <div>
-                    <button type="button" id="editBtn" onclick="enableEdit()" class="bg-slate-100 dark:bg-zinc-800/50 hover:bg-slate-200 dark:hover:bg-zinc-700/50 text-slate-700 dark:text-zinc-300 px-6 py-2.5 rounded font-bold transition-all border border-slate-300 dark:border-zinc-700">
+                    <button type="button" id="editBtn" onclick="enableEdit()" class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 bg-ice dark:bg-navy-dark-light/50 hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:hover:bg-ice dark:bg-navy-dark-lighter/50 text-navy dark:text-ice text-slate dark:text-slate-light px-6 py-2.5 rounded font-bold transition-all border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50">
                         <i class="fa-solid fa-pen-to-square mr-2"></i>Edit Profile
                     </button>
-                    <button type="submit" id="saveBtn" class="hidden bg-[#F07B65] hover:bg-[#E06A54] text-white px-6 py-2.5 rounded font-bold shadow-md shadow-orange-500/20 transition-all hover:-translate-y-0.5">
+                    <button type="submit" id="saveBtn" class="hidden bg-[#F07B65] hover:bg-[#E06A54] text-slate dark:text-slate-light px-6 py-2.5 rounded font-bold shadow-md shadow-orange-500/20 transition-all hover:-translate-y-0.5">
                         <i class="fa-solid fa-check mr-2"></i>Save Profile
                     </button>
                 </div>
@@ -78,15 +78,15 @@
                 
                 <!-- Full Name -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 dark:text-zinc-500 mb-1 transition-colors">Full Name</label>
-                    <input type="text" name="full_name" value="{{ profile.full_name|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 dark:text-white font-bold transition-colors" placeholder="e.g. Anushka Gangwar" readonly>
-                    <p class="text-[10px] text-slate-400 dark:text-zinc-500 mt-1.5 transition-colors"><i class="fa-solid fa-circle-exclamation text-slate-300 dark:text-zinc-600 mr-1 transition-colors"></i>This name will appear on your certificate.</p>
+                    <label class="block text-xs font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light mb-1 transition-colors">Full Name</label>
+                    <input type="text" name="full_name" value="{{ profile.full_name|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-blue dark:border-blue-dark text-navy dark:text-ice text-navy dark:text-ice font-bold transition-colors" placeholder="e.g. Anushka Gangwar" readonly>
+                    <p class="text-[10px] text-slate dark:text-slate-light text-slate dark:text-slate-light mt-1.5 transition-colors"><i class="fa-solid fa-circle-exclamation text-slate dark:text-slate-light dark:text-zinc-600 mr-1 transition-colors"></i>This name will appear on your certificate.</p>
                 </div>
 
                 <!-- Gender -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 dark:text-zinc-500 mb-1 transition-colors">Gender</label>
-                    <select name="gender" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 dark:text-white font-bold transition-colors appearance-none cursor-default" disabled>
+                    <label class="block text-xs font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light mb-1 transition-colors">Gender</label>
+                    <select name="gender" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-blue dark:border-blue-dark text-navy dark:text-ice text-navy dark:text-ice font-bold transition-colors appearance-none cursor-default" disabled>
                         <option value="" {% if not profile.gender %}selected{% endif %}>Select Gender</option>
                         <option value="Male" {% if profile.gender == 'Male' %}selected{% endif %}>Male</option>
                         <option value="Female" {% if profile.gender == 'Female' %}selected{% endif %}>Female</option>
@@ -96,39 +96,39 @@
 
                 <!-- Email -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 dark:text-zinc-500 mb-1 transition-colors">Email</label>
-                    <input type="email" name="email" value="{{ request.user.email }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 dark:text-white font-bold transition-colors" placeholder="e.g. name@example.com" readonly>
+                    <label class="block text-xs font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light mb-1 transition-colors">Email</label>
+                    <input type="email" name="email" value="{{ request.user.email }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-blue dark:border-blue-dark text-navy dark:text-ice text-navy dark:text-ice font-bold transition-colors" placeholder="e.g. name@example.com" readonly>
                 </div>
 
                 <!-- Contact Number (Readonly always) -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 dark:text-zinc-500 mb-1 transition-colors">Contact Number <span class="text-slate-300 dark:text-zinc-600 ml-1 font-normal transition-colors">(Registered)</span></label>
+                    <label class="block text-xs font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light mb-1 transition-colors">Contact Number <span class="text-slate dark:text-slate-light dark:text-zinc-600 ml-1 font-normal transition-colors">(Registered)</span></label>
                     <div class="flex items-end">
-                        <div class="text-slate-400 dark:text-zinc-500 font-bold border-b border-transparent py-2 pr-3 flex items-center gap-2 transition-colors">
+                        <div class="text-slate dark:text-slate-light text-slate dark:text-slate-light font-bold border-b border-transparent py-2 pr-3 flex items-center gap-2 transition-colors">
                             <span>IN <i class="fa-solid fa-caret-down text-[10px]"></i></span>
                             <span>+91</span>
-                            <span class="text-slate-300 dark:text-zinc-600 transition-colors">|</span>
+                            <span class="text-slate dark:text-slate-light dark:text-zinc-600 transition-colors">|</span>
                         </div>
-                        <input type="text" name="contact_number" value="{{ profile.contact_number|default:'' }}" class="flex-1 bg-transparent border-b border-transparent py-2 pl-3 text-slate-700 dark:text-white font-bold cursor-not-allowed transition-colors" placeholder="9588012281" readonly>
+                        <input type="text" name="contact_number" value="{{ profile.contact_number|default:'' }}" class="flex-1 bg-transparent border-b border-transparent py-2 pl-3 text-navy dark:text-ice text-navy dark:text-ice font-bold cursor-not-allowed transition-colors" placeholder="9588012281" readonly>
                     </div>
                 </div>
 
                 <!-- State -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 dark:text-zinc-500 mb-1 transition-colors">State</label>
-                    <input type="text" name="state" value="{{ profile.state|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 dark:text-white font-bold transition-colors" placeholder="e.g. Uttar Pradesh" readonly>
+                    <label class="block text-xs font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light mb-1 transition-colors">State</label>
+                    <input type="text" name="state" value="{{ profile.state|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-blue dark:border-blue-dark text-navy dark:text-ice text-navy dark:text-ice font-bold transition-colors" placeholder="e.g. Uttar Pradesh" readonly>
                 </div>
 
                 <!-- City -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 dark:text-zinc-500 mb-1 transition-colors">City</label>
-                    <input type="text" name="city" value="{{ profile.city|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 dark:text-white font-bold transition-colors" placeholder="e.g. Moradabad" readonly>
+                    <label class="block text-xs font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light mb-1 transition-colors">City</label>
+                    <input type="text" name="city" value="{{ profile.city|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-blue dark:border-blue-dark text-navy dark:text-ice text-navy dark:text-ice font-bold transition-colors" placeholder="e.g. Moradabad" readonly>
                 </div>
 
                 <!-- Pincode -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-400 dark:text-zinc-500 mb-1 transition-colors">Pincode</label>
-                    <input type="text" name="pincode" value="{{ profile.pincode|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-brand-blue text-slate-700 dark:text-white font-bold transition-colors" placeholder="e.g. 244001" readonly>
+                    <label class="block text-xs font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light mb-1 transition-colors">Pincode</label>
+                    <input type="text" name="pincode" value="{{ profile.pincode|default:'' }}" class="profile-input w-full bg-transparent border-b border-transparent py-2 focus:outline-none focus:border-blue dark:border-blue-dark text-navy dark:text-ice text-navy dark:text-ice font-bold transition-colors" placeholder="e.g. 244001" readonly>
                 </div>
 
             </div>
@@ -159,8 +159,8 @@
             }
             // Add border to show they are editable
             input.classList.remove('border-transparent');
-            input.classList.add('border-slate-200');
-            input.classList.add('dark:border-zinc-700');
+            input.classList.add('border-blue/20 dark:border-slate-dark/50');
+            input.classList.add('border-blue/20 dark:border-slate-dark/50');
             // Change text font weight back to medium instead of bold so it looks like an input
             input.classList.remove('font-bold');
             input.classList.add('font-medium');

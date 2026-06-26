@@ -8,31 +8,31 @@
     <!-- Header Area -->
     <div class="flex items-center justify-between mb-8">
         <div>
-            <h1 class="text-2xl font-bold text-slate-800 dark:text-white transition-colors">Students</h1>
-            <p class="text-slate-500 dark:text-zinc-400 text-sm mt-1 transition-colors">Manage all student records and information</p>
+            <h1 class="text-2xl font-bold text-navy dark:text-ice text-navy dark:text-ice transition-colors">Students</h1>
+            <p class="text-slate dark:text-slate-light text-slate dark:text-slate-light text-sm mt-1 transition-colors">Manage all student records and information</p>
         </div>
-        <a href="{% url 'founder_register_student' %}" class="bg-brand-blue hover:bg-blue-700 text-white dark:text-slate-900 font-medium text-sm px-5 py-2.5 rounded-lg transition-colors flex items-center gap-2 shadow-sm">
+        <a href="{% url 'founder_register_student' %}" class="bg-blue dark:bg-blue-dark hover:bg-blue-700 text-slate dark:text-slate-light text-navy dark:text-ice font-medium text-sm px-5 py-2.5 rounded-lg transition-colors flex items-center gap-2 shadow-sm">
             <i class="fa-solid fa-plus"></i> Register Student
         </a>
     </div>
 
     <!-- Main Card -->
-    <div class="bg-white dark:bg-[#121212] rounded-xl shadow-sm border border-slate-200 dark:border-zinc-800 flex flex-col transition-colors">
+    <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] rounded-xl shadow-sm border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 flex flex-col transition-colors">
         
-        <div class="px-6 py-5 border-b border-slate-100 dark:border-zinc-800/50 transition-colors">
-            <h2 class="font-semibold text-slate-800 dark:text-white transition-colors">Student Directory</h2>
-            <p class="text-xs text-slate-500 dark:text-zinc-400 mt-1 transition-colors">Browse and manage student records ({{ students|length }} total)</p>
+        <div class="px-6 py-5 border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 transition-colors">
+            <h2 class="font-semibold text-navy dark:text-ice text-navy dark:text-ice transition-colors">Student Directory</h2>
+            <p class="text-xs text-slate dark:text-slate-light text-slate dark:text-slate-light mt-1 transition-colors">Browse and manage student records ({{ students|length }} total)</p>
         </div>
 
         <!-- Filters Toolbar -->
-        <div class="px-6 py-4 flex items-center justify-between gap-4 border-b border-slate-100 dark:border-zinc-800/50 bg-slate-50/50 dark:bg-[#0a0a0a] transition-colors">
+        <div class="px-6 py-4 flex items-center justify-between gap-4 border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30/50 dark:bg-[#0a0a0a] transition-colors">
             <div class="relative flex-1 max-w-md">
-                <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-zinc-500 transition-colors"></i>
-                <input type="text" id="searchInput" placeholder="Search by name, admission number, or email..." class="w-full bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-700 rounded-lg pl-10 pr-4 py-2 text-sm text-slate-700 dark:text-zinc-300 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all placeholder-slate-400 dark:placeholder-zinc-500">
+                <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate dark:text-slate-light text-slate dark:text-slate-light transition-colors"></i>
+                <input type="text" id="searchInput" placeholder="Search by name, admission number, or email..." class="w-full bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 rounded-lg pl-10 pr-4 py-2 text-sm text-navy dark:text-ice text-slate dark:text-slate-light focus:outline-none focus:border-blue dark:border-blue-dark focus:ring-1 focus:ring-blue/50 dark:focus:ring-blue-dark/50 transition-all placeholder-slate-400 dark:placeholder-zinc-500">
             </div>
             
             <div class="flex items-center gap-3">
-                <select id="statusFilter" class="bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-700 rounded-lg px-4 py-2 text-sm text-slate-600 dark:text-zinc-300 focus:outline-none focus:border-brand-blue transition-colors">
+                <select id="statusFilter" class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 rounded-lg px-4 py-2 text-sm text-navy dark:text-ice text-slate dark:text-slate-light focus:outline-none focus:border-blue dark:border-blue-dark transition-colors">
                     <option value="">All Status</option>
                     <option value="ACTIVE">Active</option>
                     <option value="FREEZE USED">Freeze Used</option>
@@ -44,45 +44,45 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse" id="studentsTable">
                 <thead>
-                    <tr class="border-b border-slate-200 dark:border-zinc-800 bg-white dark:bg-[#121212] transition-colors">
-                        <th class="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-zinc-400 tracking-wider transition-colors">Username</th>
-                        <th class="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-zinc-400 tracking-wider transition-colors">Name</th>
-                        <th class="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-zinc-400 tracking-wider transition-colors">Contact No.</th>
-                        <th class="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-zinc-400 tracking-wider transition-colors">Email</th>
-                        <th class="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-zinc-400 tracking-wider transition-colors">Status</th>
-                        <th class="px-6 py-3 text-xs font-semibold text-slate-500 dark:text-zinc-400 tracking-wider text-right transition-colors">Actions</th>
+                    <tr class="border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] transition-colors">
+                        <th class="px-6 py-3 text-xs font-semibold text-slate dark:text-slate-light text-slate dark:text-slate-light tracking-wider transition-colors">Username</th>
+                        <th class="px-6 py-3 text-xs font-semibold text-slate dark:text-slate-light text-slate dark:text-slate-light tracking-wider transition-colors">Name</th>
+                        <th class="px-6 py-3 text-xs font-semibold text-slate dark:text-slate-light text-slate dark:text-slate-light tracking-wider transition-colors">Contact No.</th>
+                        <th class="px-6 py-3 text-xs font-semibold text-slate dark:text-slate-light text-slate dark:text-slate-light tracking-wider transition-colors">Email</th>
+                        <th class="px-6 py-3 text-xs font-semibold text-slate dark:text-slate-light text-slate dark:text-slate-light tracking-wider transition-colors">Status</th>
+                        <th class="px-6 py-3 text-xs font-semibold text-slate dark:text-slate-light text-slate dark:text-slate-light tracking-wider text-right transition-colors">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-zinc-800/50 transition-colors">
                     {% for st in students %}
-                    <tr class="hover:bg-slate-50/80 dark:hover:bg-zinc-800/50 transition-colors student-row">
-                        <td class="px-6 py-4 text-sm font-medium text-slate-700 dark:text-zinc-300 adm-col transition-colors">@{{ st.real_username }}</td>
+                    <tr class="hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30/80 dark:hover:bg-zinc-800/50 transition-colors student-row">
+                        <td class="px-6 py-4 text-sm font-medium text-navy dark:text-ice text-slate dark:text-slate-light adm-col transition-colors">@{{ st.real_username }}</td>
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-zinc-700 text-slate-600 dark:text-zinc-300 flex items-center justify-center font-bold text-xs shrink-0 transition-colors">
+                                <div class="w-8 h-8 rounded-full bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-zinc-700 text-navy dark:text-ice text-slate dark:text-slate-light flex items-center justify-center font-bold text-xs shrink-0 transition-colors">
                                     {{ st.initials }}
                                 </div>
                                 <div class="flex flex-col">
-                                    <span class="text-sm font-medium text-slate-800 dark:text-white name-col transition-colors">{{ st.username }}</span>
-                                    <span class="text-[10px] text-slate-500 dark:text-zinc-500 transition-colors">{{ st.progress }} / 90 Days • {{ st.xp }} XP</span>
+                                    <span class="text-sm font-medium text-navy dark:text-ice text-navy dark:text-ice name-col transition-colors">{{ st.username }}</span>
+                                    <span class="text-[10px] text-slate dark:text-slate-light text-slate dark:text-slate-light transition-colors">{{ st.progress }} / 90 Days • {{ st.xp }} XP</span>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-sm text-slate-500 dark:text-zinc-500 transition-colors">{{ st.contact }}</td>
-                        <td class="px-6 py-4 text-sm text-slate-500 dark:text-zinc-500 email-col transition-colors">{{ st.email }}</td>
+                        <td class="px-6 py-4 text-sm text-slate dark:text-slate-light text-slate dark:text-slate-light transition-colors">{{ st.contact }}</td>
+                        <td class="px-6 py-4 text-sm text-slate dark:text-slate-light text-slate dark:text-slate-light email-col transition-colors">{{ st.email }}</td>
                         <td class="px-6 py-4">
                             {% if st.status == 'ACTIVE' %}
                                 <span class="status-col inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 uppercase tracking-wider transition-colors">
                                     Active
                                 </span>
                             {% else %}
-                                <span class="status-col inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 uppercase tracking-wider transition-colors">
+                                <span class="status-col inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold bg-blue-light dark:bg-blue-dark/20 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400 uppercase tracking-wider transition-colors">
                                     Freeze Used
                                 </span>
                             {% endif %}
                         </td>
                         <td class="px-6 py-4 text-right">
-                            <a href="{% url 'founder_student_detail' st.profile_id %}" class="text-slate-400 dark:text-zinc-500 hover:text-brand-blue dark:hover:text-blue-400 transition-colors inline-block">
+                            <a href="{% url 'founder_student_detail' st.profile_id %}" class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-blue dark:text-blue-light dark:hover:text-blue-400 transition-colors inline-block">
                                 <i class="fa-regular fa-eye"></i>
                             </a>
                         </td>

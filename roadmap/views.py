@@ -10,6 +10,19 @@ from django.db.models import Sum
 
 from .forms import StudentRegistrationForm
 
+def landing_page_view(request):
+    # Build data for the 90 days learning path
+    days_data = []
+    content_map = {dc.day_number: dc.topic_name for dc in DailyContent.objects.all()}
+    
+    for i in range(1, 91):
+        days_data.append({
+            'day_number': i,
+            'topic': content_map.get(i, 'Topic Locked - Login to Reveal')
+        })
+        
+    return render(request, 'roadmap/landing.html', {'days_data': days_data})
+
 def register_view(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
@@ -36,7 +49,11 @@ def register_view(request):
     return render(request, 'roadmap/register.html', {'form': form})
 
 def login_view(request):
+    next_url = request.GET.get('next') or request.POST.get('next')
+    
     if request.user.is_authenticated:
+        if next_url:
+            return redirect(next_url)
         if request.user.is_superuser:
             return redirect('founder_dashboard')
         return redirect('dashboard')
@@ -47,6 +64,8 @@ def login_view(request):
             user = form.get_user()
             login(request, user)
             request.session['show_welcome_back'] = True
+            if next_url:
+                return redirect(next_url)
             if user.is_superuser:
                 return redirect('founder_dashboard')
             return redirect('dashboard')

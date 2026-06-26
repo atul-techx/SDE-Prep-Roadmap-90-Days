@@ -33,13 +33,13 @@
     <!-- Header Title Area -->
     <div class="flex items-center justify-between mb-8">
         <div>
-            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-white flex items-center gap-2 transition-colors">
+            <h1 class="text-2xl md:text-3xl font-extrabold text-navy dark:text-ice text-navy dark:text-ice flex items-center gap-2 transition-colors">
                 Manage Content
             </h1>
-            <p class="text-sm text-slate-500 dark:text-zinc-400 mt-2 transition-colors">Edit the rich content, notes, and topics for all 90 days.</p>
+            <p class="text-sm text-slate dark:text-slate-light text-slate dark:text-slate-light mt-2 transition-colors">Edit the rich content, notes, and topics for all 90 days.</p>
         </div>
-        <div class="bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-800 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold text-slate-700 dark:text-zinc-300 shadow-sm transition-colors">
-            Total Days: <span class="text-brand-blue dark:text-blue-400 transition-colors">90</span>
+        <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold text-navy dark:text-ice text-slate dark:text-slate-light shadow-sm transition-colors">
+            Total Days: <span class="text-blue dark:text-blue-light dark:text-blue-400 transition-colors">90</span>
         </div>
     </div>
 
@@ -48,29 +48,29 @@
         {% for day_num in "x"|ljust:"90"|make_list %}
             {% with forloop.counter as day %}
             <!-- Accordion Item -->
-            <div class="bg-white dark:bg-[#121212] border border-slate-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden transition-all duration-300 accordion-container">
+            <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 shadow-sm rounded-2xl overflow-hidden transition-all duration-300 accordion-container">
                 <!-- Header -->
-                <button class="w-full px-6 py-5 flex items-center justify-between bg-white dark:bg-[#121212] hover:bg-slate-50 dark:hover:bg-zinc-800/50 transition-colors accordion-btn focus:outline-none">
+                <button class="w-full px-6 py-5 flex items-center justify-between bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:hover:bg-zinc-800/50 transition-colors accordion-btn focus:outline-none">
                     <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-indigo-900/40 text-brand-blue dark:text-blue-400 border border-slate-200 dark:border-indigo-800/50 flex items-center justify-center font-bold text-lg transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-indigo-900/40 text-blue dark:text-blue-light dark:text-blue-400 border border-blue/20 dark:border-slate-dark/50 dark:border-indigo-800/50 flex items-center justify-center font-bold text-lg transition-colors">
                             {{ day }}
                         </div>
                         <div class="text-left">
-                            <h4 class="text-slate-800 dark:text-white font-bold text-lg transition-colors">Day {{ day }} Content</h4>
-                            <p class="text-xs text-slate-500 dark:text-zinc-400 font-medium mt-0.5 transition-colors">Manage topic names and resources</p>
+                            <h4 class="text-navy dark:text-ice text-navy dark:text-ice font-bold text-lg transition-colors">Day {{ day }} Content</h4>
+                            <p class="text-xs text-slate dark:text-slate-light text-slate dark:text-slate-light font-medium mt-0.5 transition-colors">Manage topic names and resources</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-6">
-                        <i class="fa-solid fa-chevron-down text-slate-400 dark:text-zinc-500 transition-transform duration-300 accordion-icon"></i>
+                        <i class="fa-solid fa-chevron-down text-slate dark:text-slate-light text-slate dark:text-slate-light transition-transform duration-300 accordion-icon"></i>
                     </div>
                 </button>
 
                 <!-- Content (Hidden by default) -->
-                <div class="accordion-content hidden border-t border-slate-100 dark:border-zinc-800/50 bg-slate-50 dark:bg-[#0a0a0a] transition-colors">
+                <div class="accordion-content hidden border-t border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] transition-colors">
                     <div class="p-6">
-                        <p class="text-sm text-slate-600 dark:text-zinc-300 mb-4 transition-colors">You can update the resources, video links, reading materials, and checkboxes for Day {{ day }} here.</p>
+                        <p class="text-sm text-navy dark:text-ice text-slate dark:text-slate-light mb-4 transition-colors">You can update the resources, video links, reading materials, and checkboxes for Day {{ day }} here.</p>
                         <div class="flex justify-end">
-                            <a href="{% url 'founder_content_edit' day %}" class="px-6 py-2.5 bg-white dark:bg-[#121212] hover:bg-brand-blue dark:hover:bg-indigo-600 hover:text-white text-brand-blue dark:text-blue-400 font-bold rounded-lg transition-colors flex items-center gap-2 border border-brand-blue dark:border-indigo-500 shadow-sm">
+                            <a href="{% url 'founder_content_edit' day %}" class="px-6 py-2.5 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] hover:bg-blue dark:bg-blue-dark dark:hover:bg-blue dark:bg-blue-dark hover:text-slate dark:text-slate-light text-blue dark:text-blue-light dark:text-blue-400 font-bold rounded-lg transition-colors flex items-center gap-2 border border-blue dark:border-blue-dark dark:border-indigo-500 shadow-sm">
                                 <i class="fa-solid fa-pen-to-square"></i> Edit Day {{ day }}
                             </a>
                         </div>

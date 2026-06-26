@@ -19,31 +19,30 @@
             theme: {
                 extend: {
                     colors: {
-                        brand: {
-                            blue: '#7FCDFF', /* Ocean Breeze Blue */
-                            light: '#DFF7FF', /* Ocean Breeze Light */
-                            dark: '#0369a1', /* Sky 700 for text contrast */
+                        ice: {
+                            DEFAULT: '#F0F4F9',
+                            light: '#FFFFFF',
+                            dark: '#E2E8F0',
                         },
-                        indigo: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#7FCDFF',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
-                        },
-                        purple: {
-                            500: '#7FCDFF',
-                            600: '#0284c7',
+                        navy: {
+                            DEFAULT: '#0A192F',
+                            light: '#1E293B',
+                            dark: '#020617',
                         },
                         blue: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            700: '#0369a1',
+                            DEFAULT: '#2563EB',
+                            light: '#3B82F6',
+                            dark: '#1D4ED8',
+                        },
+                        slate: {
+                            DEFAULT: '#475569',
+                            light: '#94A3B8',
+                            dark: '#1E293B',
+                        },
+                        brand: {
+                            DEFAULT: '#2563EB',
+                            light: '#3B82F6',
+                            dark: '#1D4ED8',
                         }
                     },
                     animation: {
@@ -61,30 +60,30 @@
     </script>
     <style>
         body {
-            background-color: #DFF7FF;
-            color: #334155;
+            background-color: #F0F4F9; /* Ice Blue */
+            color: #0A192F; /* Deep Navy */
             font-family: 'Inter', sans-serif;
         }
         .dark body {
-            background-color: #0a0a0a;
-            color: #ededed;
+            background-color: #020617; /* Darkest Navy */
+            color: #F8FAFC; /* White-ish */
         }
-        /* Ocean Breeze Theme Overrides */
-        .bg-brand-blue {
-            background: linear-gradient(135deg, #DFF7FF 0%, #7FCDFF 100%) !important;
-            color: #0f172a !important; /* Slate 900 for readability */
-            border: 1px solid rgba(127, 205, 255, 0.5);
+        /* Ice Blue Theme Overrides */
+        .bg-blue {
+            background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important; /* Vibrant Blue gradient */
+            color: #FFFFFF !important; /* White for readability */
+            border: 1px solid rgba(37, 99, 235, 0.5); /* Blue border */
         }
-        .bg-brand-blue:hover {
-            background: linear-gradient(135deg, #7FCDFF 0%, #3BA4D9 100%) !important;
+        .bg-blue:hover {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%) !important; /* Lighter Blue */
             color: #ffffff !important;
-            border-color: #3BA4D9;
+            border-color: #3B82F6; /* Light Blue */
         }
-        .text-brand-blue {
-            color: #0369a1 !important; /* Sky 700 */
+        .text-blue {
+            color: #2563EB !important; /* Vibrant Blue */
         }
-        .bg-brand-blue\/10 {
-            background-color: rgba(127, 205, 255, 0.2) !important;
+        .bg-blue\/10 {
+            background-color: rgba(37, 99, 235, 0.1) !important; /* Blue with opacity */
         }
         .no-scrollbar::-webkit-scrollbar {
             display: none;
@@ -97,77 +96,77 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="min-h-screen flex font-sans antialiased selection:bg-brand-blue selection:text-slate-900 dark:selection:text-white overflow-hidden transition-colors duration-300">
+<body class="min-h-screen flex font-sans antialiased selection:bg-blue dark:bg-blue-dark selection:text-navy dark:text-ice dark:selection:text-slate dark:text-slate-light overflow-hidden transition-colors duration-300">
 
     <!-- Sidebar -->
     {% if user.is_authenticated %}
-    <aside class="w-64 bg-slate-900 flex flex-col h-screen fixed left-0 top-0 z-40 shadow-2xl">
+    <aside class="w-64 bg-ice dark:bg-navy-dark flex flex-col h-screen fixed left-0 top-0 z-40 shadow-2xl">
         <!-- Logo -->
-        <div class="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950/50">
+        <div class="h-16 flex items-center px-6 border-b border-blue/20 dark:border-slate-dark/50 bg-ice dark:bg-navy-dark/50">
             <div class="w-10 h-10 rounded-lg overflow-hidden shrink-0 mr-3 flex items-center justify-center">
                 <img src="/media/sde_prep_logo.png" alt="Logo" class="w-full h-full object-cover scale-150">
             </div>
-            <span class="font-extrabold text-xl text-white tracking-tight">SDE PREP 90</span>
+            <span class="font-extrabold text-xl text-slate dark:text-slate-light tracking-tight">SDE PREP 90</span>
         </div>
         
         <!-- Navigation -->
         <div class="flex-1 overflow-y-auto py-6 px-4 space-y-2">
             {% if user.is_superuser %}
-            <a href="{% url 'founder_dashboard' %}" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_dashboard' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'founder_dashboard' %}" class="flex items-center px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_dashboard' %}bg-blue dark:bg-blue-dark text-slate dark:text-slate-light shadow-lg shadow-blue/30 dark:shadow-blue-dark/30{% else %}text-slate dark:text-slate-light hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 hover:text-slate dark:text-slate-light{% endif %}">
                 <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
             </a>
-            <a href="{% url 'founder_content_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_content_list' or request.resolver_match.url_name == 'founder_content_edit' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'founder_content_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_content_list' or request.resolver_match.url_name == 'founder_content_edit' %}bg-blue dark:bg-blue-dark text-slate dark:text-slate-light shadow-lg shadow-blue/30 dark:shadow-blue-dark/30{% else %}text-slate dark:text-slate-light hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 hover:text-slate dark:text-slate-light{% endif %}">
                 <i class="fa-solid fa-file-pen w-5"></i> Manage Content
             </a>
-            <a href="{% url 'founder_notes' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_notes' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'founder_notes' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'founder_notes' %}bg-blue dark:bg-blue-dark text-slate dark:text-slate-light shadow-lg shadow-blue/30 dark:shadow-blue-dark/30{% else %}text-slate dark:text-slate-light hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 hover:text-slate dark:text-slate-light{% endif %}">
                 <i class="fa-solid fa-book w-5"></i> Manage Notes
             </a>
             {% else %}
-            <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'dashboard' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'dashboard' %}bg-blue dark:bg-blue-dark text-slate dark:text-slate-light shadow-lg shadow-blue/30 dark:shadow-blue-dark/30{% else %}text-slate dark:text-slate-light hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 hover:text-slate dark:text-slate-light{% endif %}">
                 <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
             </a>
-            <a href="{% url 'student_notes' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'student_notes' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'student_notes' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'student_notes' %}bg-blue dark:bg-blue-dark text-slate dark:text-slate-light shadow-lg shadow-blue/30 dark:shadow-blue-dark/30{% else %}text-slate dark:text-slate-light hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 hover:text-slate dark:text-slate-light{% endif %}">
                 <i class="fa-solid fa-book-open w-5"></i> Notes Library
             </a>
             {% endif %}
             
-            <a href="{% url 'calendar' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'calendar' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'calendar' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'calendar' %}bg-blue dark:bg-blue-dark text-slate dark:text-slate-light shadow-lg shadow-blue/30 dark:shadow-blue-dark/30{% else %}text-slate dark:text-slate-light hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 hover:text-slate dark:text-slate-light{% endif %}">
                 <i class="fa-regular fa-calendar-days text-lg w-5"></i> Timeline
             </a>
             
-            <a href="{% url 'community' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'community' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'community' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'community' %}bg-blue dark:bg-blue-dark text-slate dark:text-slate-light shadow-lg shadow-blue/30 dark:shadow-blue-dark/30{% else %}text-slate dark:text-slate-light hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 hover:text-slate dark:text-slate-light{% endif %}">
                 <i class="fa-solid fa-users w-5"></i> Community
             </a>
             
-            <a href="{% url 'leaderboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'leaderboard' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'leaderboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'leaderboard' %}bg-blue dark:bg-blue-dark text-slate dark:text-slate-light shadow-lg shadow-blue/30 dark:shadow-blue-dark/30{% else %}text-slate dark:text-slate-light hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 hover:text-slate dark:text-slate-light{% endif %}">
                 <i class="fa-solid fa-trophy w-5"></i> Leaderboard
             </a>
             
-            <a href="{% url 'profile' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'profile' %}bg-brand-blue text-white shadow-lg shadow-brand-blue/20{% else %}text-slate-400 hover:bg-slate-800 hover:text-white{% endif %}">
+            <a href="{% url 'profile' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {% if request.resolver_match.url_name == 'profile' %}bg-blue dark:bg-blue-dark text-slate dark:text-slate-light shadow-lg shadow-blue/30 dark:shadow-blue-dark/30{% else %}text-slate dark:text-slate-light hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 hover:text-slate dark:text-slate-light{% endif %}">
                 <i class="fa-solid fa-user w-5"></i> Profile
             </a>
         </div>
 
         <!-- Logout & Profile snippet at bottom -->
-        <div class="p-4 border-t border-slate-800 bg-slate-900">
+        <div class="p-4 border-t border-blue/20 dark:border-slate-dark/50 bg-ice dark:bg-navy-dark">
             <div class="flex items-center justify-between px-2 py-2 mb-4">
                 <div class="flex items-center gap-3">
                     {% if user.profile.profile_picture %}
-                        <img src="{{ user.profile.profile_picture.url }}" class="w-9 h-9 rounded-full object-cover shadow-md border border-slate-700">
+                        <img src="{{ user.profile.profile_picture.url }}" class="w-9 h-9 rounded-full object-cover shadow-md border border-blue/20 dark:border-slate-dark/50">
                     {% else %}
-                        <div class="w-9 h-9 rounded-full bg-gradient-to-r from-[#7FCDFF] to-[#3BA4D9] text-white flex items-center justify-center font-bold text-sm shadow-md border border-slate-700">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-r from-[#7FCDFF] to-[#3BA4D9] text-slate dark:text-slate-light flex items-center justify-center font-bold text-sm shadow-md border border-blue/20 dark:border-slate-dark/50">
                             {{ user.username|make_list|first|upper }}
                         </div>
                     {% endif %}
                     <div class="flex flex-col">
-                        <span class="text-sm font-bold text-white leading-none">{{ user.username }}</span>
-                        <span class="text-[10px] text-slate-400 mt-1 uppercase tracking-wider font-semibold">{% if user.is_superuser %}Founder{% else %}Student{% endif %}</span>
+                        <span class="text-sm font-bold text-slate dark:text-slate-light leading-none">{{ user.username }}</span>
+                        <span class="text-[10px] text-slate dark:text-slate-light mt-1 uppercase tracking-wider font-semibold">{% if user.is_superuser %}Founder{% else %}Student{% endif %}</span>
                     </div>
                 </div>
             </div>
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}
-                <button type="submit" class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold bg-slate-800 text-slate-300 hover:bg-red-500/10 hover:text-red-500 transition-colors w-full border border-slate-700 hover:border-red-500/30">
+                <button type="submit" class="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 text-slate dark:text-slate-light hover:bg-red-500/10 hover:text-red-500 transition-colors w-full border border-blue/20 dark:border-slate-dark/50 hover:border-red-500/30">
                     <i class="fa-solid fa-power-off"></i> Sign Out
                 </button>
             </form>
@@ -176,20 +175,20 @@
     {% endif %}
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden {% if user.is_authenticated %}ml-64{% endif %} bg-brand-light dark:bg-[#0a0a0a] transition-colors duration-300">
+    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden {% if user.is_authenticated %}ml-64{% endif %} bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] transition-colors duration-300">
         
         <!-- Top Navbar -->
         {% if user.is_authenticated %}
-        <header class="h-16 bg-white/80 dark:bg-[#121212]/80 backdrop-blur-md border-b border-slate-200 dark:border-zinc-800 flex items-center justify-between px-8 shrink-0 z-30 relative sticky top-0 transition-colors duration-300">
+        <header class="h-16 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30/80 dark:bg-[#121212]/80 backdrop-blur-md border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 flex items-center justify-between px-8 shrink-0 z-30 relative sticky top-0 transition-colors duration-300">
             <div class="flex items-center gap-4">
-                <h1 class="text-xl font-bold text-slate-800 dark:text-white tracking-tight">{% block header_title %}SDE PREP 90{% endblock %}</h1>
+                <h1 class="text-xl font-bold text-navy dark:text-ice text-navy dark:text-ice tracking-tight">{% block header_title %}SDE PREP 90{% endblock %}</h1>
             </div>
             <div class="flex items-center gap-5">
-                <button id="themeToggle" class="text-slate-400 hover:text-brand-blue dark:hover:text-emerald-400 transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-indigo-50 dark:hover:bg-zinc-800">
+                <button id="themeToggle" class="text-slate dark:text-slate-light hover:text-blue dark:text-blue-light hover:text-blue dark:text-blue-light-light transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-blue-light dark:bg-blue-dark/20 dark:hover:bg-zinc-800">
                     <i id="themeToggleIcon" class="fa-solid fa-moon text-xl"></i>
                 </button>
                 <div class="relative">
-                    <button class="text-slate-400 hover:text-brand-blue dark:hover:text-emerald-400 transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-indigo-50 dark:hover:bg-zinc-800">
+                    <button class="text-slate dark:text-slate-light hover:text-blue dark:text-blue-light hover:text-blue dark:text-blue-light-light transition-colors flex items-center justify-center w-10 h-10 rounded-full hover:bg-blue-light dark:bg-blue-dark/20 dark:hover:bg-zinc-800">
                         <i class="fa-regular fa-bell text-xl"></i>
                     </button>
                     <span class="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white"></span>
@@ -199,8 +198,8 @@
 
         <!-- Notices Marquee (if any) -->
         {% if latest_notice %}
-        <div class="bg-indigo-50 dark:bg-indigo-900/30 border-b border-indigo-100 dark:border-indigo-800/50 overflow-hidden relative h-10 flex items-center shrink-0 transition-colors">
-            <div class="absolute whitespace-nowrap animate-marquee text-brand-blue dark:text-blue-400 font-semibold text-sm flex items-center">
+        <div class="bg-blue-light dark:bg-blue-dark/20 dark:bg-indigo-900/30 border-b border-blue dark:border-blue-dark dark:border-indigo-800/50 overflow-hidden relative h-10 flex items-center shrink-0 transition-colors">
+            <div class="absolute whitespace-nowrap animate-marquee text-blue dark:text-blue-light dark:text-blue-400 font-semibold text-sm flex items-center">
                 <i class="fa-solid fa-bolt text-yellow-500 mr-3"></i> {{ latest_notice.text }} <span class="mx-8 opacity-30">•</span> {{ latest_notice.text }} <span class="mx-8 opacity-30">•</span> {{ latest_notice.text }}
             </div>
         </div>
@@ -211,7 +210,7 @@
         {% if messages %}
         <div class="absolute top-20 right-8 z-50 flex flex-col gap-3">
             {% for message in messages %}
-                <div class="bg-slate-900 text-white px-6 py-4 rounded-xl shadow-2xl border-l-4 {% if message.tags == 'success' %}border-l-emerald-400{% elif message.tags == 'error' %}border-l-red-400{% else %}border-l-indigo-400{% endif %} flex items-center gap-4 transform transition-all duration-300">
+                <div class="bg-ice dark:bg-navy-dark text-slate dark:text-slate-light px-6 py-4 rounded-xl shadow-2xl border-l-4 {% if message.tags == 'success' %}border-l-emerald-400{% elif message.tags == 'error' %}border-l-red-400{% else %}border-l-indigo-400{% endif %} flex items-center gap-4 transform transition-all duration-300">
                     <span class="text-sm font-medium">{{ message }}</span>
                 </div>
             {% endfor %}

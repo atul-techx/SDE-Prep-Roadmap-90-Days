@@ -1,0 +1,189 @@
+{% extends 'roadmap/base.html' %}
+
+{% block content %}
+<!-- Custom Top Navbar for Landing Page -->
+<div class="fixed top-0 left-0 right-0 z-50 bg-ice dark:bg-navy-dark/90 backdrop-blur-md border-b border-blue/20 dark:border-slate-dark/50 px-8 py-4 flex items-center justify-between shadow-xl shadow-navy/5 dark:shadow-navy-dark/50">
+    <div class="flex items-center gap-2">
+        <h1 class="text-2xl font-black text-navy dark:text-ice tracking-tighter">90<span class="text-blue dark:text-blue-light">Days</span></h1>
+    </div>
+    <div class="flex items-center gap-4">
+        {% if user.is_authenticated %}
+            <a href="{% if user.is_superuser %}{% url 'founder_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" class="bg-blue dark:bg-blue-dark hover:bg-blue dark:bg-blue-dark-light text-navy dark:text-ice font-bold px-6 py-2 rounded-full transition-all shadow-lg shadow-blue/20 dark:shadow-blue-dark/20">Go to Dashboard</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="text-slate dark:text-slate-light hover:text-navy dark:text-ice font-bold transition-colors">Login</a>
+            <a href="{% url 'register' %}" class="bg-blue dark:bg-blue-dark hover:bg-blue dark:bg-blue-dark-light text-navy dark:text-ice font-bold px-6 py-2 rounded-full transition-all shadow-lg shadow-blue/20 dark:shadow-blue-dark/20">Join Challenge</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="pt-32 pb-32 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-40">
+    
+    <!-- Hero Section -->
+    <section class="text-center space-y-8 relative">
+        <!-- Glow effect -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue dark:bg-blue-dark/20 rounded-full blur-[120px] pointer-events-none -z-10"></div>
+        
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-light dark:bg-blue-dark/10 border border-blue/20 dark:border-slate-dark/50 text-blue dark:text-blue-light text-sm font-bold tracking-widest uppercase mb-4 shadow-sm shadow-blue/10 dark:shadow-blue-dark/10">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue dark:bg-blue-dark opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-blue dark:bg-blue-dark"></span>
+            </span>
+            Admissions Open
+        </div>
+        
+        <h1 class="text-5xl md:text-7xl font-extrabold text-navy dark:text-ice tracking-tight max-w-4xl mx-auto leading-tight">
+            Don't Memorize, <br/>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue dark:from-blue-light via-blue-light dark:via-blue to-blue dark:to-blue-light">Recognize Patterns.</span>
+        </h1>
+        <p class="text-xl text-slate dark:text-slate-light max-w-2xl mx-auto font-medium">
+            Master Data Structures and Algorithms in 90 days. A structured path designed to build logic, not just cram solutions.
+        </p>
+        <div class="flex items-center justify-center gap-6 pt-4">
+            <a href="{% url 'register' %}" class="bg-blue dark:bg-blue-dark hover:bg-blue dark:bg-blue-dark-light text-navy dark:text-ice font-bold px-8 py-4 rounded-full transition-all shadow-xl shadow-blue/30 dark:shadow-blue-dark/30 text-lg flex items-center gap-3">
+                Start Your Journey <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="#curriculum" class="text-navy dark:text-ice font-bold hover:text-blue dark:text-blue-light transition-colors flex items-center gap-2">
+                View Curriculum <i class="fa-solid fa-chevron-down text-sm"></i>
+            </a>
+        </div>
+        
+        <!-- Stats -->
+        <div class="flex items-center justify-center gap-12 pt-16 border-t border-blue/10 dark:border-slate-dark/30 mt-16 max-w-3xl mx-auto">
+            <div class="text-center">
+                <h3 class="text-4xl font-black text-navy dark:text-ice">90</h3>
+                <p class="text-xs font-bold text-slate dark:text-slate-light uppercase tracking-widest mt-2">Days</p>
+            </div>
+            <div class="text-center border-l border-r border-blue/10 dark:border-slate-dark/30 px-12">
+                <h3 class="text-4xl font-black text-navy dark:text-ice">482</h3>
+                <p class="text-xs font-bold text-slate dark:text-slate-light uppercase tracking-widest mt-2">Problems</p>
+            </div>
+            <div class="text-center">
+                <h3 class="text-4xl font-black text-navy dark:text-ice">100%</h3>
+                <p class="text-xs font-bold text-slate dark:text-slate-light uppercase tracking-widest mt-2">Free</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Not Just Practice, Thinking Training -->
+    <section class="space-y-16">
+        <div class="text-center space-y-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-navy dark:text-ice tracking-tight">Not Just Practice, <br/><span class="text-blue dark:text-blue-light">Thinking Training.</span></h2>
+            <p class="text-slate dark:text-slate-light text-lg max-w-2xl mx-auto">We focus on building intuition. When you see a new problem, you won't guess—you'll know exactly which pattern to apply.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-navy dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 p-8 rounded-3xl hover:border-blue dark:border-blue-dark transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue/10 dark:shadow-blue-dark/10">
+                <div class="w-14 h-14 bg-blue dark:bg-blue-dark/20 rounded-2xl flex items-center justify-center text-blue dark:text-blue-light text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-brain"></i>
+                </div>
+                <h3 class="text-xl font-bold text-ice mb-3">Pattern Recognition</h3>
+                <p class="text-slate-light leading-relaxed">Stop solving randomly. Learn to identify underlying patterns like Sliding Window, Two Pointers, and DP paradigms.</p>
+            </div>
+            <div class="bg-navy dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 p-8 rounded-3xl hover:border-blue dark:border-blue-dark transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue/10 dark:shadow-blue-dark/10">
+                <div class="w-14 h-14 bg-blue-light dark:bg-blue-dark/20 rounded-2xl flex items-center justify-center text-blue dark:text-blue-light text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <h3 class="text-xl font-bold text-ice mb-3">Structured Flow</h3>
+                <p class="text-slate-light leading-relaxed">Day-by-day progression from arrays to advanced graphs. You never have to wonder "What should I solve today?"</p>
+            </div>
+            <div class="bg-navy dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 p-8 rounded-3xl hover:border-blue dark:border-blue-dark transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue/10 dark:shadow-blue-dark/10">
+                <div class="w-14 h-14 bg-blue dark:bg-blue-dark-light/20 rounded-2xl flex items-center justify-center text-blue dark:text-blue-light-light text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-laptop-code"></i>
+                </div>
+                <h3 class="text-xl font-bold text-ice mb-3">Interview Ready</h3>
+                <p class="text-slate-light leading-relaxed">Curated list of problems that are most frequently asked by top tech companies and MAANG.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Structured Learning Path (Curriculum) -->
+    <section id="curriculum" class="space-y-16">
+        <div class="text-center space-y-4">
+            <h2 class="text-3xl md:text-5xl font-extrabold text-navy dark:text-ice tracking-tight">Structured <span class="text-blue dark:text-blue-light">Learning Path</span></h2>
+            <p class="text-slate dark:text-slate-light text-lg max-w-2xl mx-auto">Click on any day to unlock its contents. You need to be logged in to view the curriculum resources.</p>
+        </div>
+        
+        <div class="max-w-4xl mx-auto bg-ice dark:bg-navy-dark-light/50 border border-blue/10 dark:border-slate-dark/30 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
+            <!-- Decorative gradient -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-blue-light dark:bg-blue-dark/10 rounded-full blur-[80px] -z-10"></div>
+            
+            <div class="space-y-4 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">
+                {% for day in days_data %}
+                <a href="{% if user.is_authenticated %}{% url 'student_day_content' day.day_number %}{% else %}{% url 'login' %}?next=/day/{{ day.day_number }}/{% endif %}" class="block bg-ice dark:bg-navy-dark border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-6 hover:border-blue dark:border-blue-dark hover:bg-[#1a0b12] transition-all group relative overflow-hidden shadow-sm hover:shadow-lg hover:shadow-blue/5 dark:shadow-blue-dark/5">
+                    <!-- Hover Sweep Effect -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-blue/0 dark:from-blue-dark/0 via-blue-light dark:via-blue/5 to-blue/0 dark:to-blue-dark/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></div>
+                    
+                    <div class="flex items-center justify-between relative z-10">
+                        <div class="flex items-center gap-6">
+                            <div class="w-14 h-14 rounded-xl bg-ice dark:bg-navy-dark-light border border-blue/20 dark:border-slate-dark/50 text-blue dark:text-blue-light font-black text-xl flex items-center justify-center group-hover:bg-blue dark:bg-blue-dark group-hover:text-navy dark:text-ice group-hover:border-blue dark:border-blue-dark shadow-inner transition-all duration-300">
+                                {{ day.day_number }}
+                            </div>
+                            <div>
+                                <h4 class="text-navy dark:text-ice font-bold text-xl group-hover:text-blue dark:text-blue-light transition-colors">Day {{ day.day_number }}</h4>
+                                <p class="text-slate dark:text-slate-light font-medium mt-1">{{ day.topic }}</p>
+                            </div>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-ice dark:bg-navy-dark-light flex items-center justify-center border border-blue/10 dark:border-slate-dark/30 group-hover:bg-blue dark:bg-blue-dark/10 group-hover:border-blue dark:border-blue-dark/30 transition-colors">
+                            {% if user.is_authenticated %}
+                                <i class="fa-solid fa-arrow-right text-slate dark:text-slate-light group-hover:text-blue dark:text-blue-light transition-colors"></i>
+                            {% else %}
+                                <i class="fa-solid fa-lock text-slate dark:text-slate-light group-hover:text-blue dark:text-blue-light transition-colors"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="space-y-12 max-w-3xl mx-auto">
+        <div class="text-center space-y-4 mb-12">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-navy dark:text-ice">Frequently Asked <span class="text-blue dark:text-blue-light">Questions</span></h2>
+        </div>
+        
+        <div class="space-y-4">
+            <!-- FAQ 1 -->
+            <div class="bg-ice dark:bg-navy-dark-light/80 border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-8 hover:border-blue/30 dark:hover:border-slate-dark/50 transition-colors">
+                <h4 class="text-xl font-bold text-navy dark:text-ice mb-3 flex items-center gap-3"><i class="fa-solid fa-circle-question text-blue dark:text-blue-light text-lg"></i> Is this challenge really free?</h4>
+                <p class="text-slate dark:text-slate-light leading-relaxed pl-8">Yes, the 90-day challenge and all its structured content are completely free to access.</p>
+            </div>
+            <!-- FAQ 2 -->
+            <div class="bg-ice dark:bg-navy-dark-light/80 border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-8 hover:border-blue/30 dark:hover:border-slate-dark/50 transition-colors">
+                <h4 class="text-xl font-bold text-navy dark:text-ice mb-3 flex items-center gap-3"><i class="fa-solid fa-circle-question text-blue dark:text-blue-light text-lg"></i> Do I need prior DSA knowledge?</h4>
+                <p class="text-slate dark:text-slate-light leading-relaxed pl-8">You should know basic programming constructs (loops, variables, functions) in at least one language. We cover concepts from scratch, but it ramps up quickly.</p>
+            </div>
+            <!-- FAQ 3 -->
+            <div class="bg-ice dark:bg-navy-dark-light/80 border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-8 hover:border-blue/30 dark:hover:border-slate-dark/50 transition-colors">
+                <h4 class="text-xl font-bold text-navy dark:text-ice mb-3 flex items-center gap-3"><i class="fa-solid fa-circle-question text-blue dark:text-blue-light text-lg"></i> What languages are supported?</h4>
+                <p class="text-slate dark:text-slate-light leading-relaxed pl-8">You can solve problems in any language (C++, Java, Python). The logic and patterns remain the same.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="text-center pt-16 border-t border-blue/10 dark:border-slate-dark/30 text-slate dark:text-slate-light">
+        <h3 class="text-2xl font-black text-navy dark:text-ice mb-4">90<span class="text-blue dark:text-blue-light">Days</span></h3>
+        <p class="font-bold text-sm uppercase tracking-widest">&copy; 2026 SDE 90 Days Challenge. Built for aspiring engineers.</p>
+    </footer>
+</div>
+
+<style>
+    /* Custom Scrollbar for Landing Page */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(0,0,0,0.1); 
+        border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(37, 99, 235, 0.3); /* Blue transparent */
+        border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(37, 99, 235, 0.6);
+    }
+</style>
+{% endblock %}
