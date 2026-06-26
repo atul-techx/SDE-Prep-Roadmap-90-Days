@@ -43,6 +43,12 @@ class ProgressTracker(models.Model):
     day = models.ForeignKey(DailyContent, on_delete=models.CASCADE)
     completed_at = models.DateTimeField(auto_now_add=True)
     used_freeze = models.BooleanField(default=False)
+    
+    # Sub-task completion flags
+    dsa_completed = models.BooleanField(default=False)
+    aptitude_completed = models.BooleanField(default=False)
+    core_completed = models.BooleanField(default=False)
+    web_dev_completed = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('student', 'day')

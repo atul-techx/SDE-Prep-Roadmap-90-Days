@@ -21,6 +21,7 @@ urlpatterns = [
     path('', views.landing_page_view, name='home'),
     path('complete/<int:day_number>/', views.mark_completed_view, name='mark_completed'),
     path('day/<int:day_number>/', views.student_day_content_view, name='student_day_content'),
+    path('toggle-task/', views.toggle_task_completion, name='toggle_task_completion'),
     path('apply-freeze/', views.apply_freeze_view, name='apply_freeze'),
     path('setup-founder-account/', views.setup_founder_view, name='setup_founder'),
 ]

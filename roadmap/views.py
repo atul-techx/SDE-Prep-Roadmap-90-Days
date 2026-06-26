@@ -106,19 +106,36 @@ def dashboard_view(request):
     
     completed_days = set(ProgressTracker.objects.filter(student=profile).values_list('day__day_number', flat=True))
     
+    # Get detailed progress tracker for dynamic percentage calculation
+    progress_trackers = ProgressTracker.objects.filter(student=profile)
+    progress_dict = {p.day.day_number: p for p in progress_trackers}
+    
     days_data = []
     for day_num in range(1, 91):
         day_obj = all_days_dict.get(day_num)
+        
+        tracker = progress_dict.get(day_num)
+        tasks_done = 0
+        if tracker:
+            tasks_done += 1 if tracker.dsa_completed else 0
+            tasks_done += 1 if tracker.aptitude_completed else 0
+            tasks_done += 1 if tracker.core_completed else 0
+            tasks_done += 1 if tracker.web_dev_completed else 0
+            
+        progress_percentage = (tasks_done * 25)
+        
         status = 'locked'
         if day_num <= current_day_number:
             status = 'unlocked'
-        if day_num in completed_days:
+        if tasks_done == 4:
             status = 'completed'
             
         days_data.append({
             'day_number': day_num,
             'day_obj': day_obj,
-            'status': status
+            'status': status,
+            'progress_percentage': progress_percentage,
+            'tracker': tracker
         })
         
     latest_notice = Notice.objects.filter(is_active=True).order_by('-created_at').first()
@@ -423,6 +440,50 @@ def student_notes_view(request):
     })
 
 @login_required
+@require_POST
+def toggle_task_completion(request):
+    try:
+        data = json.loads(request.body)
+        day_number = data.get('day_number')
+        task_name = data.get('task_name')
+        
+        if not day_number or not task_name:
+            return JsonResponse({'success': False, 'error': 'Missing parameters'}, status=400)
+            
+        valid_tasks = ['dsa_completed', 'aptitude_completed', 'core_completed', 'web_dev_completed']
+        if task_name not in valid_tasks:
+            return JsonResponse({'success': False, 'error': 'Invalid task name'}, status=400)
+            
+        profile = request.user.profile
+        day = get_object_or_404(DailyContent, day_number=day_number)
+        
+        tracker, created = ProgressTracker.objects.get_or_create(student=profile, day=day)
+        
+        # Toggle the boolean value
+        current_val = getattr(tracker, task_name)
+        setattr(tracker, task_name, not current_val)
+        tracker.save()
+        
+        # Calculate new percentage
+        tasks_done = 0
+        tasks_done += 1 if tracker.dsa_completed else 0
+        tasks_done += 1 if tracker.aptitude_completed else 0
+        tasks_done += 1 if tracker.core_completed else 0
+        tasks_done += 1 if tracker.web_dev_completed else 0
+        progress_percentage = tasks_done * 25
+        
+        # Calculate overall XP & Streak if it just reached 100%
+        # (Optional logic here if we want to add XP when they click the checkboxes instead of the mark complete button)
+        
+        return JsonResponse({
+            'success': True, 
+            'completed': not current_val,
+            'progress_percentage': progress_percentage
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+@login_required
 def mark_completed_view(request, day_number):
     if request.method == 'POST':
         profile = request.user.profile
@@ -436,29 +497,36 @@ def mark_completed_view(request, day_number):
             
         day_obj = get_object_or_404(DailyContent, day_number=day_number)
         
-        access_log = DayAccessLog.objects.filter(student=profile, day=day_obj).first()
-        if not access_log or timezone.now() < (access_log.first_accessed_at + timedelta(hours=2)):
-            messages.error(request, "You must wait 2 hours after opening the content before marking it as complete.")
-            return redirect('student_day_content', day_number=day_number)
-            
-        if ProgressTracker.objects.filter(student=profile, day=day_obj).exists():
-            messages.info(request, "Day already completed.")
-            return redirect('dashboard')
-            
-        if profile.last_completed_date == today:
-            pass
-        elif profile.last_completed_date == yesterday:
-            profile.current_streak += 1
+        tracker, created = ProgressTracker.objects.get_or_create(student=profile, day=day_obj)
+        
+        # Mark all 4 sub-tasks as completed if using the main button
+        if not created:
+            tracker.dsa_completed = True
+            tracker.aptitude_completed = True
+            tracker.core_completed = True
+            tracker.web_dev_completed = True
+            tracker.save()
+            messages.info(request, f"Day {day_number} is already marked as completed!")
         else:
-            profile.current_streak = 1
+            tracker.dsa_completed = True
+            tracker.aptitude_completed = True
+            tracker.core_completed = True
+            tracker.web_dev_completed = True
+            tracker.save()
             
-        profile.last_completed_date = today
-        profile.xp += 10
-        profile.save()
-        
-        ProgressTracker.objects.create(student=profile, day=day_obj)
-        messages.success(request, f"+10 XP! Day {day_number} completed.")
-        
+            if profile.last_completed_date == today:
+                pass
+            elif profile.last_completed_date == yesterday:
+                profile.current_streak += 1
+            else:
+                profile.current_streak = 1
+                
+            profile.last_completed_date = today
+            profile.xp += 10
+            profile.save()
+            
+            messages.success(request, f"+10 XP! Day {day_number} completed.")
+            
     return redirect('dashboard')
 
 @login_required
