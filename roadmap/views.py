@@ -374,7 +374,10 @@ def founder_content_edit_view(request, day_number):
     
     if request.method == 'POST':
         day.topic_name = request.POST.get('topic_name', day.topic_name)
-        day.rich_content = request.POST.get('rich_content', '')
+        day.dsa_content = request.POST.get('dsa_content', '')
+        day.aptitude_content = request.POST.get('aptitude_content', '')
+        day.core_subject_content = request.POST.get('core_subject_content', '')
+        day.web_dev_content = request.POST.get('web_dev_content', '')
         day.save()
         messages.success(request, f"Day {day_number} content updated successfully!")
         return redirect('founder_content_list')

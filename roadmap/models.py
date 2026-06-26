@@ -28,7 +28,11 @@ class DailyContent(models.Model):
     topic_name = models.CharField(max_length=255)
     video_link = models.URLField(blank=True, null=True)
     notes_link = models.URLField(blank=True, null=True)
-    rich_content = models.TextField(blank=True, null=True)
+    rich_content = models.TextField(blank=True, null=True) # Deprecated
+    dsa_content = models.TextField(blank=True, null=True)
+    aptitude_content = models.TextField(blank=True, null=True)
+    core_subject_content = models.TextField(blank=True, null=True)
+    web_dev_content = models.TextField(blank=True, null=True)
     questions_list = models.JSONField(default=list, help_text="List of question URLs")
 
     def __str__(self):

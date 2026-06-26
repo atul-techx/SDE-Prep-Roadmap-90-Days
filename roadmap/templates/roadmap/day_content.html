@@ -18,16 +18,83 @@
             </div>
         </div>
         
+        <!-- Tabs Navigation -->
+        <div class="px-8 border-b border-blue/20 dark:border-slate-dark/50 flex flex-wrap gap-6 mt-4">
+            <button onclick="switchStudentTab('dsa')" id="btn-dsa" class="student-tab-btn active border-b-2 border-blue dark:border-blue-dark text-blue dark:text-blue-light font-bold pb-3 transition-colors">DSA</button>
+            <button onclick="switchStudentTab('aptitude')" id="btn-aptitude" class="student-tab-btn border-b-2 border-transparent text-slate dark:text-slate-light hover:text-blue dark:hover:text-blue-light font-medium pb-3 transition-colors">Aptitude</button>
+            <button onclick="switchStudentTab('core')" id="btn-core" class="student-tab-btn border-b-2 border-transparent text-slate dark:text-slate-light hover:text-blue dark:hover:text-blue-light font-medium pb-3 transition-colors">Core Subjects</button>
+            <button onclick="switchStudentTab('web')" id="btn-web" class="student-tab-btn border-b-2 border-transparent text-slate dark:text-slate-light hover:text-blue dark:hover:text-blue-light font-medium pb-3 transition-colors">Web Development</button>
+        </div>
+
         <div class="p-8 prose prose-slate dark:prose-invert max-w-none prose-headings:text-navy dark:text-ice dark:prose-headings:text-slate dark:text-slate-light prose-a:text-blue dark:text-blue-light dark:prose-a:text-blue-400 hover:prose-a:text-blue dark:text-blue-light dark:hover:prose-a:text-indigo-400 prose-img:rounded-xl transition-colors">
-            {% if day.rich_content %}
-                {{ day.rich_content|safe }}
+            {% if day.dsa_content or day.aptitude_content or day.core_subject_content or day.web_dev_content or day.rich_content %}
+                
+                <div id="content-dsa" class="student-tab-content block">
+                    {% if day.dsa_content %}
+                        {{ day.dsa_content|safe }}
+                    {% elif day.rich_content %}
+                        {{ day.rich_content|safe }}
+                    {% else %}
+                        <p class="text-slate-500 italic">No DSA content available for today.</p>
+                    {% endif %}
+                </div>
+                
+                <div id="content-aptitude" class="student-tab-content hidden">
+                    {% if day.aptitude_content %}
+                        {{ day.aptitude_content|safe }}
+                    {% else %}
+                        <p class="text-slate-500 italic">No Aptitude content available for today.</p>
+                    {% endif %}
+                </div>
+                
+                <div id="content-core" class="student-tab-content hidden">
+                    {% if day.core_subject_content %}
+                        {{ day.core_subject_content|safe }}
+                    {% else %}
+                        <p class="text-slate-500 italic">No Core Subject content available for today.</p>
+                    {% endif %}
+                </div>
+                
+                <div id="content-web" class="student-tab-content hidden">
+                    {% if day.web_dev_content %}
+                        {{ day.web_dev_content|safe }}
+                    {% else %}
+                        <p class="text-slate-500 italic">No Web Development content available for today.</p>
+                    {% endif %}
+                </div>
+                
             {% else %}
-                <div class="text-center py-12 text-slate dark:text-slate-light text-slate dark:text-slate-light transition-colors">
+                <div class="text-center py-12 text-slate dark:text-slate-light transition-colors">
                     <i class="fa-solid fa-person-digging text-5xl mb-4 text-slate-200 dark:text-zinc-700 transition-colors"></i>
                     <p class="font-medium">Content is being prepared for this day.</p>
                 </div>
             {% endif %}
         </div>
+        
+        <script>
+            function switchStudentTab(tabId) {
+                // Hide all contents
+                document.querySelectorAll('.student-tab-content').forEach(el => {
+                    el.classList.remove('block');
+                    el.classList.add('hidden');
+                });
+                
+                // Reset all buttons
+                document.querySelectorAll('.student-tab-btn').forEach(btn => {
+                    btn.classList.remove('border-blue', 'dark:border-blue-dark', 'text-blue', 'dark:text-blue-light', 'font-bold');
+                    btn.classList.add('border-transparent', 'text-slate', 'dark:text-slate-light', 'font-medium');
+                });
+                
+                // Show current content
+                document.getElementById('content-' + tabId).classList.remove('hidden');
+                document.getElementById('content-' + tabId).classList.add('block');
+                
+                // Highlight current button
+                const btn = document.getElementById('btn-' + tabId);
+                btn.classList.remove('border-transparent', 'text-slate', 'dark:text-slate-light', 'font-medium');
+                btn.classList.add('border-blue', 'dark:border-blue-dark', 'text-blue', 'dark:text-blue-light', 'font-bold');
+            }
+        </script>
         
         {% if not is_completed %}
         <div class="p-8 border-t border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] flex flex-col items-center transition-colors">
