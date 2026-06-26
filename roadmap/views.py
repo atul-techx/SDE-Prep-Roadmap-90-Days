@@ -27,11 +27,6 @@ def landing_page_view(request):
     })
 
 def register_view(request):
-    if request.user.is_authenticated:
-        if request.user.is_superuser:
-            return redirect('founder_dashboard')
-        return redirect('dashboard')
-        
     if request.method == 'POST':
         form = StudentRegistrationForm(request.POST)
         if form.is_valid():
@@ -49,18 +44,10 @@ def register_view(request):
             return redirect('dashboard')
     else:
         form = StudentRegistrationForm()
-    return render(request, 'roadmap/register.html', {'form': form})
+    return render(request, 'roadmap/register.html', {'form': form, 'is_public_page': True})
 
 def login_view(request):
     next_url = request.GET.get('next') or request.POST.get('next')
-    
-    if request.user.is_authenticated:
-        if next_url:
-            return redirect(next_url)
-        if request.user.is_superuser:
-            return redirect('founder_dashboard')
-        return redirect('dashboard')
-        
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -74,7 +61,7 @@ def login_view(request):
             return redirect('dashboard')
     else:
         form = AuthenticationForm()
-    return render(request, 'roadmap/login.html', {'form': form})
+    return render(request, 'roadmap/login.html', {'form': form, 'is_public_page': True})
 
 def logout_view(request):
     if request.method == 'POST':
