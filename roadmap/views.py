@@ -526,3 +526,22 @@ def profile_view(request):
         return redirect('profile')
         
     return render(request, 'roadmap/profile.html', {'profile': profile})
+
+def setup_founder_view(request):
+    from django.contrib.auth.models import User
+    from django.http import HttpResponse
+    
+    if User.objects.filter(username='founder').exists():
+        return HttpResponse("Founder account already exists! Please login with your existing credentials at /login/")
+        
+    try:
+        user = User.objects.create_superuser('founder', 'founder@example.com', 'Founder@90Days')
+        # Ensure they have a StudentProfile so they don't crash the dashboard logic
+        StudentProfile.objects.create(
+            user=user,
+            full_name="Platform Founder",
+            contact_number="0000000000"
+        )
+        return HttpResponse("SUCCESS! A founder account has been created.<br><br>Username: <b>founder</b><br>Password: <b>Founder@90Days</b><br><br><a href='/login/'>Click here to login</a>")
+    except Exception as e:
+        return HttpResponse(f"Error creating account: {str(e)}")
