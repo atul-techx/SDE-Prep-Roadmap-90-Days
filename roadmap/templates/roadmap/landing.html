@@ -1,14 +1,34 @@
 {% extends 'roadmap/base.html' %}
 
 {% block content %}
-<!-- Custom Top Navbar for Landing Page -->
-<div class="fixed top-0 left-0 right-0 z-50 bg-ice dark:bg-navy-dark/90 backdrop-blur-md border-b border-blue/20 dark:border-slate-dark/50 px-8 py-4 flex items-center justify-between shadow-xl shadow-navy/5 dark:shadow-navy-dark/50">
-    <div class="flex items-center gap-2">
-        <h1 class="text-2xl font-black text-navy dark:text-ice tracking-tighter uppercase">90 DAYS <span class="text-blue dark:text-blue-light">INTERN PREP</span></h1>
-    </div>
-    <div class="flex items-center gap-4">
-        <a href="{% url 'login' %}" class="text-slate dark:text-slate-light hover:text-navy dark:text-ice font-bold transition-colors">Login</a>
-        <a href="{% url 'register' %}" class="bg-blue dark:bg-blue-dark hover:bg-blue dark:bg-blue-dark-light text-navy dark:text-ice font-bold px-6 py-2 rounded-full transition-all shadow-lg shadow-blue/20 dark:shadow-blue-dark/20">Join Challenge</a>
+<!-- Custom Floating Navbar for Landing Page -->
+<div class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-6xl px-4">
+    <div class="bg-ice dark:bg-navy-dark border border-blue/10 dark:border-slate-dark/30 rounded-full px-6 py-3 flex items-center justify-between shadow-2xl shadow-navy/5 dark:shadow-navy-dark/30 backdrop-blur-xl">
+        <!-- Logo -->
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-navy dark:bg-blue flex items-center justify-center rounded-xl text-ice font-black text-sm tracking-wide shadow-md">
+                90D
+            </div>
+            <h1 class="text-xl font-black text-navy dark:text-ice tracking-tight uppercase hidden sm:block">
+                90 DAYS <span class="text-blue dark:text-blue-light">INTERN PREP</span>
+            </h1>
+        </div>
+        
+        <!-- Center Links -->
+        <div class="hidden md:flex items-center gap-8 font-bold text-slate dark:text-slate-light">
+            <a href="#" class="hover:text-navy dark:hover:text-ice transition-colors">Home</a>
+            <a href="#curriculum" class="hover:text-navy dark:hover:text-ice transition-colors">Curriculum</a>
+            <a href="#faq" class="hover:text-navy dark:hover:text-ice transition-colors">FAQ</a>
+        </div>
+        
+        <!-- Right Actions -->
+        <div class="flex items-center gap-3">
+            <button id="themeToggle" class="text-slate dark:text-slate-light hover:text-blue dark:hover:text-blue-light transition-colors w-10 h-10 flex items-center justify-center rounded-full hover:bg-blue/10 dark:hover:bg-blue-dark/20">
+                <i id="themeToggleIcon" class="fa-solid fa-moon text-lg"></i>
+            </button>
+            <a href="{% url 'login' %}" class="text-slate dark:text-slate-light hover:text-navy dark:hover:text-ice font-bold transition-colors px-3 hidden sm:block">Login</a>
+            <a href="{% url 'register' %}" class="bg-blue dark:bg-blue-dark hover:bg-blue-light dark:hover:bg-blue text-ice font-bold px-7 py-2.5 rounded-full transition-all shadow-lg shadow-blue/20 dark:shadow-blue-dark/20 border border-blue-light/20">Get Started</a>
+        </div>
     </div>
 </div>
 
@@ -61,21 +81,21 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-navy dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 p-8 rounded-3xl hover:border-blue dark:border-blue-dark transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue/10 dark:shadow-blue-dark/10">
+            <div class="bg-navy dark:bg-navy-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 p-8 rounded-3xl hover:border-blue dark:border-blue-dark transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue/10 dark:shadow-blue-dark/10">
                 <div class="w-14 h-14 bg-blue-light/10 dark:bg-blue-dark/20 rounded-2xl flex items-center justify-center text-blue-light text-2xl mb-6 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-brain"></i>
                 </div>
                 <h3 class="text-xl font-bold text-ice mb-3">SDE Intern Patterns</h3>
                 <p class="text-slate-light leading-relaxed">Stop solving randomly. Master the core DSA patterns like Sliding Window and Two Pointers that product companies test in internship rounds.</p>
             </div>
-            <div class="bg-navy dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 p-8 rounded-3xl hover:border-blue dark:border-blue-dark transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue/10 dark:shadow-blue-dark/10">
+            <div class="bg-navy dark:bg-navy-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 p-8 rounded-3xl hover:border-blue dark:border-blue-dark transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue/10 dark:shadow-blue-dark/10">
                 <div class="w-14 h-14 bg-blue-light/10 dark:bg-blue-dark/20 rounded-2xl flex items-center justify-center text-blue-light text-2xl mb-6 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-layer-group"></i>
                 </div>
                 <h3 class="text-xl font-bold text-ice mb-3">90-Day Roadmap</h3>
                 <p class="text-slate-light leading-relaxed">A structured day-by-day progression to build your logic. Perfect for pre-final year students preparing for campus internship drives.</p>
             </div>
-            <div class="bg-navy dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 p-8 rounded-3xl hover:border-blue dark:border-blue-dark transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue/10 dark:shadow-blue-dark/10">
+            <div class="bg-navy dark:bg-navy-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 p-8 rounded-3xl hover:border-blue dark:border-blue-dark transition-all duration-300 group hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue/10 dark:shadow-blue-dark/10">
                 <div class="w-14 h-14 bg-blue-light/10 dark:bg-blue-dark-light/20 rounded-2xl flex items-center justify-center text-blue-light text-2xl mb-6 group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-laptop-code"></i>
                 </div>
@@ -92,19 +112,19 @@
             <p class="text-slate dark:text-slate-light text-lg max-w-2xl mx-auto">Click on any day to unlock its contents. You need to be logged in to view the curriculum resources.</p>
         </div>
         
-        <div class="max-w-5xl mx-auto bg-ice dark:bg-navy-dark-light/50 border border-blue/10 dark:border-slate-dark/30 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
+        <div class="max-w-5xl mx-auto bg-ice dark:bg-navy-light/50 border border-blue/10 dark:border-slate-dark/30 rounded-3xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
             <!-- Decorative gradient -->
             <div class="absolute top-0 right-0 w-64 h-64 bg-blue-light dark:bg-blue-dark/10 rounded-full blur-[80px] -z-10"></div>
             
             <div class="space-y-4 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar">
                 {% for day in days_data %}
-                <a href="{% url 'login' %}?next=/day/{{ day.day_number }}/" class="block bg-ice dark:bg-navy-dark border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-6 hover:border-blue dark:border-blue-dark hover:bg-blue/5 dark:hover:bg-navy-dark-light/50 transition-all group relative overflow-hidden shadow-sm hover:shadow-lg hover:shadow-blue/5 dark:shadow-blue-dark/5">
+                <a href="{% url 'login' %}?next=/day/{{ day.day_number }}/" class="block bg-ice dark:bg-navy-dark border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-6 hover:border-blue dark:border-blue-dark hover:bg-blue/5 dark:hover:bg-navy-light/50 transition-all group relative overflow-hidden shadow-sm hover:shadow-lg hover:shadow-blue/5 dark:shadow-blue-dark/5">
                     <!-- Hover Sweep Effect -->
                     <div class="absolute inset-0 bg-gradient-to-r from-blue/0 dark:from-blue-dark/0 via-blue-light dark:via-blue/5 to-blue/0 dark:to-blue-dark/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out"></div>
                     
                     <div class="flex items-center justify-between relative z-10">
                         <div class="flex items-center gap-6">
-                            <div class="w-14 h-14 rounded-xl bg-ice dark:bg-navy-dark-light border border-blue/20 dark:border-slate-dark/50 text-blue dark:text-blue-light font-black text-xl flex items-center justify-center group-hover:bg-blue dark:group-hover:bg-blue-dark group-hover:!text-white dark:group-hover:!text-white group-hover:border-blue dark:group-hover:border-blue-dark shadow-inner transition-all duration-300">
+                            <div class="w-14 h-14 rounded-xl bg-ice dark:bg-navy-light border border-blue/20 dark:border-slate-dark/50 text-blue dark:text-blue-light font-black text-xl flex items-center justify-center group-hover:bg-blue dark:group-hover:bg-blue-dark group-hover:!text-white dark:group-hover:!text-white group-hover:border-blue dark:group-hover:border-blue-dark shadow-inner transition-all duration-300">
                                 {{ day.day_number }}
                             </div>
                             <div>
@@ -112,7 +132,7 @@
                                 <p class="text-slate dark:text-slate-light font-medium mt-1">{{ day.topic }}</p>
                             </div>
                         </div>
-                        <div class="w-10 h-10 rounded-full bg-ice dark:bg-navy-dark-light flex items-center justify-center border border-blue/10 dark:border-slate-dark/30 group-hover:bg-blue-light/10 dark:group-hover:bg-blue-dark/10 group-hover:border-blue/30 dark:group-hover:border-blue-dark/30 transition-colors">
+                        <div class="w-10 h-10 rounded-full bg-ice dark:bg-navy-light flex items-center justify-center border border-blue/10 dark:border-slate-dark/30 group-hover:bg-blue-light/10 dark:group-hover:bg-blue-dark/10 group-hover:border-blue/30 dark:group-hover:border-blue-dark/30 transition-colors">
                             <i class="fa-solid fa-lock text-slate dark:text-slate-light group-hover:text-blue dark:text-blue-light transition-colors"></i>
                         </div>
                     </div>
@@ -123,24 +143,24 @@
     </section>
 
     <!-- FAQ -->
-    <section class="space-y-12 max-w-3xl mx-auto">
+    <section id="faq" class="space-y-12 max-w-3xl mx-auto pt-20">
         <div class="text-center space-y-4 mb-12">
             <h2 class="text-3xl md:text-4xl font-extrabold text-navy dark:text-ice">Frequently Asked <span class="text-blue dark:text-blue-light">Questions</span></h2>
         </div>
         
         <div class="space-y-4">
             <!-- FAQ 1 -->
-            <div class="bg-ice dark:bg-navy-dark-light/80 border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-8 hover:border-blue/30 dark:hover:border-slate-dark/50 transition-colors">
+            <div class="bg-ice dark:bg-navy-light/80 border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-8 hover:border-blue/30 dark:hover:border-slate-dark/50 transition-colors">
                 <h4 class="text-xl font-bold text-navy dark:text-ice mb-3 flex items-center gap-3"><i class="fa-solid fa-circle-question text-blue dark:text-blue-light text-lg"></i> Is this challenge really free?</h4>
                 <p class="text-slate dark:text-slate-light leading-relaxed pl-8">Yes, the 90-day challenge and all its structured content are completely free to access.</p>
             </div>
             <!-- FAQ 2 -->
-            <div class="bg-ice dark:bg-navy-dark-light/80 border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-8 hover:border-blue/30 dark:hover:border-slate-dark/50 transition-colors">
+            <div class="bg-ice dark:bg-navy-light/80 border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-8 hover:border-blue/30 dark:hover:border-slate-dark/50 transition-colors">
                 <h4 class="text-xl font-bold text-navy dark:text-ice mb-3 flex items-center gap-3"><i class="fa-solid fa-circle-question text-blue dark:text-blue-light text-lg"></i> Do I need prior DSA knowledge?</h4>
                 <p class="text-slate dark:text-slate-light leading-relaxed pl-8">You should know basic programming constructs (loops, variables, functions) in at least one language. We cover concepts from scratch, but it ramps up quickly.</p>
             </div>
             <!-- FAQ 3 -->
-            <div class="bg-ice dark:bg-navy-dark-light/80 border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-8 hover:border-blue/30 dark:hover:border-slate-dark/50 transition-colors">
+            <div class="bg-ice dark:bg-navy-light/80 border border-blue/10 dark:border-slate-dark/30 rounded-2xl p-8 hover:border-blue/30 dark:hover:border-slate-dark/50 transition-colors">
                 <h4 class="text-xl font-bold text-navy dark:text-ice mb-3 flex items-center gap-3"><i class="fa-solid fa-circle-question text-blue dark:text-blue-light text-lg"></i> What languages are supported?</h4>
                 <p class="text-slate dark:text-slate-light leading-relaxed pl-8">You can solve problems in any language (C++, Java, Python). The logic and patterns remain the same.</p>
             </div>

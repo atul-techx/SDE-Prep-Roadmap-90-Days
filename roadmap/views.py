@@ -66,8 +66,8 @@ def login_view(request):
 def logout_view(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('login')
-    return redirect('login')
+        return redirect('home')
+    return redirect('home')
 
 @login_required
 def dashboard_view(request):
@@ -396,7 +396,7 @@ def student_notes_view(request):
     notes = Note.objects.all().order_by('-uploaded_at')
     
     if category_filter:
-        notes = notes.filter(category=category_filter)
+        notes = notes.filter(category__iexact=category_filter)
         
     categories = [c[0] for c in Note.CATEGORY_CHOICES]
     
