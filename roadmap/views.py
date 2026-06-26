@@ -505,7 +505,8 @@ def leaderboard_view(request):
 
 @login_required
 def profile_view(request):
-    profile = request.user.profile
+    from .models import StudentProfile
+    profile, created = StudentProfile.objects.get_or_create(user=request.user)
     if request.method == 'POST':
         profile.full_name = request.POST.get('full_name')
         profile.gender = request.POST.get('gender')
