@@ -115,57 +115,54 @@
 
                     <!-- Content (Hidden by default) -->
                     <div class="accordion-content hidden border-t border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] transition-colors">
-                        <!-- Sub-section header -->
-                        <div class="px-6 py-3 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#111] border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 flex items-center justify-between cursor-pointer hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:hover:bg-[#151515] transition-colors">
-                            <h5 class="text-xs font-bold text-navy dark:text-ice text-slate dark:text-slate-light tracking-wider">THINGS TO LEARN IN JAVA</h5>
-                            <i class="fa-solid fa-chevron-down text-slate dark:text-slate-light text-slate dark:text-slate-light text-xs"></i>
-                        </div>
-                        
-                        <!-- List Items Mock -->
-                        <div class="p-2 space-y-1">
-                            <!-- Item 1 -->
-                            <div class="flex items-center justify-between px-4 py-3 hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:hover:bg-zinc-900/50 rounded-lg transition-colors group">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-5 h-5 rounded border-2 border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 flex items-center justify-center cursor-pointer hover:border-blue dark:border-blue-dark dark:hover:border-blue dark:border-blue-dark transition-colors">
-                                        <!-- Checked state: <i class="fa-solid fa-check text-[10px] text-emerald-500"></i> -->
-                                    </div>
-                                    <span class="text-sm font-medium text-navy dark:text-ice text-slate dark:text-slate-light group-hover:text-blue dark:text-blue-light dark:group-hover:text-slate dark:text-slate-light transition-colors">Java Basics</span>
+                        <div class="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <!-- DSA Option -->
+                            <a href="{% url 'day_content' day_data.day.day_number %}#dsa" class="flex items-center gap-3 p-4 bg-ice dark:bg-[#111] hover:bg-blue/5 border border-blue/10 dark:border-slate-dark/50 rounded-xl transition-all group shadow-sm">
+                                <div class="w-10 h-10 rounded-lg bg-blue/10 text-blue flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-code text-lg"></i>
                                 </div>
-                                <div class="flex items-center gap-4">
-                                    <button class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-red-500 dark:hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube text-lg"></i></button>
-                                    <button class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-blue dark:text-blue-light dark:hover:text-blue-400 transition-colors"><i class="fa-solid fa-book-open text-base"></i></button>
-                                    <button class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-emerald-500 hover:text-blue dark:text-blue-light-light transition-colors"><i class="fa-solid fa-code text-base"></i></button>
-                                    <span class="px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-300 text-[10px] font-bold tracking-wide bg-emerald-50 dark:bg-emerald-500/10 w-16 text-center transition-colors">EASY</span>
+                                <div>
+                                    <h4 class="font-bold text-navy dark:text-ice text-sm group-hover:text-blue transition-colors">DSA</h4>
+                                    <p class="text-[10px] text-slate-500 font-medium">Data Structures & Algo</p>
                                 </div>
-                            </div>
-                            <!-- Item 2 -->
-                            <div class="flex items-center justify-between px-4 py-3 hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:hover:bg-zinc-900/50 rounded-lg transition-colors group">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-5 h-5 rounded border-2 border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 flex items-center justify-center cursor-pointer hover:border-blue dark:border-blue-dark dark:hover:border-blue dark:border-blue-dark transition-colors"></div>
-                                    <span class="text-sm font-medium text-navy dark:text-ice text-slate dark:text-slate-light group-hover:text-blue dark:text-blue-light dark:group-hover:text-slate dark:text-slate-light transition-colors">Input Output</span>
+                                <i class="fa-solid fa-chevron-right ml-auto text-xs text-slate-400 group-hover:text-blue transition-colors"></i>
+                            </a>
+
+                            <!-- Aptitude Option -->
+                            <a href="{% url 'day_content' day_data.day.day_number %}#aptitude" class="flex items-center gap-3 p-4 bg-ice dark:bg-[#111] hover:bg-emerald-500/5 border border-emerald-500/10 dark:border-slate-dark/50 rounded-xl transition-all group shadow-sm">
+                                <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-brain text-lg"></i>
                                 </div>
-                                <div class="flex items-center gap-4">
-                                    <button class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-red-500 dark:hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube text-lg"></i></button>
-                                    <button class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-blue dark:text-blue-light dark:hover:text-blue-400 transition-colors"><i class="fa-solid fa-book-open text-base"></i></button>
-                                    <button class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-emerald-500 hover:text-blue dark:text-blue-light-light transition-colors"><i class="fa-solid fa-code text-base"></i></button>
-                                    <span class="px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-300 text-[10px] font-bold tracking-wide bg-emerald-50 dark:bg-emerald-500/10 w-16 text-center transition-colors">EASY</span>
+                                <div>
+                                    <h4 class="font-bold text-navy dark:text-ice text-sm group-hover:text-emerald-500 transition-colors">Aptitude</h4>
+                                    <p class="text-[10px] text-slate-500 font-medium">Quant & Reasoning</p>
                                 </div>
-                            </div>
-                            <!-- Item 3 -->
-                            <div class="flex items-center justify-between px-4 py-3 hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:hover:bg-zinc-900/50 rounded-lg transition-colors group">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-5 h-5 rounded border-2 border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 flex items-center justify-center cursor-pointer hover:border-blue dark:border-blue-dark dark:hover:border-blue dark:border-blue-dark transition-colors"></div>
-                                    <span class="text-sm font-medium text-navy dark:text-ice text-slate dark:text-slate-light group-hover:text-blue dark:text-blue-light dark:group-hover:text-slate dark:text-slate-light transition-colors">Control Statements</span>
+                                <i class="fa-solid fa-chevron-right ml-auto text-xs text-slate-400 group-hover:text-emerald-500 transition-colors"></i>
+                            </a>
+
+                            <!-- Core Subjects Option -->
+                            <a href="{% url 'day_content' day_data.day.day_number %}#core" class="flex items-center gap-3 p-4 bg-ice dark:bg-[#111] hover:bg-purple-500/5 border border-purple-500/10 dark:border-slate-dark/50 rounded-xl transition-all group shadow-sm">
+                                <div class="w-10 h-10 rounded-lg bg-purple-500/10 text-purple-500 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-book text-lg"></i>
                                 </div>
-                                <div class="flex items-center gap-4">
-                                    <button class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-red-500 dark:hover:text-red-500 transition-colors"><i class="fa-brands fa-youtube text-lg"></i></button>
-                                    <button class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-blue dark:text-blue-light dark:hover:text-blue-400 transition-colors"><i class="fa-solid fa-book-open text-base"></i></button>
-                                    <button class="text-slate dark:text-slate-light text-slate dark:text-slate-light hover:text-emerald-500 hover:text-blue dark:text-blue-light-light transition-colors"><i class="fa-solid fa-code text-base"></i></button>
-                                    <span class="px-2.5 py-1 rounded-md border border-emerald-200 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-300 text-[10px] font-bold tracking-wide bg-emerald-50 dark:bg-emerald-500/10 w-16 text-center transition-colors">EASY</span>
+                                <div>
+                                    <h4 class="font-bold text-navy dark:text-ice text-sm group-hover:text-purple-500 transition-colors">Core Subjects</h4>
+                                    <p class="text-[10px] text-slate-500 font-medium">OS, DBMS, CN</p>
                                 </div>
-                            </div>
-                            
-                            
+                                <i class="fa-solid fa-chevron-right ml-auto text-xs text-slate-400 group-hover:text-purple-500 transition-colors"></i>
+                            </a>
+
+                            <!-- Web Dev Option -->
+                            <a href="{% url 'day_content' day_data.day.day_number %}#web" class="flex items-center gap-3 p-4 bg-ice dark:bg-[#111] hover:bg-orange-500/5 border border-orange-500/10 dark:border-slate-dark/50 rounded-xl transition-all group shadow-sm">
+                                <div class="w-10 h-10 rounded-lg bg-orange-500/10 text-orange-500 flex items-center justify-center shrink-0">
+                                    <i class="fa-brands fa-html5 text-lg"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-navy dark:text-ice text-sm group-hover:text-orange-500 transition-colors">Web Development</h4>
+                                    <p class="text-[10px] text-slate-500 font-medium">Frontend & Backend</p>
+                                </div>
+                                <i class="fa-solid fa-chevron-right ml-auto text-xs text-slate-400 group-hover:text-orange-500 transition-colors"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
