@@ -102,11 +102,13 @@ def dashboard_view(request):
     display_streak = profile.current_streak if not streak_at_risk else 0
 
     all_days = DailyContent.objects.order_by('day_number')
-    completed_days = ProgressTracker.objects.filter(student=profile).values_list('day__day_number', flat=True)
+    all_days_dict = {day.day_number: day for day in all_days}
+    
+    completed_days = set(ProgressTracker.objects.filter(student=profile).values_list('day__day_number', flat=True))
     
     days_data = []
     for day_num in range(1, 91):
-        day_obj = all_days.filter(day_number=day_num).first()
+        day_obj = all_days_dict.get(day_num)
         status = 'locked'
         if day_num <= current_day_number:
             status = 'unlocked'
