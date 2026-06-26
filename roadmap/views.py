@@ -61,6 +61,14 @@ def login_view(request):
             return redirect('dashboard')
     else:
         form = AuthenticationForm()
+        
+    # Add placeholders dynamically for the login form
+    for field_name, field in form.fields.items():
+        if field_name == 'username':
+            field.widget.attrs.update({'placeholder': 'Enter your username'})
+        elif field_name == 'password':
+            field.widget.attrs.update({'placeholder': 'Enter your password'})
+            
     return render(request, 'roadmap/login.html', {'form': form, 'is_public_page': True})
 
 def logout_view(request):
