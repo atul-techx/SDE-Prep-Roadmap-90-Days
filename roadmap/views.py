@@ -6,7 +6,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib import messages
 from .models import StudentProfile, DailyContent, ProgressTracker, Notice, Event, DayAccessLog, Note
-from django.db.models import Sum
+from django.db.models import Sum, Count, OuterRef, Exists
 
 from .forms import StudentRegistrationForm
 
@@ -139,19 +139,20 @@ def founder_dashboard_view(request):
     if not request.user.is_superuser:
         return redirect('dashboard')
         
-    students = StudentProfile.objects.select_related('user').filter(user__is_superuser=False).order_by('-xp')
+    recent_freeze_subquery = ProgressTracker.objects.filter(
+        student=OuterRef('pk'),
+        used_freeze=True,
+        completed_at__gte=timezone.now() - timedelta(days=3)
+    )
+
+    students = StudentProfile.objects.select_related('user').filter(user__is_superuser=False).annotate(
+        days_completed=Count('progress'),
+        recent_freeze_exists=Exists(recent_freeze_subquery)
+    ).order_by('-xp')
     
     student_data = []
     for st in students:
-        max_day = ProgressTracker.objects.filter(student=st).aggregate(Sum('day__day_number')) # Just rough logic for progression
-        # Actually better to count how many days completed:
-        days_completed = ProgressTracker.objects.filter(student=st).count()
-        status = 'ACTIVE'
-        # Check if they recently used a freeze (e.g. within last 3 days)
-        recent_freeze = ProgressTracker.objects.filter(student=st, used_freeze=True, completed_at__gte=timezone.now() - timedelta(days=3)).exists()
-        if recent_freeze:
-            status = 'FREEZE USED'
-            
+        status = 'FREEZE USED' if st.recent_freeze_exists else 'ACTIVE'
         display_name = st.full_name if st.full_name else st.user.username
         
         student_data.append({
@@ -161,7 +162,7 @@ def founder_dashboard_view(request):
             'email': st.user.email,
             'contact': st.contact_number if st.contact_number else 'N/A',
             'initials': display_name[0].upper() if display_name else 'U',
-            'progress': days_completed,
+            'progress': st.days_completed,
             'streak': st.current_streak,
             'xp': st.xp,
             'status': status
@@ -208,11 +209,13 @@ def founder_student_detail_view(request, profile_id):
     display_streak = profile.current_streak if not streak_at_risk else 0
 
     all_days = DailyContent.objects.order_by('day_number')
-    completed_days = ProgressTracker.objects.filter(student=profile).values_list('day__day_number', flat=True)
+    all_days_dict = {day.day_number: day for day in all_days}
+    
+    completed_days = set(ProgressTracker.objects.filter(student=profile).values_list('day__day_number', flat=True))
     
     days_data = []
     for day_num in range(1, 91):
-        day_obj = all_days.filter(day_number=day_num).first()
+        day_obj = all_days_dict.get(day_num)
         status = 'locked'
         if day_num <= current_day_number:
             status = 'unlocked'
