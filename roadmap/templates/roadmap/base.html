@@ -99,7 +99,7 @@
 <body class="min-h-screen flex font-sans antialiased selection:bg-blue dark:bg-blue-dark selection:text-navy dark:text-ice dark:selection:text-slate dark:text-slate-light overflow-hidden transition-colors duration-300">
 
     <!-- Sidebar -->
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated and not is_public_page %}
     <aside class="w-64 bg-ice dark:bg-navy-dark flex flex-col h-screen fixed left-0 top-0 z-40 shadow-2xl">
         <!-- Logo -->
         <div class="h-16 flex items-center px-6 border-b border-blue/20 dark:border-slate-dark/50 bg-ice dark:bg-navy-dark/50">
@@ -175,10 +175,10 @@
     {% endif %}
 
     <!-- Main Content Wrapper -->
-    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden {% if user.is_authenticated %}ml-64{% endif %} bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] transition-colors duration-300">
+    <div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden {% if user.is_authenticated and not is_public_page %}ml-64{% endif %} bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] transition-colors duration-300">
         
         <!-- Top Navbar -->
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated and not is_public_page %}
         <header class="h-16 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30/80 dark:bg-[#121212]/80 backdrop-blur-md border-b border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 flex items-center justify-between px-8 shrink-0 z-30 relative sticky top-0 transition-colors duration-300">
             <div class="flex items-center gap-4">
                 <h1 class="text-xl font-bold text-navy dark:text-ice text-navy dark:text-ice tracking-tight">{% block header_title %}SDE PREP 90{% endblock %}</h1>
@@ -218,7 +218,7 @@
         {% endif %}
 
         <!-- Main Scrollable Area -->
-        <main class="flex-1 overflow-y-auto p-8 relative transition-colors duration-300">
+        <main class="flex-1 overflow-y-auto relative transition-colors duration-300 {% if not is_public_page %}p-8{% endif %}">
             {% block content %}{% endblock %}
         </main>
 

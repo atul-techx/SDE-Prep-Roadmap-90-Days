@@ -21,7 +21,10 @@ def landing_page_view(request):
             'topic': content_map.get(i, 'Topic Locked - Login to Reveal')
         })
         
-    return render(request, 'roadmap/landing.html', {'days_data': days_data})
+    return render(request, 'roadmap/landing.html', {
+        'days_data': days_data,
+        'is_public_page': True
+    })
 
 def register_view(request):
     if request.user.is_authenticated:
