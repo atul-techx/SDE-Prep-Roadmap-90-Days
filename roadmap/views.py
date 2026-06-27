@@ -111,6 +111,11 @@ def dashboard_view(request):
     progress_trackers = ProgressTracker.objects.filter(student=profile)
     progress_dict = {p.day.day_number: p for p in progress_trackers}
     
+    total_dsa_done = 0
+    total_aptitude_done = 0
+    total_core_done = 0
+    total_web_dev_done = 0
+
     days_data = []
     for day_num in range(1, 91):
         day_obj = all_days_dict.get(day_num)
@@ -118,10 +123,18 @@ def dashboard_view(request):
         tracker = progress_dict.get(day_num)
         tasks_done = 0
         if tracker:
-            tasks_done += 1 if tracker.dsa_completed else 0
-            tasks_done += 1 if tracker.aptitude_completed else 0
-            tasks_done += 1 if tracker.core_completed else 0
-            tasks_done += 1 if tracker.web_dev_completed else 0
+            if tracker.dsa_completed:
+                tasks_done += 1
+                total_dsa_done += 1
+            if tracker.aptitude_completed:
+                tasks_done += 1
+                total_aptitude_done += 1
+            if tracker.core_completed:
+                tasks_done += 1
+                total_core_done += 1
+            if tracker.web_dev_completed:
+                tasks_done += 1
+                total_web_dev_done += 1
             
         progress_percentage = (tasks_done * 25)
         
@@ -139,6 +152,9 @@ def dashboard_view(request):
             'tracker': tracker
         })
         
+    total_tasks_done = total_dsa_done + total_aptitude_done + total_core_done + total_web_dev_done
+    overall_progress_percentage = (total_tasks_done / 360.0) * 100
+        
     latest_notice = Notice.objects.filter(is_active=True).order_by('-created_at').first()
 
     context = {
@@ -148,6 +164,12 @@ def dashboard_view(request):
         'latest_notice': latest_notice,
         'streak_at_risk': streak_at_risk,
         'display_streak': display_streak,
+        'total_dsa_done': total_dsa_done,
+        'total_aptitude_done': total_aptitude_done,
+        'total_core_done': total_core_done,
+        'total_web_dev_done': total_web_dev_done,
+        'total_tasks_done': total_tasks_done,
+        'overall_progress_percentage': overall_progress_percentage,
         'show_welcome_back': request.session.pop('show_welcome_back', False),
     }
     return render(request, 'roadmap/dashboard.html', context)

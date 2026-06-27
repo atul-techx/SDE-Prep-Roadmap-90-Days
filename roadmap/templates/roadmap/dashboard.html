@@ -48,32 +48,35 @@
             
             <!-- Overall Stats Box -->
             <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 shadow-sm rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden transition-colors">
-                <!-- Circular Progress Mock -->
+                <!-- Circular Progress -->
                 <div class="relative w-32 h-32 flex items-center justify-center shrink-0">
                     <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                         <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" class="text-slate-200 dark:text-zinc-800" stroke-width="8"></circle>
-                        <!-- Progress value here -->
-                        <circle cx="50" cy="50" r="45" fill="none" stroke="#3b82f6" stroke-width="8" stroke-dasharray="283" stroke-dashoffset="283" class="transition-all duration-1000"></circle>
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#3b82f6" stroke-width="8" stroke-dasharray="283" style="stroke-dashoffset: calc(283 - (283 * {{ overall_progress_percentage|default:'0' }} / 100))" class="transition-all duration-1000"></circle>
                     </svg>
                     <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span class="text-3xl font-black text-navy dark:text-ice text-navy dark:text-ice">0%</span>
-                        <span class="text-[10px] text-slate dark:text-slate-light text-slate dark:text-slate-light font-bold tracking-wider">OVERALL</span>
+                        <span class="text-3xl font-black text-navy dark:text-ice">{{ overall_progress_percentage|default:"0"|floatformat:"0" }}%</span>
+                        <span class="text-[10px] text-slate font-bold tracking-wider">OVERALL</span>
                     </div>
                 </div>
 
-                <!-- Easy / Medium / Hard -->
-                <div class="flex-1 flex items-center justify-between gap-4 w-full">
+                <!-- Subject-wise Progress -->
+                <div class="flex-1 flex items-center justify-between gap-2 w-full px-2">
                     <div class="text-center">
-                        <p class="text-xs font-bold text-emerald-500 dark:text-emerald-300 tracking-wider mb-1">EASY</p>
-                        <p class="text-xl md:text-2xl font-bold text-navy dark:text-ice text-navy dark:text-ice">0 <span class="text-slate dark:text-slate-light text-slate dark:text-slate-light text-lg">/ 123</span></p>
+                        <p class="text-[10px] sm:text-xs font-bold text-blue tracking-wider mb-1">DSA</p>
+                        <p class="text-lg sm:text-xl md:text-2xl font-bold text-navy dark:text-ice">{{ total_dsa_done }} <span class="text-slate text-sm md:text-lg">/ 90</span></p>
                     </div>
                     <div class="text-center">
-                        <p class="text-xs font-bold text-blue dark:text-blue-light tracking-wider mb-1">MEDIUM</p>
-                        <p class="text-xl md:text-2xl font-bold text-navy dark:text-ice text-navy dark:text-ice">0 <span class="text-slate dark:text-slate-light text-slate dark:text-slate-light text-lg">/ 209</span></p>
+                        <p class="text-[10px] sm:text-xs font-bold text-emerald-500 tracking-wider mb-1">APTITUDE</p>
+                        <p class="text-lg sm:text-xl md:text-2xl font-bold text-navy dark:text-ice">{{ total_aptitude_done }} <span class="text-slate text-sm md:text-lg">/ 90</span></p>
                     </div>
                     <div class="text-center">
-                        <p class="text-xs font-bold text-blue dark:text-blue-light-500 tracking-wider mb-1">HARD</p>
-                        <p class="text-xl md:text-2xl font-bold text-navy dark:text-ice text-navy dark:text-ice">0 <span class="text-slate dark:text-slate-light text-slate dark:text-slate-light text-lg">/ 148</span></p>
+                        <p class="text-[10px] sm:text-xs font-bold text-purple-500 tracking-wider mb-1">CORE</p>
+                        <p class="text-lg sm:text-xl md:text-2xl font-bold text-navy dark:text-ice">{{ total_core_done }} <span class="text-slate text-sm md:text-lg">/ 90</span></p>
+                    </div>
+                    <div class="text-center">
+                        <p class="text-[10px] sm:text-xs font-bold text-orange-500 tracking-wider mb-1">WEB DEV</p>
+                        <p class="text-lg sm:text-xl md:text-2xl font-bold text-navy dark:text-ice">{{ total_web_dev_done }} <span class="text-slate text-sm md:text-lg">/ 90</span></p>
                     </div>
                 </div>
 
@@ -180,11 +183,11 @@
                 </div>
                 <h3 class="text-[10px] font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light tracking-widest uppercase mb-4 transition-colors">ACTIVE PROGRESS</h3>
                 <div class="flex items-baseline gap-1">
-                    <span class="text-5xl font-black text-navy dark:text-ice text-navy dark:text-ice transition-colors">0</span>
-                    <span class="text-slate dark:text-slate-light text-slate dark:text-slate-light text-xl font-bold transition-colors">/ 482</span>
+                    <span class="text-5xl font-black text-navy dark:text-ice transition-colors">{{ total_tasks_done|default:"0" }}</span>
+                    <span class="text-slate dark:text-slate-light text-xl font-bold transition-colors">/ 360</span>
                 </div>
                 <div class="mt-4 h-1.5 w-full bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-zinc-700 rounded-full overflow-hidden transition-colors">
-                    <div class="h-full bg-blue dark:bg-blue-dark w-0"></div>
+                    <div class="h-full bg-blue dark:bg-blue-dark transition-all duration-1000" style="width: {{ overall_progress_percentage|default:'0' }}%"></div>
                 </div>
             </div>
 
