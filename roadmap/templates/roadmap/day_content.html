@@ -32,8 +32,6 @@
                 <div id="content-dsa" class="student-tab-content block">
                     {% if day.dsa_content %}
                         {{ day.dsa_content|safe }}
-                    {% elif day.rich_content %}
-                        {{ day.rich_content|safe }}
                     {% else %}
                         <p class="text-slate-500 italic">No DSA content available for today.</p>
                     {% endif %}
@@ -91,9 +89,20 @@
                 
                 // Highlight current button
                 const btn = document.getElementById('btn-' + tabId);
-                btn.classList.remove('border-transparent', 'text-slate', 'dark:text-slate-light', 'font-medium');
-                btn.classList.add('border-blue', 'dark:border-blue-dark', 'text-blue', 'dark:text-blue-light', 'font-bold');
+                if (btn) {
+                    btn.classList.remove('border-transparent', 'text-slate', 'dark:text-slate-light', 'font-medium');
+                    btn.classList.add('border-blue', 'dark:border-blue-dark', 'text-blue', 'dark:text-blue-light', 'font-bold');
+                }
             }
+
+            // Auto-switch based on URL hash
+            document.addEventListener('DOMContentLoaded', function() {
+                const hash = window.location.hash.replace('#', '');
+                const validTabs = ['dsa', 'aptitude', 'core', 'web'];
+                if (hash && validTabs.includes(hash)) {
+                    switchStudentTab(hash);
+                }
+            });
         </script>
         
         {% if not is_completed %}
