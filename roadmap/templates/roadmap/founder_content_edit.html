@@ -40,38 +40,12 @@
         <div class="mb-6">
             <label class="block text-navy dark:text-ice text-slate dark:text-slate-light font-bold mb-2 transition-colors">Daily Content</label>
             
-            <!-- Tabs -->
-            <div class="flex flex-wrap gap-2 mb-4 border-b border-blue/20 dark:border-slate-dark/50 pb-2">
-                <button type="button" class="tab-btn active px-4 py-2 text-sm font-semibold rounded-lg bg-blue dark:bg-blue-dark text-white" onclick="switchTab('dsa')">DSA</button>
-                <button type="button" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate dark:text-slate-light hover:bg-ice dark:hover:bg-navy-dark-light/80" onclick="switchTab('aptitude')">Aptitude</button>
-                <button type="button" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate dark:text-slate-light hover:bg-ice dark:hover:bg-navy-dark-light/80" onclick="switchTab('core')">Core Subjects</button>
-                <button type="button" class="tab-btn px-4 py-2 text-sm font-semibold rounded-lg text-slate dark:text-slate-light hover:bg-ice dark:hover:bg-navy-dark-light/80" onclick="switchTab('web')">Web Dev</button>
-            </div>
-
             <input type="hidden" name="dsa_content" id="dsa_content">
-            <input type="hidden" name="aptitude_content" id="aptitude_content">
-            <input type="hidden" name="core_subject_content" id="core_subject_content">
-            <input type="hidden" name="web_dev_content" id="web_dev_content">
 
             <!-- Editors -->
             <div id="dsa-tab" class="tab-content">
                 <div id="editor-dsa" class="h-96 rounded-b-xl border-blue/20 dark:border-slate-dark/50 font-sans text-base transition-colors">
                     {{ day.dsa_content|safe|default:"" }}
-                </div>
-            </div>
-            <div id="aptitude-tab" class="tab-content hidden">
-                <div id="editor-aptitude" class="h-96 rounded-b-xl border-blue/20 dark:border-slate-dark/50 font-sans text-base transition-colors">
-                    {{ day.aptitude_content|safe|default:"" }}
-                </div>
-            </div>
-            <div id="core-tab" class="tab-content hidden">
-                <div id="editor-core" class="h-96 rounded-b-xl border-blue/20 dark:border-slate-dark/50 font-sans text-base transition-colors">
-                    {{ day.core_subject_content|safe|default:"" }}
-                </div>
-            </div>
-            <div id="web-tab" class="tab-content hidden">
-                <div id="editor-web" class="h-96 rounded-b-xl border-blue/20 dark:border-slate-dark/50 font-sans text-base transition-colors">
-                    {{ day.web_dev_content|safe|default:"" }}
                 </div>
             </div>
         </div>
@@ -98,34 +72,10 @@
     ];
 
     var quillDsa = new Quill('#editor-dsa', { theme: 'snow', modules: { toolbar: toolbarOptions } });
-    var quillAptitude = new Quill('#editor-aptitude', { theme: 'snow', modules: { toolbar: toolbarOptions } });
-    var quillCore = new Quill('#editor-core', { theme: 'snow', modules: { toolbar: toolbarOptions } });
-    var quillWeb = new Quill('#editor-web', { theme: 'snow', modules: { toolbar: toolbarOptions } });
-
-    function switchTab(tabId) {
-        // Hide all tabs
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-        // Reset all buttons
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('bg-blue', 'dark:bg-blue-dark', 'text-white', 'active');
-            btn.classList.add('text-slate', 'dark:text-slate-light');
-        });
-        
-        // Show selected tab
-        document.getElementById(tabId + '-tab').classList.remove('hidden');
-        
-        // Highlight active button
-        const activeBtn = event.currentTarget;
-        activeBtn.classList.add('bg-blue', 'dark:bg-blue-dark', 'text-white', 'active');
-        activeBtn.classList.remove('text-slate', 'dark:text-slate-light');
-    }
 
     var form = document.getElementById('contentForm');
     form.onsubmit = function() {
         document.getElementById('dsa_content').value = quillDsa.root.innerHTML;
-        document.getElementById('aptitude_content').value = quillAptitude.root.innerHTML;
-        document.getElementById('core_subject_content').value = quillCore.root.innerHTML;
-        document.getElementById('web_dev_content').value = quillWeb.root.innerHTML;
         return true;
     };
 </script>

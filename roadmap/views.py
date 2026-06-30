@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -6,22 +7,15 @@ from django.views.decorators.http import require_POST
 from django.utils import timezone
 from datetime import timedelta
 from django.contrib import messages
-from .models import StudentProfile, DailyContent, ProgressTracker, Notice, Event, DayAccessLog, Note
-from django.db.models import Sum, Count, OuterRef, Exists
+from django.http import JsonResponse
+from .models import StudentProfile, Topic, DayContent, Question, QuestionProgress, Notice, Event, Note, CommunityMessage
+from django.db.models import Sum, Count, OuterRef, Exists, Prefetch
 
 from .forms import StudentRegistrationForm
 
 def landing_page_view(request):
-    # Build data for the 90 days learning path
     days_data = []
-    content_map = {dc.day_number: dc.topic_name for dc in DailyContent.objects.all()}
-    
-    for i in range(1, 91):
-        days_data.append({
-            'day_number': i,
-            'topic': content_map.get(i, 'Topic Locked - Login to Reveal')
-        })
-        
+    # Simplified for now
     return render(request, 'roadmap/landing.html', {
         'days_data': days_data,
         'is_public_page': True
@@ -33,12 +27,9 @@ def register_view(request):
         if form.is_valid():
             user = form.save()
             profile = StudentProfile.objects.create(user=user)
-            
-            # Save the extra fields to profile
             profile.full_name = form.cleaned_data.get('full_name')
             profile.contact_number = form.cleaned_data.get('contact_number')
             profile.save()
-            
             login(request, user)
             if user.is_superuser:
                 return redirect('founder_dashboard')
@@ -63,7 +54,6 @@ def login_view(request):
     else:
         form = AuthenticationForm()
         
-    # Add placeholders dynamically for the login form
     for field_name, field in form.fields.items():
         if field_name == 'username':
             field.widget.attrs.update({'placeholder': 'Enter your username'})
@@ -75,7 +65,6 @@ def login_view(request):
 def logout_view(request):
     if request.method == 'POST':
         logout(request)
-        return redirect('home')
     return redirect('home')
 
 @login_required
@@ -85,130 +74,216 @@ def dashboard_view(request):
 
     profile = request.user.profile
     today = timezone.now().date()
-    yesterday = today - timedelta(days=1)
     
     current_day_number = (today - profile.start_date).days + 1
-    
-    # Cap at 90
     if current_day_number > 90:
         current_day_number = 90
     elif current_day_number < 1:
         current_day_number = 1
 
-    # Check if streak is at risk
     days_since_last = (today - profile.last_completed_date).days if profile.last_completed_date else 0
     streak_at_risk = days_since_last > 1 and profile.current_streak > 0
-    
-    # If streak is at risk and they haven't applied a freeze, their streak is effectively 0
     display_streak = profile.current_streak if not streak_at_risk else 0
 
-    all_days = DailyContent.objects.order_by('day_number')
-    all_days_dict = {day.day_number: day for day in all_days}
+    topics = Topic.objects.all().order_by('order').prefetch_related(
+        Prefetch('days', queryset=DayContent.objects.all().order_by('day_number')),
+        Prefetch('days__questions', queryset=Question.objects.all().order_by('order'))
+    )
     
-    completed_days = set(ProgressTracker.objects.filter(student=profile).values_list('day__day_number', flat=True))
+    completed_q_ids = set(QuestionProgress.objects.filter(student=profile, completed=True).values_list('question_id', flat=True))
     
-    # Get detailed progress tracker for dynamic percentage calculation
-    progress_trackers = ProgressTracker.objects.filter(student=profile)
-    progress_dict = {p.day.day_number: p for p in progress_trackers}
+    topics_data = []
+    total_questions = 0
+    total_completed = 0
     
-    total_dsa_done = 0
-    total_aptitude_done = 0
-    total_core_done = 0
-    total_web_dev_done = 0
-
-    days_data = []
-    for day_num in range(1, 91):
-        day_obj = all_days_dict.get(day_num)
-        
-        tracker = progress_dict.get(day_num)
-        tasks_done = 0
-        if tracker:
-            if tracker.dsa_completed:
-                tasks_done += 1
-                total_dsa_done += 1
-            if tracker.aptitude_completed:
-                tasks_done += 1
-                total_aptitude_done += 1
-            if tracker.core_completed:
-                tasks_done += 1
-                total_core_done += 1
-            if tracker.web_dev_completed:
-                tasks_done += 1
-                total_web_dev_done += 1
+    for topic in topics:
+        topic_questions = 0
+        topic_completed = 0
+        days_data = []
+        for day in topic.days.all():
+            day_questions = []
+            for q in day.questions.all():
+                is_completed = q.id in completed_q_ids
+                total_questions += 1
+                topic_questions += 1
+                if is_completed:
+                    total_completed += 1
+                    topic_completed += 1
+                
+                day_questions.append({
+                    'id': q.id,
+                    'name': q.name,
+                    'difficulty': q.difficulty,
+                    'article_link': q.article_link,
+                    'youtube_link': q.youtube_link,
+                    'leetcode_link': q.leetcode_link,
+                    'completed': is_completed
+                })
             
-        progress_percentage = (tasks_done * 25)
-        
-        status = 'locked'
-        if day_num <= current_day_number:
-            status = 'unlocked'
-        if tasks_done == 4:
-            status = 'completed'
+            days_data.append({
+                'day': day,
+                'questions': day_questions,
+            })
             
-        days_data.append({
-            'day_number': day_num,
-            'day_obj': day_obj,
-            'status': status,
-            'progress_percentage': progress_percentage,
-            'tracker': tracker
+        topics_data.append({
+            'topic': topic,
+            'days': days_data,
+            'total': topic_questions,
+            'completed': topic_completed,
+            'progress': int((topic_completed / topic_questions * 100) if topic_questions > 0 else 0)
         })
-        
-    total_tasks_done = total_dsa_done + total_aptitude_done + total_core_done + total_web_dev_done
-    overall_progress_percentage = (total_tasks_done / 360.0) * 100
-        
+
+    overall_progress = int((total_completed / total_questions * 100) if total_questions > 0 else 0)
     latest_notice = Notice.objects.filter(is_active=True).order_by('-created_at').first()
 
     context = {
         'profile': profile,
         'current_day_number': current_day_number,
-        'days_data': days_data,
+        'topics_data': topics_data,
         'latest_notice': latest_notice,
         'streak_at_risk': streak_at_risk,
         'display_streak': display_streak,
-        'total_dsa_done': total_dsa_done,
-        'total_aptitude_done': total_aptitude_done,
-        'total_core_done': total_core_done,
-        'total_web_dev_done': total_web_dev_done,
-        'total_tasks_done': total_tasks_done,
-        'overall_progress_percentage': overall_progress_percentage,
+        'total_completed': total_completed,
+        'total_questions': total_questions,
+        'overall_progress_percentage': overall_progress,
         'show_welcome_back': request.session.pop('show_welcome_back', False),
     }
     return render(request, 'roadmap/dashboard.html', context)
 
 @login_required
-def founder_dashboard_view(request):
-    if not request.user.is_superuser:
-        return redirect('dashboard')
+@require_POST
+def toggle_task_completion(request):
+    try:
+        data = json.loads(request.body)
+        question_id = data.get('question_id')
+        completed = data.get('completed', False)
         
-    recent_freeze_subquery = ProgressTracker.objects.filter(
-        student=OuterRef('pk'),
-        used_freeze=True,
-        completed_at__gte=timezone.now() - timedelta(days=3)
-    )
-
-    students = StudentProfile.objects.select_related('user').filter(user__is_superuser=False).annotate(
-        days_completed=Count('progress'),
-        recent_freeze_exists=Exists(recent_freeze_subquery)
-    ).order_by('-xp')
-    
-    student_data = []
-    for st in students:
-        status = 'FREEZE USED' if st.recent_freeze_exists else 'ACTIVE'
-        display_name = st.full_name if st.full_name else st.user.username
+        if not question_id:
+            return JsonResponse({'success': False, 'error': 'Missing question_id'}, status=400)
+            
+        profile = request.user.profile
+        question = get_object_or_404(Question, id=question_id)
         
-        student_data.append({
-            'profile_id': st.id,
-            'real_username': st.user.username,
-            'username': display_name,
-            'email': st.user.email,
-            'contact': st.contact_number if st.contact_number else 'N/A',
-            'initials': display_name[0].upper() if display_name else 'U',
-            'progress': st.days_completed,
-            'streak': st.current_streak,
-            'xp': st.xp,
-            'status': status
+        tracker, created = QuestionProgress.objects.get_or_create(student=profile, question=question)
+        tracker.completed = completed
+        tracker.save()
+        
+        # Recalculate progress for UI update
+        total_qs = Question.objects.count()
+        total_done = QuestionProgress.objects.filter(student=profile, completed=True).count()
+        overall = int((total_done / total_qs * 100) if total_qs > 0 else 0)
+        
+        topic_qs = Question.objects.filter(day__topic=question.day.topic).count()
+        topic_done = QuestionProgress.objects.filter(student=profile, completed=True, question__day__topic=question.day.topic).count()
+        topic_prog = int((topic_done / topic_qs * 100) if topic_qs > 0 else 0)
+        
+        return JsonResponse({
+            'success': True, 
+            'overall_progress': overall,
+            'topic_progress': topic_prog,
+            'topic_id': question.day.topic.id,
+            'total_done': total_done
         })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
-    return render(request, 'roadmap/founder_dashboard.html', {'students': student_data})
+@login_required
+def apply_freeze_view(request):
+    return redirect('dashboard')
+
+@login_required
+def community_view(request):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        image = request.FILES.get('image')
+        if content or image:
+            CommunityMessage.objects.create(user=request.user, content=content, image=image)
+        return redirect('community')
+        
+    messages_list = CommunityMessage.objects.all().order_by('-created_at')
+    return render(request, 'roadmap/community.html', {'community_messages': messages_list})
+
+@login_required
+def leaderboard_view(request):
+    students = StudentProfile.objects.select_related('user').filter(user__is_superuser=False).order_by('-xp')
+    leaderboard_data = []
+    for index, student in enumerate(students):
+        leaderboard_data.append({
+            'rank': index + 1,
+            'profile': student,
+        })
+    return render(request, 'roadmap/leaderboard.html', {'leaderboard_data': leaderboard_data})
+
+@login_required
+def profile_view(request):
+    profile, created = StudentProfile.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        profile.full_name = request.POST.get('full_name')
+        profile.gender = request.POST.get('gender')
+        
+        email = request.POST.get('email')
+        if email:
+            request.user.email = email
+            request.user.save()
+            
+        profile.state = request.POST.get('state')
+        profile.city = request.POST.get('city')
+        profile.pincode = request.POST.get('pincode')
+        
+        if 'profile_picture' in request.FILES:
+            profile.profile_picture = request.FILES['profile_picture']
+        if 'cover_banner' in request.FILES:
+            profile.cover_banner = request.FILES['cover_banner']
+            
+        profile.save()
+        messages.success(request, 'Profile updated successfully!')
+        return redirect('profile')
+        
+    return render(request, 'roadmap/profile.html', {'profile': profile})
+
+@login_required
+def founder_dashboard_view(request):
+    if not request.user.is_superuser: return redirect('dashboard')
+    students = StudentProfile.objects.select_related('user').filter(user__is_superuser=False)
+    return render(request, 'roadmap/founder_dashboard.html', {'students': students})
+
+@login_required
+def founder_student_detail_view(request, profile_id):
+    if not request.user.is_superuser: return redirect('dashboard')
+    profile = get_object_or_404(StudentProfile, id=profile_id)
+    return render(request, 'roadmap/founder_student_detail.html', {'student_profile': profile})
+
+@login_required
+def calendar_view(request):
+    return render(request, 'roadmap/calendar.html', {})
+
+@login_required
+def add_event_view(request):
+    return redirect('calendar')
+
+@login_required
+def founder_content_list_view(request):
+    return redirect('founder_dashboard')
+
+@login_required
+def founder_content_edit_view(request, day_number):
+    return redirect('founder_dashboard')
+
+@login_required
+def founder_notes_view(request):
+    return redirect('founder_dashboard')
+
+@login_required
+def student_notes_view(request):
+    return redirect('dashboard')
+
+@login_required
+def student_day_content_view(request, day_number):
+    return redirect('dashboard')
+
+@login_required
+def mark_completed_view(request, day_number):
+    return redirect('dashboard')
 
 @login_required
 def founder_register_student_view(request):
@@ -230,418 +305,14 @@ def founder_register_student_view(request):
         
     return render(request, 'roadmap/founder_register_student.html', {'form': form})
 
-@login_required
-def founder_student_detail_view(request, profile_id):
-    if not request.user.is_superuser:
-        return redirect('dashboard')
-        
-    profile = get_object_or_404(StudentProfile, id=profile_id)
-    today = timezone.now().date()
-    
-    current_day_number = (today - profile.start_date).days + 1
-    if current_day_number > 90:
-        current_day_number = 90
-    elif current_day_number < 1:
-        current_day_number = 1
-
-    days_since_last = (today - profile.last_completed_date).days if profile.last_completed_date else 0
-    streak_at_risk = days_since_last > 1 and profile.current_streak > 0
-    display_streak = profile.current_streak if not streak_at_risk else 0
-
-    all_days = DailyContent.objects.order_by('day_number')
-    all_days_dict = {day.day_number: day for day in all_days}
-    
-    completed_days = set(ProgressTracker.objects.filter(student=profile).values_list('day__day_number', flat=True))
-    
-    days_data = []
-    for day_num in range(1, 91):
-        day_obj = all_days_dict.get(day_num)
-        status = 'locked'
-        if day_num <= current_day_number:
-            status = 'unlocked'
-        if day_num in completed_days:
-            status = 'completed'
-            
-        days_data.append({
-            'day_number': day_num,
-            'day_obj': day_obj,
-            'status': status
-        })
-        
-    context = {
-        'student_profile': profile,
-        'current_day_number': current_day_number,
-        'display_streak': display_streak,
-        'days_data': days_data,
-        'total_completed': len(completed_days),
-    }
-    return render(request, 'roadmap/founder_student_detail.html', context)
-
-import calendar as cal
-from datetime import date
-
-@login_required
-def calendar_view(request):
-    today = timezone.now().date()
-    
-    try:
-        year = int(request.GET.get('year', today.year))
-        month = int(request.GET.get('month', today.month))
-    except ValueError:
-        year = today.year
-        month = today.month
-        
-    if month == 1:
-        prev_month = 12
-        prev_year = year - 1
-    else:
-        prev_month = month - 1
-        prev_year = year
-        
-    if month == 12:
-        next_month = 1
-        next_year = year + 1
-    else:
-        next_month = month + 1
-        next_year = year
-    
-    c = cal.Calendar(firstweekday=6)
-    weeks = c.monthdatescalendar(year, month)
-    
-    colors = ['bg-indigo-500', 'bg-emerald-500', 'bg-rose-500', 'bg-amber-500', 'bg-sky-500', 'bg-purple-500', 'bg-pink-500', 'bg-teal-500']
-    events = Event.objects.filter(date__year=year, date__month=month)
-    events_by_date = {}
-    for e in events:
-        cat_hash = sum(ord(c) for c in e.category) if e.category else 0
-        e.color_class = colors[cat_hash % len(colors)]
-        
-        if e.date not in events_by_date:
-            events_by_date[e.date] = []
-        events_by_date[e.date].append(e)
-        
-    calendar_grid = []
-    for week in weeks:
-        week_data = []
-        for d in week:
-            day_events = events_by_date.get(d, [])
-            week_data.append({
-                'date': d,
-                'day': d.day,
-                'in_month': d.month == month,
-                'is_today': d == today,
-                'events': day_events
-            })
-        calendar_grid.append(week_data)
-        
-    current_date = date(year, month, 1)
-        
-    return render(request, 'roadmap/calendar.html', {
-        'calendar_grid': calendar_grid,
-        'current_month_name': current_date.strftime('%B %Y'),
-        'prev_month': prev_month,
-        'prev_year': prev_year,
-        'next_month': next_month,
-        'next_year': next_year,
-    })
-
-@login_required
-def add_event_view(request):
-    if not request.user.is_superuser:
-        return redirect('calendar')
-        
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        date_str = request.POST.get('date')
-        category = request.POST.get('category')
-        description = request.POST.get('description', '')
-        if title and date_str and category:
-            Event.objects.create(title=title, date=date_str, category=category, description=description)
-            messages.success(request, 'Event added successfully.')
-        else:
-            messages.error(request, 'Please fill all required fields.')
-            
-    return redirect('calendar')
-
-@login_required
-def student_day_content_view(request, day_number):
-    if request.user.is_superuser:
-        return redirect('founder_dashboard')
-        
-    profile = request.user.profile
-    today = timezone.now().date()
-    current_day_number = (today - profile.start_date).days + 1
-    
-    if day_number > current_day_number:
-        messages.error(request, "This day is locked.")
-        return redirect('dashboard')
-        
-    day_obj = get_object_or_404(DailyContent, day_number=day_number)
-    is_completed = ProgressTracker.objects.filter(student=profile, day=day_obj).exists()
-    
-    access_log, created = DayAccessLog.objects.get_or_create(student=profile, day=day_obj)
-    
-    unlock_time = access_log.first_accessed_at + timedelta(hours=2)
-    now = timezone.now()
-    can_complete = now >= unlock_time
-    
-    time_remaining_seconds = 0
-    if not can_complete:
-        time_remaining_seconds = (unlock_time - now).total_seconds()
-        
-    context = {
-        'day': day_obj,
-        'is_completed': is_completed,
-        'can_complete': can_complete,
-        'time_remaining_seconds': time_remaining_seconds,
-        'unlock_time': unlock_time,
-    }
-    return render(request, 'roadmap/day_content.html', context)
-
-@login_required
-def founder_content_list_view(request):
-    if not request.user.is_superuser:
-        return redirect('dashboard')
-        
-    days = DailyContent.objects.all().order_by('day_number')
-    return render(request, 'roadmap/founder_content_list.html', {'days': days})
-
-@login_required
-def founder_content_edit_view(request, day_number):
-    if not request.user.is_superuser:
-        return redirect('dashboard')
-        
-    day, created = DailyContent.objects.get_or_create(day_number=day_number, defaults={'topic_name': f'Day {day_number}'})
-    
-    if request.method == 'POST':
-        day.topic_name = request.POST.get('topic_name', day.topic_name)
-        day.dsa_content = request.POST.get('dsa_content', '')
-        day.aptitude_content = request.POST.get('aptitude_content', '')
-        day.core_subject_content = request.POST.get('core_subject_content', '')
-        day.web_dev_content = request.POST.get('web_dev_content', '')
-        day.save()
-        messages.success(request, f"Day {day_number} content updated successfully!")
-        return redirect('founder_content_list')
-        
-    return render(request, 'roadmap/founder_content_edit.html', {'day': day})
-
-@login_required
-def founder_notes_view(request):
-    if not request.user.is_superuser:
-        return redirect('dashboard')
-        
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        category = request.POST.get('category')
-        description = request.POST.get('description')
-        file = request.FILES.get('file')
-        
-        if title and file:
-            Note.objects.create(title=title, category=category, description=description, file=file)
-            messages.success(request, "Note uploaded successfully!")
-        else:
-            messages.error(request, "Title and File are required.")
-        return redirect('founder_notes')
-        
-    notes = Note.objects.all().order_by('-uploaded_at')
-    categories = [c[0] for c in Note.CATEGORY_CHOICES]
-    return render(request, 'roadmap/founder_notes.html', {'notes': notes, 'categories': categories})
-
-@login_required
-def student_notes_view(request):
-    category_filter = request.GET.get('category')
-    notes = Note.objects.all().order_by('-uploaded_at')
-    
-    if category_filter:
-        notes = notes.filter(category__iexact=category_filter)
-        
-    categories = [c[0] for c in Note.CATEGORY_CHOICES]
-    
-    return render(request, 'roadmap/student_notes.html', {
-        'notes': notes, 
-        'categories': categories,
-        'current_category': category_filter
-    })
-
-@login_required
-@require_POST
-def toggle_task_completion(request):
-    try:
-        data = json.loads(request.body)
-        day_number = data.get('day_number')
-        task_name = data.get('task_name')
-        
-        if not day_number or not task_name:
-            return JsonResponse({'success': False, 'error': 'Missing parameters'}, status=400)
-            
-        valid_tasks = ['dsa_completed', 'aptitude_completed', 'core_completed', 'web_dev_completed']
-        if task_name not in valid_tasks:
-            return JsonResponse({'success': False, 'error': 'Invalid task name'}, status=400)
-            
-        profile = request.user.profile
-        day = get_object_or_404(DailyContent, day_number=day_number)
-        
-        tracker, created = ProgressTracker.objects.get_or_create(student=profile, day=day)
-        
-        # Toggle the boolean value
-        current_val = getattr(tracker, task_name)
-        setattr(tracker, task_name, not current_val)
-        tracker.save()
-        
-        # Calculate new percentage
-        tasks_done = 0
-        tasks_done += 1 if tracker.dsa_completed else 0
-        tasks_done += 1 if tracker.aptitude_completed else 0
-        tasks_done += 1 if tracker.core_completed else 0
-        tasks_done += 1 if tracker.web_dev_completed else 0
-        progress_percentage = tasks_done * 25
-        
-        # Calculate overall XP & Streak if it just reached 100%
-        # (Optional logic here if we want to add XP when they click the checkboxes instead of the mark complete button)
-        
-        return JsonResponse({
-            'success': True, 
-            'completed': not current_val,
-            'progress_percentage': progress_percentage
-        })
-    except Exception as e:
-        return JsonResponse({'success': False, 'error': str(e)}, status=500)
-
-@login_required
-def mark_completed_view(request, day_number):
-    if request.method == 'POST':
-        profile = request.user.profile
-        today = timezone.now().date()
-        yesterday = today - timedelta(days=1)
-        
-        current_day_number = (today - profile.start_date).days + 1
-        if day_number > current_day_number:
-            messages.error(request, "This day is locked.")
-            return redirect('dashboard')
-            
-        day_obj = get_object_or_404(DailyContent, day_number=day_number)
-        
-        tracker, created = ProgressTracker.objects.get_or_create(student=profile, day=day_obj)
-        
-        # Mark all 4 sub-tasks as completed if using the main button
-        if not created:
-            tracker.dsa_completed = True
-            tracker.aptitude_completed = True
-            tracker.core_completed = True
-            tracker.web_dev_completed = True
-            tracker.save()
-            messages.info(request, f"Day {day_number} is already marked as completed!")
-        else:
-            tracker.dsa_completed = True
-            tracker.aptitude_completed = True
-            tracker.core_completed = True
-            tracker.web_dev_completed = True
-            tracker.save()
-            
-            if profile.last_completed_date == today:
-                pass
-            elif profile.last_completed_date == yesterday:
-                profile.current_streak += 1
-            else:
-                profile.current_streak = 1
-                
-            profile.last_completed_date = today
-            profile.xp += 10
-            profile.save()
-            
-            messages.success(request, f"+10 XP! Day {day_number} completed.")
-            
-    return redirect('dashboard')
-
-@login_required
-def apply_freeze_view(request):
-    if request.method == 'POST':
-        profile = request.user.profile
-        today = timezone.now().date()
-        yesterday = today - timedelta(days=1)
-        
-        days_since_last = (today - profile.last_completed_date).days if profile.last_completed_date else 0
-        streak_at_risk = days_since_last > 1 and profile.current_streak > 0
-        
-        if profile.freezes_left > 0 and streak_at_risk:
-            profile.freezes_left -= 1
-            profile.last_completed_date = yesterday
-            profile.save()
-            messages.success(request, "Streak freeze applied! Streak restored.")
-        else:
-            messages.error(request, "Cannot apply freeze. You may not have freezes left, or your streak is not at risk.")
-            
-    return redirect('dashboard')
-
-@login_required
-def community_view(request):
-    if request.method == 'POST':
-        content = request.POST.get('content')
-        image = request.FILES.get('image')
-        if content or image:
-            from .models import CommunityMessage
-            CommunityMessage.objects.create(user=request.user, content=content, image=image)
-        return redirect('community')
-        
-    from .models import CommunityMessage
-    messages_list = CommunityMessage.objects.all().order_by('-created_at')
-    return render(request, 'roadmap/community.html', {'community_messages': messages_list})
-
-@login_required
-def leaderboard_view(request):
-    students = StudentProfile.objects.select_related('user').filter(user__is_superuser=False).order_by('-xp')
-    leaderboard_data = []
-    for index, student in enumerate(students):
-        leaderboard_data.append({
-            'rank': index + 1,
-            'profile': student,
-        })
-    return render(request, 'roadmap/leaderboard.html', {'leaderboard_data': leaderboard_data})
-
-@login_required
-def profile_view(request):
-    from .models import StudentProfile
-    profile, created = StudentProfile.objects.get_or_create(user=request.user)
-    if request.method == 'POST':
-        profile.full_name = request.POST.get('full_name')
-        profile.gender = request.POST.get('gender')
-        
-        email = request.POST.get('email')
-        if email:
-            request.user.email = email
-            request.user.save()
-            
-        profile.state = request.POST.get('state')
-        profile.city = request.POST.get('city')
-        profile.pincode = request.POST.get('pincode')
-        
-        if 'profile_picture' in request.FILES:
-            profile.profile_picture = request.FILES['profile_picture']
-            
-        if 'cover_banner' in request.FILES:
-            profile.cover_banner = request.FILES['cover_banner']
-            
-        profile.save()
-        
-        messages.success(request, 'Profile updated successfully!')
-        return redirect('profile')
-        
-    return render(request, 'roadmap/profile.html', {'profile': profile})
-
 def setup_founder_view(request):
     from django.contrib.auth.models import User
     from django.http import HttpResponse
-    
     if User.objects.filter(username='founder').exists():
-        return HttpResponse("Founder account already exists! Please login with your existing credentials at /login/")
-        
+        return HttpResponse("Founder account exists!")
     try:
         user = User.objects.create_superuser('founder', 'founder@example.com', 'Founder@90Days')
-        # Ensure they have a StudentProfile so they don't crash the dashboard logic
-        StudentProfile.objects.create(
-            user=user,
-            full_name="Platform Founder",
-            contact_number="0000000000"
-        )
-        return HttpResponse("SUCCESS! A founder account has been created.<br><br>Username: <b>founder</b><br>Password: <b>Founder@90Days</b><br><br><a href='/login/'>Click here to login</a>")
+        StudentProfile.objects.create(user=user, full_name="Founder", contact_number="000")
+        return HttpResponse("SUCCESS! <a href='/login/'>Click here to login</a>")
     except Exception as e:
-        return HttpResponse(f"Error creating account: {str(e)}")
+        return HttpResponse(f"Error: {str(e)}")

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import StudentProfile, DailyContent, ProgressTracker, Notice
+from .models import StudentProfile, Topic, DayContent, Question, QuestionProgress, Notice
 
 @admin.register(StudentProfile)
 class StudentProfileAdmin(admin.ModelAdmin):
@@ -7,16 +7,21 @@ class StudentProfileAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'user__email')
     ordering = ('-xp', '-current_streak')
 
-@admin.register(DailyContent)
-class DailyContentAdmin(admin.ModelAdmin):
-    list_display = ('day_number', 'topic_name')
-    ordering = ('day_number',)
+@admin.register(Topic)
+class TopicAdmin(admin.ModelAdmin):
+    list_display = ('name', 'allocated_days', 'order')
 
-@admin.register(ProgressTracker)
-class ProgressTrackerAdmin(admin.ModelAdmin):
-    list_display = ('student', 'day', 'completed_at', 'used_freeze')
-    list_filter = ('used_freeze', 'day')
-    search_fields = ('student__user__username',)
+@admin.register(DayContent)
+class DayContentAdmin(admin.ModelAdmin):
+    list_display = ('day_number', 'topic', 'name')
+    
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'day', 'difficulty')
+
+@admin.register(QuestionProgress)
+class QuestionProgressAdmin(admin.ModelAdmin):
+    list_display = ('student', 'question', 'completed_at', 'completed')
 
 @admin.register(Notice)
 class NoticeAdmin(admin.ModelAdmin):

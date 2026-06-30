@@ -23,49 +23,45 @@ class StudentProfile(models.Model):
     def __str__(self):
         return f"{self.user.username}'s Profile"
 
-class DailyContent(models.Model):
-    day_number = models.IntegerField(unique=True, primary_key=True)
-    topic_name = models.CharField(max_length=255)
-    video_link = models.URLField(blank=True, null=True)
-    notes_link = models.URLField(blank=True, null=True)
-    rich_content = models.TextField(blank=True, null=True) # Deprecated
-    dsa_content = models.TextField(blank=True, null=True)
-    aptitude_content = models.TextField(blank=True, null=True)
-    core_subject_content = models.TextField(blank=True, null=True)
-    web_dev_content = models.TextField(blank=True, null=True)
-    questions_list = models.JSONField(default=list, help_text="List of question URLs")
+class Topic(models.Model):
+    name = models.CharField(max_length=255)
+    allocated_days = models.IntegerField(default=1)
+    order = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"Day {self.day_number}: {self.topic_name}"
+        return self.name
 
-class ProgressTracker(models.Model):
-    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='progress')
-    day = models.ForeignKey(DailyContent, on_delete=models.CASCADE)
+class DayContent(models.Model):
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='days')
+    day_number = models.IntegerField()
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"Day {self.day_number}: {self.name}"
+
+class Question(models.Model):
+    day = models.ForeignKey(DayContent, on_delete=models.CASCADE, related_name='questions')
+    name = models.CharField(max_length=500)
+    difficulty = models.CharField(max_length=50)
+    article_link = models.URLField(blank=True, null=True, max_length=1000)
+    youtube_link = models.URLField(blank=True, null=True, max_length=1000)
+    leetcode_link = models.URLField(blank=True, null=True, max_length=1000)
+    order = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.name
+
+class QuestionProgress(models.Model):
+    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='question_progress')
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     completed_at = models.DateTimeField(auto_now_add=True)
-    used_freeze = models.BooleanField(default=False)
-    
-    # Sub-task completion flags
-    dsa_completed = models.BooleanField(default=False)
-    aptitude_completed = models.BooleanField(default=False)
-    core_completed = models.BooleanField(default=False)
-    web_dev_completed = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ('student', 'day')
+        unique_together = ('student', 'question')
 
     def __str__(self):
-        return f"{self.student.user.username} completed Day {self.day.day_number}"
-
-class DayAccessLog(models.Model):
-    student = models.ForeignKey(StudentProfile, on_delete=models.CASCADE, related_name='access_logs')
-    day = models.ForeignKey(DailyContent, on_delete=models.CASCADE)
-    first_accessed_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('student', 'day')
-
-    def __str__(self):
-        return f"{self.student.user.username} accessed Day {self.day.day_number}"
+        return f"{self.student.user.username} - {self.question.name}"
 
 class Notice(models.Model):
     text = models.CharField(max_length=500)

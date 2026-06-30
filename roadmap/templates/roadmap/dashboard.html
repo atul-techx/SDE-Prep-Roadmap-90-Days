@@ -4,119 +4,148 @@
 
 {% block content %}
 <style>
-    /* Custom Scrollbar for Accordion */
-    ::-webkit-scrollbar {
-        width: 6px;
-    }
-    ::-webkit-scrollbar-track {
-        background: #f1f5f9; 
-    }
-    .dark ::-webkit-scrollbar-track {
-        background: #171717; 
-    }
-    ::-webkit-scrollbar-thumb {
-        background: #cbd5e1; 
-        border-radius: 4px;
-    }
-    .dark ::-webkit-scrollbar-thumb {
-        background: #404040; 
-    }
-    ::-webkit-scrollbar-thumb:hover {
-        background: #94a3b8; 
-    }
-    .dark ::-webkit-scrollbar-thumb:hover {
-        background: #525252; 
-    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    .dark ::-webkit-scrollbar-track { background: #171717; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #404040; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .dark ::-webkit-scrollbar-thumb:hover { background: #525252; }
 </style>
 
 <div class="max-w-7xl mx-auto space-y-6 pb-20">
-    
-    <!-- Header Title Area -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <h1 class="text-2xl md:text-3xl font-extrabold text-navy dark:text-ice transition-colors">
             90 Days <span class="text-blue dark:text-blue-light">SDE Internship Preparation</span> Challenge
         </h1>
-        <div class="shrink-0 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 dark:bg-[#121212] px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold text-navy dark:text-ice shadow-sm transition-colors">
-            Solved: <span class="text-blue dark:text-blue-light">{{ total_tasks_done|default:"0" }} / 360</span>
+        <div class="shrink-0 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 px-4 py-2 rounded-full flex items-center gap-2 text-sm font-bold text-navy dark:text-ice shadow-sm">
+            Solved: <span class="text-blue dark:text-blue-light" id="overall-solved-badge">{{ total_completed|default:"0" }} / {{ total_questions }}</span>
         </div>
     </div>
 
     <div class="flex flex-col lg:flex-row gap-6">
-        
-        <!-- Left Column: Main Content -->
+        <!-- Main Content -->
         <div class="flex-1 space-y-6">
             
-            <!-- Overall Stats Box -->
-            <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 shadow-sm rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden transition-colors">
-                <!-- Circular Progress -->
+            <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 shadow-sm rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-8 relative overflow-hidden transition-colors">
                 <div class="relative w-32 h-32 flex items-center justify-center shrink-0">
                     <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                         <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" class="text-slate-200 dark:text-zinc-800" stroke-width="8"></circle>
-                        <circle cx="50" cy="50" r="45" fill="none" stroke="#3b82f6" stroke-width="8" stroke-dasharray="283" style="stroke-dashoffset: calc(283 - (283 * {{ overall_progress_percentage|default:'0' }} / 100))" class="transition-all duration-1000"></circle>
+                        <circle id="overall-progress-circle" cx="50" cy="50" r="45" fill="none" stroke="#3b82f6" stroke-width="8" stroke-dasharray="283" style="stroke-dashoffset: calc(283 - (283 * {{ overall_progress_percentage|default:'0' }} / 100))" class="transition-all duration-1000"></circle>
                     </svg>
                     <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-                        <span class="text-3xl font-black text-navy dark:text-ice">{{ overall_progress_percentage|default:"0"|floatformat:"0" }}%</span>
+                        <span class="text-3xl font-black text-navy dark:text-ice" id="overall-progress-text">{{ overall_progress_percentage|default:"0" }}%</span>
                         <span class="text-[10px] text-slate font-bold tracking-wider">OVERALL</span>
                     </div>
                 </div>
 
-                <!-- Subject-wise Progress -->
                 <div class="flex-1 flex items-center justify-between gap-2 w-full px-2">
                     <div class="text-center">
                         <p class="text-[10px] sm:text-xs font-bold text-blue tracking-wider mb-1">DSA</p>
-                        <p class="text-lg sm:text-xl md:text-2xl font-bold text-navy dark:text-ice">{{ total_dsa_done }} <span class="text-slate text-sm md:text-lg">/ 90</span></p>
+                        <p class="text-lg sm:text-xl md:text-2xl font-bold text-navy dark:text-ice"><span id="overall-solved-text">{{ total_completed }}</span> <span class="text-slate text-sm md:text-lg">/ {{ total_questions }}</span></p>
                     </div>
                 </div>
 
-                <!-- Quote -->
-                <div class="hidden xl:block w-64 pl-6 border-l border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50">
-                    <p class="text-xs text-slate dark:text-slate-light text-slate dark:text-slate-light italic mb-2 leading-relaxed">"It's not about being the best today, it's about being 1% better than you were yesterday."</p>
+                <div class="hidden xl:block w-64 pl-6 border-l border-blue/20 dark:border-slate-dark/50">
+                    <p class="text-xs text-slate dark:text-slate-light italic mb-2 leading-relaxed">"It's not about being the best today, it's about being 1% better than you were yesterday."</p>
                     <p class="text-xs font-bold text-blue dark:text-blue-light">— The Code Journey</p>
                 </div>
             </div>
 
-            <!-- Roadmap Plan Section -->
             <div class="flex items-center gap-2 mb-2 mt-8">
-                <h3 class="text-sm font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light tracking-widest uppercase">Roadmap Plan <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i></h3>
+                <h3 class="text-sm font-bold text-slate dark:text-slate-light tracking-widest uppercase">Roadmap Plan <i class="fa-solid fa-chevron-right text-[10px] ml-1"></i></h3>
             </div>
 
             <div class="space-y-4">
-                {% for day in days_data %}
-                <!-- Accordion Item -->
-                <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 shadow-sm rounded-2xl overflow-hidden transition-all duration-300 accordion-container">
-                    <!-- Header -->
-                    <button class="w-full px-6 py-5 flex items-center justify-between bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] hover:bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:hover:bg-[#1a1a1a] transition-colors accordion-btn focus:outline-none">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 rounded-xl {% if day.status == 'completed' %}bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20{% else %}bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-zinc-700/50 text-blue dark:text-blue-light dark:text-blue dark:text-blue-light border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50{% endif %} flex items-center justify-center font-bold text-lg transition-colors">
-                                {{ day.day_number }}
-                            </div>
-                            <div class="text-left">
-                                <h4 class="text-navy dark:text-ice text-navy dark:text-ice font-bold text-lg transition-colors">Day {{ day.day_number }}</h4>
-                            </div>
+                {% for tdata in topics_data %}
+                <!-- Topic Accordion -->
+                <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/20 dark:border-slate-dark/50 shadow-sm rounded-2xl overflow-hidden transition-all duration-300 topic-container">
+                    
+                    <button class="w-full px-6 py-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-[#1a1a1a] transition-colors topic-btn focus:outline-none">
+                        <div class="flex flex-col text-left">
+                            <h4 class="text-navy dark:text-ice font-bold text-lg">Step {{ tdata.topic.order }}: {{ tdata.topic.name }}</h4>
                         </div>
                         <div class="flex items-center gap-6">
-                            <div class="hidden sm:flex flex-col items-end">
-                                <span class="text-[10px] text-slate dark:text-slate-light text-slate dark:text-slate-light font-bold tracking-wider mb-1 transition-colors">PROGRESS</span>
-                                <span class="text-sm font-black text-navy dark:text-ice italic transition-colors" id="progress-text-{{ day.day_number }}">{{ day.progress_percentage|default:"0"|floatformat:"0" }}%</span>
+                            <div class="hidden sm:flex flex-col items-end w-32">
+                                <div class="w-full bg-slate-200 dark:bg-zinc-700 h-1.5 rounded-full overflow-hidden mb-1">
+                                    <div class="h-full bg-blue transition-all duration-500 topic-progress-bar-{{ tdata.topic.id }}" style="width: {{ tdata.progress }}%"></div>
+                                </div>
+                                <span class="text-[10px] font-bold text-slate dark:text-slate-light topic-progress-text-{{ tdata.topic.id }}">{{ tdata.completed }} / {{ tdata.total }}</span>
                             </div>
-                            <i class="fa-solid fa-chevron-down text-slate dark:text-slate-light text-slate dark:text-slate-light transition-transform duration-300 accordion-icon"></i>
+                            <i class="fa-solid fa-chevron-down text-slate dark:text-slate-light transition-transform duration-300 topic-icon"></i>
                         </div>
                     </button>
 
-                    <!-- Content (Hidden by default) -->
-                    <div class="accordion-content hidden border-t border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#0a0a0a] transition-colors">
-                        <div class="p-4 grid grid-cols-1 gap-4">
-                            <!-- DSA Option -->
-                            <a href="{% url 'student_day_content' day.day_number %}#dsa" class="flex items-center gap-3 p-4 bg-ice dark:bg-[#111] hover:bg-blue/5 border border-blue/10 dark:border-slate-dark/50 rounded-xl transition-all group shadow-sm">
-                                <div class="w-10 h-10 rounded-lg bg-blue/10 text-blue flex items-center justify-center shrink-0">
-                                    <i class="fa-solid fa-code text-lg"></i>
+                    <div class="topic-content hidden border-t border-blue/20 dark:border-slate-dark/50 bg-[#fafafa] dark:bg-[#0a0a0a]">
+                        <div class="p-4 space-y-3">
+                            {% for ddata in tdata.days %}
+                            <!-- Day / Subtopic Accordion -->
+                            <div class="border border-blue/10 dark:border-slate-dark/50 rounded-xl overflow-hidden day-container">
+                                <button class="w-full px-4 py-3 flex items-center justify-between bg-white dark:bg-[#151515] hover:bg-slate-50 dark:hover:bg-[#1a1a1a] transition-colors day-btn focus:outline-none">
+                                    <h5 class="text-sm font-bold text-navy dark:text-ice text-left">{{ ddata.day.name }}</h5>
+                                    <i class="fa-solid fa-chevron-down text-slate text-xs transition-transform duration-300 day-icon"></i>
+                                </button>
+                                
+                                <div class="day-content hidden bg-white dark:bg-[#111]">
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-left text-sm">
+                                            <thead>
+                                                <tr class="bg-slate-50 dark:bg-zinc-800/50 text-slate dark:text-slate-light border-y border-slate-200 dark:border-zinc-700">
+                                                    <th class="p-3 font-semibold text-center w-12">Status</th>
+                                                    <th class="p-3 font-semibold">Problem</th>
+                                                    <th class="p-3 font-semibold text-center">Article</th>
+                                                    <th class="p-3 font-semibold text-center">YouTube</th>
+                                                    <th class="p-3 font-semibold text-center">Practice</th>
+                                                    <th class="p-3 font-semibold text-center w-24">Difficulty</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100 dark:divide-zinc-800/50">
+                                                {% for q in ddata.questions %}
+                                                <tr class="hover:bg-slate-50 dark:hover:bg-zinc-800/30 transition-colors">
+                                                    <td class="p-3 text-center">
+                                                        <div class="q-checkbox flex items-center justify-center w-5 h-5 rounded mx-auto border-2 transition-all cursor-pointer {% if q.completed %}bg-emerald-500 border-emerald-500 text-white{% else %}border-slate-300 dark:border-slate-600 text-transparent hover:border-emerald-400{% endif %}" data-qid="{{ q.id }}">
+                                                            <i class="fa-solid fa-check text-[10px]"></i>
+                                                        </div>
+                                                    </td>
+                                                    <td class="p-3 font-medium text-navy dark:text-ice">{{ q.name }}</td>
+                                                    <td class="p-3 text-center">
+                                                        {% if q.article_link %}
+                                                        <a href="{{ q.article_link }}" target="_blank" class="text-blue hover:text-blue-600"><i class="fa-solid fa-file-lines text-lg"></i></a>
+                                                        {% else %}
+                                                        <span class="text-slate-300 dark:text-slate-600">-</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="p-3 text-center">
+                                                        {% if q.youtube_link %}
+                                                        <a href="{{ q.youtube_link }}" target="_blank" class="text-red-500 hover:text-red-600"><i class="fa-brands fa-youtube text-xl"></i></a>
+                                                        {% else %}
+                                                        <span class="text-slate-300 dark:text-slate-600">-</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="p-3 text-center">
+                                                        {% if q.leetcode_link %}
+                                                        <a href="{{ q.leetcode_link }}" target="_blank" class="text-amber-500 hover:text-amber-600"><i class="fa-solid fa-code text-lg"></i></a>
+                                                        {% else %}
+                                                        <span class="text-slate-300 dark:text-slate-600">-</span>
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="p-3 text-center">
+                                                        {% if q.difficulty|lower == 'easy' %}
+                                                            <span class="px-2 py-1 rounded text-[10px] font-bold bg-emerald-100 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">EASY</span>
+                                                        {% elif q.difficulty|lower == 'medium' %}
+                                                            <span class="px-2 py-1 rounded text-[10px] font-bold bg-amber-100 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400">MEDIUM</span>
+                                                        {% else %}
+                                                            <span class="px-2 py-1 rounded text-[10px] font-bold bg-rose-100 dark:bg-rose-500/10 text-rose-600 dark:text-rose-400">HARD</span>
+                                                        {% endif %}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 class="font-bold text-navy dark:text-ice text-sm group-hover:text-blue transition-colors">DSA</h4>
-                                    <p class="text-[10px] text-slate-500 font-medium">Data Structures & Algo</p>
-                                </div>
-                                <div class="task-checkbox ml-auto flex items-center justify-center w-7 h-7 rounded-full border-2 transition-all cursor-pointer {% if day.tracker.dsa_completed %}bg-blue border-blue text-white{% else %}border-slate-300 dark:border-slate-700 text-transparent hover:border-blue{% endif %}" data-day="{{ day.day_number }}" data-task="dsa_completed"><i class="fa-solid fa-check text-xs"></i></div>
-                            </a>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -125,96 +154,38 @@
             
         </div>
 
-        <!-- Right Column: Sidebar Stats & Resources -->
+        <!-- Right Column Sidebar -->
         <div class="w-full lg:w-80 space-y-6 shrink-0">
-            
-            <!-- Active Progress Box -->
-            <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 shadow-sm rounded-2xl p-6 relative overflow-hidden transition-colors">
-                <div class="absolute top-4 right-4 w-12 h-12 rounded-full bg-emerald-50 dark:bg-emerald-500/10 flex items-center justify-center">
-                    <i class="fa-solid fa-check text-emerald-500 dark:text-emerald-500/30 text-2xl"></i>
-                </div>
-                <h3 class="text-[10px] font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light tracking-widest uppercase mb-4 transition-colors">ACTIVE PROGRESS</h3>
-                <div class="flex items-baseline gap-1">
-                    <span class="text-5xl font-black text-navy dark:text-ice transition-colors">{{ total_tasks_done|default:"0" }}</span>
-                    <span class="text-slate dark:text-slate-light text-xl font-bold transition-colors">/ 360</span>
-                </div>
-                <div class="mt-4 h-1.5 w-full bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-zinc-700 rounded-full overflow-hidden transition-colors">
-                    <div class="h-full bg-blue dark:bg-blue-dark transition-all duration-1000" style="width: {{ overall_progress_percentage|default:'0' }}%"></div>
-                </div>
-            </div>
-
             <!-- Resources -->
             <div>
-                <h3 class="text-[10px] font-bold text-slate dark:text-slate-light text-slate dark:text-slate-light tracking-widest uppercase mb-3 ml-1 transition-colors">RESOURCES</h3>
+                <h3 class="text-[10px] font-bold text-slate dark:text-slate-light tracking-widest uppercase mb-3 ml-1">RESOURCES</h3>
                 <div class="space-y-3">
-                    <a href="#" class="flex items-center gap-4 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 shadow-sm p-4 rounded-xl hover:border-blue dark:border-blue-dark dark:hover:border-zinc-600 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-blue-light dark:bg-blue-dark/20 dark:bg-red-500/10 text-red-500 flex items-center justify-center shrink-0">
+                    <a href="#" class="flex items-center gap-4 bg-ice dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 shadow-sm p-4 rounded-xl hover:border-blue transition-colors group">
+                        <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-500 flex items-center justify-center shrink-0">
                             <i class="fa-brands fa-youtube text-xl"></i>
                         </div>
                         <div class="flex-1">
-                            <h4 class="text-sm font-bold text-navy dark:text-ice text-navy dark:text-ice group-hover:text-blue dark:text-blue-light dark:group-hover:text-emerald-400 transition-colors">Java DSA Playlist</h4>
-                            <p class="text-[10px] text-slate dark:text-slate-light text-slate dark:text-slate-light font-bold uppercase tracking-wider mt-0.5 transition-colors">ALL DSA TOPICS COVERED</p>
+                            <h4 class="text-sm font-bold text-navy dark:text-ice group-hover:text-blue transition-colors">Java DSA Playlist</h4>
+                            <p class="text-[10px] text-slate font-bold uppercase tracking-wider mt-0.5">ALL DSA TOPICS COVERED</p>
                         </div>
-                        <i class="fa-solid fa-chevron-right text-slate dark:text-slate-light text-slate dark:text-slate-light text-xs group-hover:text-blue dark:text-blue-light dark:group-hover:text-slate dark:text-slate-light transition-colors"></i>
-                    </a>
-
-                    <a href="#" class="flex items-center gap-4 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 shadow-sm p-4 rounded-xl hover:border-blue dark:border-blue-dark dark:hover:border-zinc-600 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-blue-light dark:bg-blue-dark/20 dark:bg-red-500/10 text-red-500 flex items-center justify-center shrink-0">
-                            <i class="fa-brands fa-youtube text-xl"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="text-sm font-bold text-navy dark:text-ice text-navy dark:text-ice group-hover:text-blue dark:text-blue-light dark:group-hover:text-emerald-400 transition-colors">45 Days SDE Sheet</h4>
-                            <p class="text-[10px] text-slate dark:text-slate-light text-slate dark:text-slate-light font-bold uppercase tracking-wider mt-0.5 transition-colors">CHALLENGE - C++</p>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-slate dark:text-slate-light text-slate dark:text-slate-light text-xs group-hover:text-blue dark:text-blue-light dark:group-hover:text-slate dark:text-slate-light transition-colors"></i>
-                    </a>
-
-                    <a href="#" class="flex items-center gap-4 bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 dark:bg-[#121212] border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 shadow-sm p-4 rounded-xl hover:border-blue dark:border-blue-dark dark:hover:border-zinc-600 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-blue-light dark:bg-blue-dark/20 dark:bg-blue dark:bg-blue-dark/10 text-blue dark:text-blue-light dark:text-blue-400 flex items-center justify-center shrink-0">
-                            <i class="fa-solid fa-book-open text-xl"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="text-sm font-bold text-navy dark:text-ice text-navy dark:text-ice group-hover:text-blue dark:text-blue-light dark:group-hover:text-emerald-400 transition-colors">Docs & Notes</h4>
-                            <p class="text-[10px] text-slate dark:text-slate-light text-slate dark:text-slate-light font-bold uppercase tracking-wider mt-0.5 transition-colors">OFFICIAL REFERENCES</p>
-                        </div>
-                        <i class="fa-solid fa-chevron-right text-slate dark:text-slate-light text-slate dark:text-slate-light text-xs group-hover:text-blue dark:text-blue-light dark:group-hover:text-slate dark:text-slate-light transition-colors"></i>
+                        <i class="fa-solid fa-chevron-right text-slate text-xs group-hover:text-blue transition-colors"></i>
                     </a>
                 </div>
             </div>
-
-            <!-- Profile Info (from old dashboard) -->
-            <div class="mt-8 pt-6 border-t border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50/50 transition-colors">
-                <div class="flex items-center justify-between mb-4">
-                    <p class="text-xs text-slate dark:text-slate-light text-slate dark:text-slate-light font-bold transition-colors">XP: <span class="text-emerald-500 dark:text-emerald-300">{{ profile.xp }}</span></p>
-                    <p class="text-xs text-slate dark:text-slate-light text-slate dark:text-slate-light font-bold transition-colors">Streak: <span class="text-blue dark:text-blue-light">{{ display_streak }} Days</span></p>
-                </div>
-                {% if streak_at_risk %}
-                    <form method="POST" action="{% url 'apply_freeze' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="w-full py-2.5 rounded-lg bg-blue-light dark:bg-blue-dark/20 dark:bg-blue dark:bg-blue-dark/10 hover:bg-blue-100 dark:hover:bg-blue dark:bg-blue-dark/20 text-blue dark:text-blue-light dark:text-blue-400 border border-blue-200 dark:border-blue-500/20 text-xs font-bold transition-colors" {% if profile.freezes_left == 0 %}disabled{% endif %}>
-                            Apply Freeze ({{ profile.freezes_left }} left)
-                        </button>
-                    </form>
-                {% endif %}
-            </div>
-
         </div>
     </div>
 </div>
 
 <script>
-    // Accordion Logic
     document.addEventListener('DOMContentLoaded', () => {
-        const accordions = document.querySelectorAll('.accordion-container');
-        
-        accordions.forEach(acc => {
-            const btn = acc.querySelector('.accordion-btn');
-            const content = acc.querySelector('.accordion-content');
-            const icon = acc.querySelector('.accordion-icon');
+        const topics = document.querySelectorAll('.topic-container');
+        topics.forEach(topic => {
+            const btn = topic.querySelector('.topic-btn');
+            const content = topic.querySelector('.topic-content');
+            const icon = topic.querySelector('.topic-icon');
             
             btn.addEventListener('click', () => {
                 const isOpen = !content.classList.contains('hidden');
-                
                 if (isOpen) {
                     content.classList.add('hidden');
                     icon.style.transform = 'rotate(0deg)';
@@ -224,121 +195,95 @@
                 }
             });
         });
-    });
-</script>
 
-{% if show_welcome_back %}
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<div id="welcomeBackModal" class="fixed inset-0 z-50 flex items-center justify-center bg-ice dark:bg-navy-dark/60 bg-ice dark:bg-navy-dark/80 backdrop-blur-sm transition-opacity">
-    <div class="bg-ice dark:bg-navy-dark-light/80 backdrop-blur-md border border-blue/10 dark:border-slate-dark/30 bg-ice dark:bg-navy-dark-light border border-blue/20 dark:border-slate-dark/50 border-blue/20 dark:border-slate-dark/50 rounded-3xl shadow-2xl max-w-sm w-full p-8 text-center transition-colors">
-        <div class="w-20 h-20 bg-blue dark:bg-blue-dark dark:bg-emerald-500/10 border-0 dark:border dark:border-emerald-500/20 rounded-full flex items-center justify-center text-slate dark:text-slate-light dark:text-emerald-300 text-3xl mx-auto mb-5 shadow-lg shadow-blue/30 dark:shadow-blue-dark/30 dark:shadow-emerald-500/20 transition-colors">
-            <i class="fa-solid fa-hands-clapping"></i>
-        </div>
-        <h2 class="text-3xl font-extrabold text-navy dark:text-ice text-navy dark:text-ice tracking-tight mb-2 transition-colors">Welcome Back!</h2>
-        <p class="text-slate dark:text-slate-light text-slate dark:text-slate-light font-medium mb-8 transition-colors">Ready to continue your journey, <span class="text-blue dark:text-blue-light dark:text-emerald-300 font-bold">{{ profile.full_name|default:profile.user.username }}</span>?</p>
-        <button onclick="document.getElementById('welcomeBackModal').remove()" class="w-full bg-blue dark:bg-blue-dark hover:bg-blue dark:bg-blue-dark-light dark:bg-emerald-500 dark:hover:bg-emerald-400 text-slate dark:text-slate-light dark:text-zinc-950 font-bold py-3.5 rounded-xl shadow-lg shadow-blue/30 dark:shadow-blue-dark/30 dark:shadow-emerald-500/20 transition-all">
-            Let's Go! <i class="fa-solid fa-rocket ml-1"></i>
-        </button>
-    </div>
-</div>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var duration = 2500;
-        var end = Date.now() + duration;
-
-        (function frame() {
-            const isDark = document.documentElement.classList.contains('dark');
-            const colors = isDark ? ['#34d399', '#10b981', '#059669'] : ['#7FCDFF', '#DFF7FF', '#4F46E5'];
+        const days = document.querySelectorAll('.day-container');
+        days.forEach(day => {
+            const btn = day.querySelector('.day-btn');
+            const content = day.querySelector('.day-content');
+            const icon = day.querySelector('.day-icon');
             
-            confetti({
-                particleCount: 6,
-                angle: 60,
-                spread: 55,
-                origin: { x: 0 },
-                colors: colors
-            });
-            confetti({
-                particleCount: 6,
-                angle: 120,
-                spread: 55,
-                origin: { x: 1 },
-                colors: colors
-            });
-
-            if (Date.now() < end) {
-                requestAnimationFrame(frame);
-            }
-        }());
-    });
-</script>
-{% endif %}
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-    const checkboxes = document.querySelectorAll('.task-checkbox');
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const checkboxEl = this;
-            const dayNumber = checkboxEl.getAttribute('data-day');
-            const taskName = checkboxEl.getAttribute('data-task');
-            
-            const csrftoken = getCookie('csrftoken') || '{{ csrf_token }}';
-            
-            fetch("{% url 'toggle_task_completion' %}", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken
-                },
-                body: JSON.stringify({
-                    'day_number': dayNumber,
-                    'task_name': taskName
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.success) {
-                    if (data.completed) {
-                        checkboxEl.classList.remove('border-slate-300', 'dark:border-slate-700', 'text-transparent');
-                        if(taskName === 'dsa_completed') checkboxEl.classList.add('bg-blue', 'border-blue', 'text-white');
-                        else if(taskName === 'aptitude_completed') checkboxEl.classList.add('bg-emerald-500', 'border-emerald-500', 'text-white');
-                        else if(taskName === 'core_completed') checkboxEl.classList.add('bg-purple-500', 'border-purple-500', 'text-white');
-                        else if(taskName === 'web_dev_completed') checkboxEl.classList.add('bg-orange-500', 'border-orange-500', 'text-white');
-                    } else {
-                        checkboxEl.classList.remove('bg-blue', 'border-blue', 'text-white', 'bg-emerald-500', 'border-emerald-500', 'bg-purple-500', 'border-purple-500', 'bg-orange-500', 'border-orange-500');
-                        checkboxEl.classList.add('border-slate-300', 'dark:border-slate-700', 'text-transparent');
-                    }
-                    const progressText = document.getElementById('progress-text-' + dayNumber);
-                    if (progressText) progressText.textContent = Math.round(data.progress_percentage) + '%';
+            btn.addEventListener('click', () => {
+                const isOpen = !content.classList.contains('hidden');
+                if (isOpen) {
+                    content.classList.add('hidden');
+                    icon.style.transform = 'rotate(0deg)';
                 } else {
-                    console.error('Failed to toggle task:', data.error);
+                    content.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
                 }
-            })
-            .catch(error => {
-                console.error('Error in fetch:', error);
+            });
+        });
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const checkboxes = document.querySelectorAll('.q-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const qid = this.getAttribute('data-qid');
+                const isCompleted = this.classList.contains('bg-emerald-500');
+                const newStatus = !isCompleted;
+                const csrftoken = getCookie('csrftoken') || '{{ csrf_token }}';
+                
+                // Optimistic UI Update
+                if (newStatus) {
+                    this.classList.add('bg-emerald-500', 'border-emerald-500', 'text-white');
+                    this.classList.remove('border-slate-300', 'dark:border-slate-600', 'text-transparent');
+                } else {
+                    this.classList.remove('bg-emerald-500', 'border-emerald-500', 'text-white');
+                    this.classList.add('border-slate-300', 'dark:border-slate-600', 'text-transparent');
+                }
+
+                fetch("{% url 'toggle_task_completion' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        'question_id': qid,
+                        'completed': newStatus
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        // Update Overall Progress
+                        const overallCircle = document.getElementById('overall-progress-circle');
+                        const overallText = document.getElementById('overall-progress-text');
+                        const overallSolved = document.getElementById('overall-solved-text');
+                        const overallBadge = document.getElementById('overall-solved-badge');
+                        
+                        if (overallCircle) overallCircle.style.strokeDashoffset = `calc(283 - (283 * ${data.overall_progress} / 100))`;
+                        if (overallText) overallText.textContent = data.overall_progress + '%';
+                        if (overallSolved) overallSolved.textContent = data.total_done;
+                        if (overallBadge) overallBadge.textContent = data.total_done + ' / {{ total_questions }}';
+
+                        // Update Topic Progress
+                        const topicBars = document.querySelectorAll('.topic-progress-bar-' + data.topic_id);
+                        const topicTexts = document.querySelectorAll('.topic-progress-text-' + data.topic_id);
+                        
+                        topicBars.forEach(bar => bar.style.width = data.topic_progress + '%');
+                        // Optional: you can update the text to show completed / total if returned by backend, here we just show percentage for simplicity or re-parse.
+                    }
+                });
             });
         });
     });
-});
 </script>
 {% endblock %}
-
