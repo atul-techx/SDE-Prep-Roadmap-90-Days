@@ -9,3 +9,4 @@ python manage.py migrate
 python manage.py shell -c "from django.contrib.auth.models import User; User.objects.filter(username='founder').exists() or User.objects.create_superuser('founder', 'founder@example.com', 'Founder@123')"
 python ensure_founder.py
 python sync_db.py
+python manage.py loaddata roadmap_data.json
