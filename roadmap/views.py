@@ -259,8 +259,33 @@ from datetime import date
 @login_required
 def calendar_view(request):
     today = timezone.now().date()
-    year = today.year
-    month = today.month
+    
+    try:
+        year = int(request.GET.get('year', today.year))
+        month = int(request.GET.get('month', today.month))
+    except ValueError:
+        year = today.year
+        month = today.month
+        
+    if month < 1 or month > 12:
+        month = today.month
+        year = today.year
+
+    if month == 12:
+        next_month = 1
+        next_year = year + 1
+    else:
+        next_month = month + 1
+        next_year = year
+
+    if month == 1:
+        prev_month = 12
+        prev_year = year - 1
+    else:
+        prev_month = month - 1
+        prev_year = year
+
+    view_date = date(year, month, 1)
     
     c = cal.Calendar(firstweekday=6)
     weeks = c.monthdatescalendar(year, month)
@@ -292,7 +317,11 @@ def calendar_view(request):
         
     return render(request, 'roadmap/calendar.html', {
         'calendar_grid': calendar_grid,
-        'current_month_name': today.strftime('%B %Y')
+        'current_month_name': view_date.strftime('%B %Y'),
+        'prev_year': prev_year,
+        'prev_month': prev_month,
+        'next_year': next_year,
+        'next_month': next_month,
     })
 
 @login_required
