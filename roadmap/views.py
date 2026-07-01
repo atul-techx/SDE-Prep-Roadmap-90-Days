@@ -253,12 +253,64 @@ def founder_student_detail_view(request, profile_id):
     profile = get_object_or_404(StudentProfile, id=profile_id)
     return render(request, 'roadmap/founder_student_detail.html', {'student_profile': profile})
 
+import calendar as cal
+from datetime import date
+
 @login_required
 def calendar_view(request):
-    return render(request, 'roadmap/calendar.html', {})
+    today = timezone.now().date()
+    year = today.year
+    month = today.month
+    
+    c = cal.Calendar(firstweekday=6)
+    weeks = c.monthdatescalendar(year, month)
+    
+    colors = ['bg-indigo-500', 'bg-emerald-500', 'bg-rose-500', 'bg-amber-500', 'bg-sky-500', 'bg-purple-500', 'bg-pink-500', 'bg-teal-500']
+    events = Event.objects.filter(date__year=year, date__month=month)
+    events_by_date = {}
+    for e in events:
+        cat_hash = sum(ord(c) for c in e.category) if e.category else 0
+        e.color_class = colors[cat_hash % len(colors)]
+        
+        if e.date not in events_by_date:
+            events_by_date[e.date] = []
+        events_by_date[e.date].append(e)
+        
+    calendar_grid = []
+    for week in weeks:
+        week_data = []
+        for d in week:
+            day_events = events_by_date.get(d, [])
+            week_data.append({
+                'date': d,
+                'day': d.day,
+                'in_month': d.month == month,
+                'is_today': d == today,
+                'events': day_events
+            })
+        calendar_grid.append(week_data)
+        
+    return render(request, 'roadmap/calendar.html', {
+        'calendar_grid': calendar_grid,
+        'current_month_name': today.strftime('%B %Y')
+    })
 
 @login_required
 def add_event_view(request):
+    if not request.user.is_superuser:
+        return redirect('calendar')
+        
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        date_str = request.POST.get('date')
+        category = request.POST.get('category')
+        description = request.POST.get('description', '')
+        if title and date_str and category:
+            Event.objects.create(title=title, date=date_str, category=category, description=description)
+            messages.success(request, 'Event added successfully.')
+        else:
+            messages.error(request, 'Please fill all required fields.')
+            
     return redirect('calendar')
 
 @login_required
@@ -271,11 +323,41 @@ def founder_content_edit_view(request, day_number):
 
 @login_required
 def founder_notes_view(request):
-    return redirect('founder_dashboard')
+    if not request.user.is_superuser:
+        return redirect('dashboard')
+        
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        category = request.POST.get('category')
+        description = request.POST.get('description')
+        file = request.FILES.get('file')
+        
+        if title and file:
+            Note.objects.create(title=title, category=category, description=description, file=file)
+            messages.success(request, "Note uploaded successfully!")
+        else:
+            messages.error(request, "Title and File are required.")
+        return redirect('founder_notes')
+        
+    notes = Note.objects.all().order_by('-uploaded_at')
+    categories = [c[0] for c in Note.CATEGORY_CHOICES]
+    return render(request, 'roadmap/founder_notes.html', {'notes': notes, 'categories': categories})
 
 @login_required
 def student_notes_view(request):
-    return redirect('dashboard')
+    category_filter = request.GET.get('category')
+    notes = Note.objects.all().order_by('-uploaded_at')
+    
+    if category_filter:
+        notes = notes.filter(category=category_filter)
+        
+    categories = [c[0] for c in Note.CATEGORY_CHOICES]
+    
+    return render(request, 'roadmap/student_notes.html', {
+        'notes': notes, 
+        'categories': categories,
+        'current_category': category_filter
+    })
 
 @login_required
 def student_day_content_view(request, day_number):
