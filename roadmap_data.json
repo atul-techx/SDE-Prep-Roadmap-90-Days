@@ -355,8 +355,8 @@
   "pk": 22,
   "fields": {
     "topic": 7,
-    "day_number": 23,
-    "name": "Get a Strong Hold"
+    "day_number": 31,
+    "name": "Day 31: Get a Strong Hold"
   }
 },
 {
@@ -364,8 +364,8 @@
   "pk": 23,
   "fields": {
     "topic": 7,
-    "day_number": 24,
-    "name": "Subsequences Pattern"
+    "day_number": 32,
+    "name": "Day 32 - 33: Subsequences Pattern"
   }
 },
 {
@@ -373,8 +373,8 @@
   "pk": 24,
   "fields": {
     "topic": 7,
-    "day_number": 25,
-    "name": "Trying out all Combos / Hard"
+    "day_number": 34,
+    "name": "Day 34 - 35: Trying out all Combos / Hard"
   }
 },
 {
@@ -752,6 +752,15 @@
   "fields": {
     "topic": 6,
     "day_number": 28,
+    "name": "Revision Day"
+  }
+},
+{
+  "model": "roadmap.daycontent",
+  "pk": 67,
+  "fields": {
+    "topic": 7,
+    "day_number": 33,
     "name": "Revision Day"
   }
 },
