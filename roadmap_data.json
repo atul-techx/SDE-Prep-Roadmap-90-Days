@@ -409,8 +409,8 @@
   "pk": 28,
   "fields": {
     "topic": 9,
-    "day_number": 29,
-    "name": "Learning"
+    "day_number": 39,
+    "name": "Day 39 - 40: Learning"
   }
 },
 {
@@ -418,8 +418,8 @@
   "pk": 29,
   "fields": {
     "topic": 9,
-    "day_number": 30,
-    "name": "Prefix, Infix, PostFix Conversion Problems"
+    "day_number": 41,
+    "name": "Day 41 - 42: Prefix, Infix, PostFix Conversion Problems"
   }
 },
 {
@@ -427,17 +427,8 @@
   "pk": 30,
   "fields": {
     "topic": 9,
-    "day_number": 31,
-    "name": "Monotonic Stack/Queue Problems [VVV. Imp]"
-  }
-},
-{
-  "model": "roadmap.daycontent",
-  "pk": 31,
-  "fields": {
-    "topic": 9,
-    "day_number": 32,
-    "name": "Implementation Problems"
+    "day_number": 43,
+    "name": "Day 43 - 44: Monotonic Stack/Queue Problems [VVV. Imp]"
   }
 },
 {
@@ -761,6 +752,15 @@
   "fields": {
     "topic": 7,
     "day_number": 33,
+    "name": "Revision Day"
+  }
+},
+{
+  "model": "roadmap.daycontent",
+  "pk": 68,
+  "fields": {
+    "topic": 9,
+    "day_number": 40,
     "name": "Revision Day"
   }
 },
