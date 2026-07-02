@@ -247,8 +247,8 @@
   "pk": 10,
   "fields": {
     "topic": 3,
-    "day_number": 11,
-    "name": "Easy"
+    "day_number": 9,
+    "name": "Day 9 - 11: Easy"
   }
 },
 {
@@ -257,7 +257,7 @@
   "fields": {
     "topic": 3,
     "day_number": 12,
-    "name": "Hard"
+    "name": "Day 12 - 15: Hard"
   }
 },
 {
@@ -716,6 +716,15 @@
   "fields": {
     "topic": 1,
     "day_number": 7,
+    "name": "Revision Day"
+  }
+},
+{
+  "model": "roadmap.daycontent",
+  "pk": 63,
+  "fields": {
+    "topic": 3,
+    "day_number": 11,
     "name": "Revision Day"
   }
 },
