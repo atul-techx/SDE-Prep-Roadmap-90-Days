@@ -436,8 +436,8 @@
   "pk": 32,
   "fields": {
     "topic": 10,
-    "day_number": 33,
-    "name": "Medium Problems"
+    "day_number": 45,
+    "name": "Day 45 - 46: Medium Problems"
   }
 },
 {
@@ -445,8 +445,8 @@
   "pk": 33,
   "fields": {
     "topic": 10,
-    "day_number": 34,
-    "name": "Hard Problems"
+    "day_number": 47,
+    "name": "Day 47: Hard Problems"
   }
 },
 {
@@ -761,6 +761,15 @@
   "fields": {
     "topic": 9,
     "day_number": 40,
+    "name": "Revision Day"
+  }
+},
+{
+  "model": "roadmap.daycontent",
+  "pk": 69,
+  "fields": {
+    "topic": 10,
+    "day_number": 46,
     "name": "Revision Day"
   }
 },
