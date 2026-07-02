@@ -292,8 +292,8 @@
   "pk": 15,
   "fields": {
     "topic": 5,
-    "day_number": 16,
-    "name": "Basic and Easy String Problems"
+    "day_number": 22,
+    "name": "Day 22: Basic and Easy String Problems"
   }
 },
 {
@@ -301,8 +301,8 @@
   "pk": 16,
   "fields": {
     "topic": 5,
-    "day_number": 17,
-    "name": "Medium String Problems"
+    "day_number": 24,
+    "name": "Day 23 - 24: Medium String Problems"
   }
 },
 {
@@ -734,6 +734,15 @@
   "fields": {
     "topic": 4,
     "day_number": 17,
+    "name": "Revision Day"
+  }
+},
+{
+  "model": "roadmap.daycontent",
+  "pk": 65,
+  "fields": {
+    "topic": 5,
+    "day_number": 23,
     "name": "Revision Day"
   }
 },
