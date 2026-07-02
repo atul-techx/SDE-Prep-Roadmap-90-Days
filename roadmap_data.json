@@ -310,8 +310,8 @@
   "pk": 17,
   "fields": {
     "topic": 6,
-    "day_number": 18,
-    "name": "Learn 1D LinkedList"
+    "day_number": 25,
+    "name": "Day 25: Learn 1D LinkedList"
   }
 },
 {
@@ -319,8 +319,8 @@
   "pk": 18,
   "fields": {
     "topic": 6,
-    "day_number": 19,
-    "name": "Learn Doubly LinkedList"
+    "day_number": 26,
+    "name": "Day 26: Learn Doubly LinkedList"
   }
 },
 {
@@ -328,8 +328,8 @@
   "pk": 19,
   "fields": {
     "topic": 6,
-    "day_number": 20,
-    "name": "Medium Problems of LL"
+    "day_number": 27,
+    "name": "Day 27 - 28: Medium Problems of LL"
   }
 },
 {
@@ -337,8 +337,8 @@
   "pk": 20,
   "fields": {
     "topic": 6,
-    "day_number": 21,
-    "name": "Medium Problems of DLL"
+    "day_number": 29,
+    "name": "Day 29: Medium Problems of DLL"
   }
 },
 {
@@ -346,8 +346,8 @@
   "pk": 21,
   "fields": {
     "topic": 6,
-    "day_number": 22,
-    "name": "Hard Problems of LL"
+    "day_number": 30,
+    "name": "Day 30: Hard Problems of LL"
   }
 },
 {
@@ -743,6 +743,15 @@
   "fields": {
     "topic": 5,
     "day_number": 23,
+    "name": "Revision Day"
+  }
+},
+{
+  "model": "roadmap.daycontent",
+  "pk": 66,
+  "fields": {
+    "topic": 6,
+    "day_number": 28,
     "name": "Revision Day"
   }
 },
