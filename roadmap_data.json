@@ -382,8 +382,8 @@
   "pk": 25,
   "fields": {
     "topic": 8,
-    "day_number": 26,
-    "name": "Learn Bit Manipulation"
+    "day_number": 36,
+    "name": "Day 36: Learn Bit Manipulation"
   }
 },
 {
@@ -391,8 +391,8 @@
   "pk": 26,
   "fields": {
     "topic": 8,
-    "day_number": 27,
-    "name": "Interview Problems"
+    "day_number": 37,
+    "name": "Day 37: Interview Problems"
   }
 },
 {
@@ -400,8 +400,8 @@
   "pk": 27,
   "fields": {
     "topic": 8,
-    "day_number": 28,
-    "name": "Advanced Maths"
+    "day_number": 38,
+    "name": "Day 38: Advanced Maths"
   }
 },
 {
