@@ -265,8 +265,8 @@
   "pk": 12,
   "fields": {
     "topic": 4,
-    "day_number": 13,
-    "name": "BS on 1D Arrays"
+    "day_number": 16,
+    "name": "Day 16 - 17: BS on 1D Arrays"
   }
 },
 {
@@ -274,8 +274,8 @@
   "pk": 13,
   "fields": {
     "topic": 4,
-    "day_number": 14,
-    "name": "BS on Answers"
+    "day_number": 18,
+    "name": "Day 18 - 19: BS on Answers"
   }
 },
 {
@@ -283,8 +283,8 @@
   "pk": 14,
   "fields": {
     "topic": 4,
-    "day_number": 15,
-    "name": "BS on 2D Arrays"
+    "day_number": 20,
+    "name": "Day 20 - 21: BS on 2D Arrays"
   }
 },
 {
@@ -725,6 +725,15 @@
   "fields": {
     "topic": 3,
     "day_number": 11,
+    "name": "Revision Day"
+  }
+},
+{
+  "model": "roadmap.daycontent",
+  "pk": 64,
+  "fields": {
+    "topic": 4,
+    "day_number": 17,
     "name": "Revision Day"
   }
 },
