@@ -229,7 +229,7 @@
   "pk": 8,
   "fields": {
     "topic": 2,
-    "day_number": 9,
+    "day_number": 8,
     "name": "Sorting-I"
   }
 },
@@ -238,7 +238,7 @@
   "pk": 9,
   "fields": {
     "topic": 2,
-    "day_number": 10,
+    "day_number": 8,
     "name": "Sorting-II"
   }
 },
