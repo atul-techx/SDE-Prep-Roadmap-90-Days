@@ -75,7 +75,7 @@
     "model": "roadmap.topic",
     "pk": 9,
     "fields": {
-      "name": "Stack and Queues [Learning, Pre-In-Post-fix, Monotonic Stack, Implementation]",
+      "name": "Stack and Queues [Learning, Pre-In-Post-fix, Monotonic Stack]",
       "allocated_days": 6,
       "order": 9
     }
